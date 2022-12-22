@@ -1,0 +1,10 @@
+<div class="row g-4 p-4 mb-4">
+    {% for field in existing_loan_form %}
+    <div class="col-sm-4">
+        <div class="input-group input-group-static">
+            <label class="ms-0 text-primary fw-bold">{{ field.label }}</label>
+            {{ field }}
+        </div>
+    </div>
+    {% endfor %}
+</div>

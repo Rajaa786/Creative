@@ -62,7 +62,8 @@ def view_leads(request):
 def lead_detail(request, pk):
     lead = Leads.objects.get(id=pk)
     loan_applicant = LoanApplication.objects.filter(lead_id=lead)
-    loan_documents = LoanDocuments.objects.filter(loanApplication__in=loan_applicant)
+    loan_documents = LoanDocuments.objects.filter(
+        loanApplication__in=loan_applicant)
     for document in loan_documents:
         print(document.document.name)
     context = {
@@ -211,10 +212,10 @@ def register_referral(request):
 
     }
 
-    #if request.user.is_authenticated:
+    # if request.user.is_authenticated:
     return render(request, 'account/register.html', context=context)
-    #else:
-     #   return render(request, 'account/register_non_admin.html', context=context)
+    # else:
+    #   return render(request, 'account/register_non_admin.html', context=context)
 
 
 def register_staff(request):
@@ -295,7 +296,7 @@ def login(request):
                 return redirect(request.POST["next"])
 
             if user.is_superuser:
-              return redirect('base_dashboard')
+                return redirect('base_dashboard')
             elif user.system_role.role == "Referral Partner":
                 return redirect("base_dashboard")
         else:
@@ -1203,7 +1204,8 @@ def additionaldetails(request, id):
         if redirect_temp:
             return redirect_temp
 
-        tmp = handle_form_data(request, add_instance_form_1, add_instance_form_2, id)
+        tmp = handle_form_data(
+            request, add_instance_form_1, add_instance_form_2, id)
         if tmp:
             return tmp
 
@@ -1267,7 +1269,8 @@ def add_applicants(request):
     add_form_2.fields["applicant_type"].queryset = ApplicantType.objects.filter(
         applicant_type="1st Co-Applicant"
     )
-    add_form_2.fields["relation"].queryset = Relation.objects.filter(name="Spouse")
+    add_form_2.fields["relation"].queryset = Relation.objects.filter(
+        name="Spouse")
 
     print(request.GET.get("applicant_main"))
     main_applicant = request.GET.get("applicant_main") != "None"
@@ -1302,7 +1305,8 @@ def add_applicants(request):
     add_form_1.fields["applicant_type"].queryset = ApplicantType.objects.filter(
         applicant_type="Applicant"
     )
-    add_form_1.fields["relation"].queryset = Relation.objects.filter(name="Self")
+    add_form_1.fields["relation"].queryset = Relation.objects.filter(
+        name="Self")
     return render(
         request,
         "account/add_applicant.html",
@@ -1483,7 +1487,8 @@ def housewife(request, id):
         investment = request.POST["investment"]
 
         if investment != "":
-            inv_det = HousewifeInvestmentDetails(investment=investment, add_det_id=add)
+            inv_det = HousewifeInvestmentDetails(
+                investment=investment, add_det_id=add)
             inv_det.save()
 
         if "save" in request.POST:
@@ -1566,7 +1571,8 @@ def property_type_1(request, id):
                 form_instance = form.save(commit=False)
                 form_instance.lead_id = Leads.objects.get(pk=id)
                 form_instance.save()
-                messages.success(request, "Property Details Updated Successfully !")
+                messages.success(
+                    request, "Property Details Updated Successfully !")
                 return redirect("add_applicant_additional_details", id)
         else:
             messages.error(request, form.errors)
@@ -1583,7 +1589,8 @@ def property_type_v(request, id):
             form_instance = form.save(commit=False)
             form_instance.lead_id = Leads.objects.get(pk=id)
             form_instance.save()
-            messages.success(request, "Property Details Updated Successfully !")
+            messages.success(
+                request, "Property Details Updated Successfully !")
             return redirect("add_applicant_additional_details", id)
         else:
             messages.error(request, form.errors)
@@ -1601,7 +1608,8 @@ def property_type_2(request, id):
             form_instance = form.save(commit=False)
             form_instance.lead_id = Leads.objects.get(pk=id)
             form_instance.save()
-            messages.success(request, "Property Details Updated Successfully !")
+            messages.success(
+                request, "Property Details Updated Successfully !")
             return redirect("add_applicant_additional_details", id)
 
         else:
@@ -1621,7 +1629,8 @@ def property_type_3(request, id):
             form_instance = form.save(commit=False)
             form_instance.lead_id = Leads.objects.get(pk=id)
             form_instance.save()
-            messages.success(request, "Property Details Updated Successfully !")
+            messages.success(
+                request, "Property Details Updated Successfully !")
             return redirect("add_applicant_additional_details", id)
 
         else:
@@ -1641,7 +1650,8 @@ def property_type_4(request, id):
             form_instance = form.save(commit=False)
             form_instance.lead_id = Leads.objects.get(pk=id)
             form_instance.save()
-            messages.success(request, "Property Details Updated Successfully !")
+            messages.success(
+                request, "Property Details Updated Successfully !")
             return redirect("add_applicant_additional_details", id)
 
         else:
@@ -1677,7 +1687,8 @@ def add_individual_details(request, id):
 
 def property_details(request, id):
     if request.method == "GET":
-        additional_details_instance = AdditionalDetails.objects.filter(lead_id=id)
+        additional_details_instance = AdditionalDetails.objects.filter(
+            lead_id=id)
         lead = Leads.objects.get(pk=id)
         if additional_details_instance is None:
             return redirect("additionaldetails", id)
@@ -2189,7 +2200,8 @@ def salaried(request, lead_id, additionaldetails_id):
                     pk=additionaldetails_id
                 )
                 instance.save()
-                messages.success(request, '"Personal Details" Saved Successfully')
+                messages.success(
+                    request, '"Personal Details" Saved Successfully')
                 check_salaried_details_form_list["personal_details"] = True
 
                 return redirect("salaried", lead_id, additionaldetails_id)
@@ -2205,7 +2217,8 @@ def salaried(request, lead_id, additionaldetails_id):
                     pk=additionaldetails_id
                 )
                 instance.save()
-                messages.success(request, '"Income Details" Saved Successfully')
+                messages.success(
+                    request, '"Income Details" Saved Successfully')
                 check_salaried_details_form_list["income_details"] = True
 
                 return redirect("salaried", lead_id, additionaldetails_id)
@@ -2222,7 +2235,8 @@ def salaried(request, lead_id, additionaldetails_id):
                     pk=additionaldetails_id
                 )
                 instance.save()
-                messages.success(request, '"Other Incomes Details" Saved Successfully')
+                messages.success(
+                    request, '"Other Incomes Details" Saved Successfully')
                 check_salaried_details_form_list["other_incomes"] = True
 
                 return redirect("salaried", lead_id, additionaldetails_id)
@@ -2256,7 +2270,8 @@ def salaried(request, lead_id, additionaldetails_id):
                     pk=additionaldetails_id
                 )
                 instance.save()
-                messages.success(request, '"Company Details" Saved Successfully')
+                messages.success(
+                    request, '"Company Details" Saved Successfully')
                 check_salaried_details_form_list["company_details"] = True
                 return redirect("salaried", lead_id, additionaldetails_id)
             else:
@@ -2271,7 +2286,8 @@ def salaried(request, lead_id, additionaldetails_id):
                     pk=additionaldetails_id
                 )
                 instance.save()
-                messages.success(request, '"Residence Details" Saved Successfully')
+                messages.success(
+                    request, '"Residence Details" Saved Successfully')
                 check_salaried_details_form_list["residence_details"] = True
                 return redirect("salaried", lead_id, additionaldetails_id)
             else:
@@ -2286,7 +2302,8 @@ def salaried(request, lead_id, additionaldetails_id):
                     pk=additionaldetails_id
                 )
                 instance.save()
-                messages.success(request, '"Existing Loan Details" Saved Successfully')
+                messages.success(
+                    request, '"Existing Loan Details" Saved Successfully')
                 check_salaried_details_form_list["existing_loan_details"] = True
                 return redirect("salaried", lead_id, additionaldetails_id)
             else:
@@ -2301,7 +2318,8 @@ def salaried(request, lead_id, additionaldetails_id):
                     pk=additionaldetails_id
                 )
                 instance.save()
-                messages.success(request, '"Existing Card Details" Saved Successfully')
+                messages.success(
+                    request, '"Existing Card Details" Saved Successfully')
                 check_salaried_details_form_list["existing_card_details"] = True
                 return redirect("salaried", lead_id, additionaldetails_id)
             else:
@@ -2316,7 +2334,8 @@ def salaried(request, lead_id, additionaldetails_id):
                     pk=additionaldetails_id
                 )
                 instance.save()
-                messages.success(request, '"Additional Details" Saved Successfully')
+                messages.success(
+                    request, '"Additional Details" Saved Successfully')
                 check_salaried_details_form_list["additional_details"] = True
                 return redirect("salaried", lead_id, additionaldetails_id)
             else:
@@ -2330,14 +2349,16 @@ def salaried(request, lead_id, additionaldetails_id):
                     pk=additionaldetails_id
                 )
                 instance.save()
-                messages.success(request, '"Investment Details" Saved Successfully')
+                messages.success(
+                    request, '"Investment Details" Saved Successfully')
                 check_salaried_details_form_list["investment"] = True
                 return redirect("salaried", lead_id, additionaldetails_id)
             else:
                 messages.error(request, form.errors)
                 return redirect("salaried", lead_id, additionaldetails_id)
 
-    additional_details_instance = AdditionalDetails.objects.get(pk=additionaldetails_id)
+    additional_details_instance = AdditionalDetails.objects.get(
+        pk=additionaldetails_id)
     # qualifications_list = []
     # for qualification_instance in Qualification.objects.all():
     #     qualifications_list.append({qualification_instance.qualification:qualification_instance.is_degree})
@@ -2364,7 +2385,7 @@ def salaried(request, lead_id, additionaldetails_id):
         "additional_other_incomes_form": SalAdditionalOtherIncomesForm(),
         "company_details_form": SalCompanyDetailsForm(),
         "residence_details_form": SalResidenceDetailsForm(),
-        "existing_loan_details_form": SalExistingLoanDetailsForm(),
+        "existing_loan_details_form": SalExistingLoanDetailsForm(prefix="1"),
         "existing_card_details_form": SalExistingCreditCardForm(),
         "additional_details_form": SalAdditionalDetailsForm(),
         "investment_form": SalInvestmentsForm(),
@@ -3144,7 +3165,7 @@ def check_eligibility(request, id):
                         tenure_in_months = tenure.ten_type * 12
 
                         cust_considerable_amount = cust_considerable_amount - obligation_amount
-                    
+
                         if cust_considerable_amount > 0:
                             emis = pmt(
                                 rate=rate, nper=tenure_in_months, pv=principal)
@@ -3474,7 +3495,8 @@ def register2(request):
             domain = get_current_site(request).domain
             link = reverse(
                 "activate",
-                kwargs={"uidb64": uidb64, "token": token_generator.make_token(user)},
+                kwargs={"uidb64": uidb64,
+                        "token": token_generator.make_token(user)},
             )
             activate_url = "http://" + domain + link
             email_body = (
@@ -3631,7 +3653,8 @@ def handle_form_data(request, form_1_instance, form_2_instance, id):
             tmp = redirect("additionaldetails", id)
 
         if form_1_instance.inc_holder is False:
-            messages.error(request, "Rejected. Applicants should be income holders.")
+            messages.error(
+                request, "Rejected. Applicants should be income holders.")
             tmp = redirect("additionaldetails", id)
 
     if form_2_instance is not None:
@@ -3639,7 +3662,8 @@ def handle_form_data(request, form_1_instance, form_2_instance, id):
             messages.error(request, "Rejected. Applicants must be salaried.")
             tmp = redirect("additionaldetails", id)
         if form_2_instance.inc_holder is False:
-            messages.error(request, "Rejected. Applicants should be income holders.")
+            messages.error(
+                request, "Rejected. Applicants should be income holders.")
             tmp = redirect("additionaldetails", id)
 
     return tmp
@@ -3652,7 +3676,8 @@ def calculatecommission(request):
     commissiontypes = Comissionrates.objects.all()
     # context = {"commissiontype":commissiontype}
     return render(
-        request, "account/calculator.html", {"commissiontypes": commissiontypes}
+        request, "account/calculator.html", {
+            "commissiontypes": commissiontypes}
     )
 
 
@@ -3662,15 +3687,28 @@ def commissionrate(request):
         Commissiontype_id=commissiontype_id
     ).order_by("Commissiontype")
     return render(
-        request, "account/ajax_load_rates.html", {"commissionrates": commissionrates}
+        request, "account/ajax_load_rates.html", {
+            "commissionrates": commissionrates}
     )
 
 
 def calculatortypeshow(request):
     commissiontypesshow = Commission.objects.all()
     return render(
-        request, "account/calculator.html", {"commissiontypes": commissiontypesshow}
+        request, "account/calculator.html", {
+            "commissiontypes": commissiontypesshow}
     )
 
 
-register_manager = {"Referral Partner": register_referral, "Vendor": register_vendor}
+def addExistingLoanForm(request):
+    current_prefix = int(request.GET.get("loan_form_count"))
+
+    context = {
+        "existing_loan_form": SalExistingLoanDetailsForm(prefix=current_prefix)
+    }
+
+    return render(request, "account/add_existing_loan_form.html", context=context)
+
+
+register_manager = {"Referral Partner": register_referral,
+                    "Vendor": register_vendor}
