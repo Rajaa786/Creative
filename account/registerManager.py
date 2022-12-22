@@ -13,6 +13,22 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import auth, Group
 from django.contrib import messages
 
+# DATABASES_NAME = defaultdb
+# DATABASES_USER = doadmin
+# DATABASES_PASSWORD = AVNS_C4w1Q7b-lb0FU44li7c
+# DATABASES_HOST = db-mysql-blr1-53992-do-user-12870761-0.b.db.ondigitalocean.com
+# DATABASES_PORT = 25060  
+
+# DATABASES_NAME = django-test
+
+# DATABASES_USER = root
+
+# DATABASES_HOST = localhost
+
+# DATABASES_PORT = 3306
+
+# DATABASES_PASSWORD = ""
+
 
 def get_tenure_months(current_age, retirement_age):
     return (retirement_age - current_age) * 12

@@ -142,7 +142,11 @@ urlpatterns = [
     path("ajax/commissionrates/", views.commissionrate, name="ajax_load_rates"),
     path("calculatecommission/", views.calculatecommission, name="calculatecommission"),
     path("showtype/", views.calculatortypeshow, name="showtype"),
+
+    path('add_existing_loan_form/' , views.addExistingLoanForm , name="add_existing_loan_form")
 ]
+
+
 urlpatterns = urlpatterns + static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT
 )

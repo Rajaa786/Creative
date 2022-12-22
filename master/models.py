@@ -506,6 +506,7 @@ class AdditionalRate_Info(models.Model):
     loan_min_amount = models.BigIntegerField()
     loan_max_amount = models.BigIntegerField()
     rate_of_interest = models.BigIntegerField()
+    processing_fee = models.BigIntegerField(null=True)
 
 
 class RateOfInterest_Info(models.Model):
@@ -539,7 +540,6 @@ class Product_and_Policy_Master(models.Model):
     current_experience = models.IntegerField()
     total_experience = models.IntegerField()
     cibil_score = models.BigIntegerField(null=False, blank=False)
-    processing_fee = models.BigIntegerField()
     months_for_foir = models.BigIntegerField()
     effective_date = models.DateField(blank=True, null=True)
     ineffective_date = models.DateField(null=True, blank=True)
@@ -552,7 +552,6 @@ class Product_and_Policy_Master(models.Model):
     credit_card_dpd = models.IntegerField()
     credit_card_obligation = models.IntegerField()
     emi_obligation = models.IntegerField()
-
     multiplier_info = models.ManyToManyField(Multiplier_Info)
     foir_info = models.ManyToManyField(Foir_Info)
     salary_type = models.ManyToManyField(
