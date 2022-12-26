@@ -1,85 +1,204 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    {% include 'base/meta.html' %}
+
+    {% include 'base/css.html' %}
+
+    {% include 'base/dashboard_css.html' %}
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+
+    {% comment %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" /> {% endcomment %}
+
+    <link rel="stylesheet" href="{% static 'material_2_pro_assets/css/p&p_css.css' %}" />
+
+
+    <style>
+        .alert-text {
+            color: white;
+            font-weight: bolder;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+    </style>
+
+    <title>Check Eligibility</title>
 </head>
-<body>
-    {% for bank , data in eligibility_details_data.items %}
-    <div>{{data}}</div>
+
+<body class="g-sidenav-show  bg-gray-200">
+    {% comment %} <div>{{data}}</div> {% endcomment %}
     {% comment %} <h4>{{eligibility_details_data}}</h4> {% endcomment %}
-    {% if data.multiplier_calculations %}
-    <div class="mb-3 table-responsive">
-        <table class="m-0 table table-bordered">
-            <thead>
-                <tr>
-                    <th>Bank</th>
-                    <th>Loan Required</th>
-                    <th>Loan Eligibility</th>
-                    <th>Tenure</th>
-                    <th>Multiplier</th>
-                </tr>
-            </thead>
+    {% comment %} {% if data.multiplier_calculations %} {% endcomment %}
+    <div class="container-fluid">
+        <div class="row py-3 bg-white rounded-3">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table id="eligibility_details_table" data-url="{% url 'handle_loan_requirement_change' %}"
+                        class="m-0 table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Bank</th>
+                                <th>Applicant</th>
+                                <th>Multiplier</th>
+                                <th>X Amount</th>
+                                <th>FOIR</th>
+                                <th>% Amount</th>
+                                <th>Requirement</th>
+                                <th>Final Eligibility</th>
+                                <th>ROI</th>
+                                <th>EMI</th>
+                                <th>Tenure</th>
+                                <th>Processing Fees</th>
+                            </tr>
+                        </thead>
 
-            <tbody>
-                {% for multiplier_calculations in  data.multiplier_calculations %}
-                <tr>
-                    <td>{{bank}}</td>
-                    <td>{{data.loanamt}}</td>
-                    <td>{{multiplier_calculations.eligible_amount}}</td>
-                    <td>{{multiplier_calculations.associated_tenure}}</td>
-                    <td>{{multiplier_calculations.multiplier}}</td>
-                </tr>
-                {% endfor %}
-                
-                 
-            </tbody>
-            
-            <tfoot>
-                
-            </tfoot>
-        </table>
+                        <tbody>
+                            {% for bank , data in eligibility_details_data.items %}
+                            {% for calculation in  data.eligibility_calculations %}
+
+                            <tr>
+                                <td class="text-center ">{{bank}}</td>
+                                <td class="text-center">A</td>
+                                <td class="text-center">{{calculation.multiplier}}</td>
+                                <td class="text-center">{{calculation.x_amount}}</td>
+                                <td class="text-center">{{calculation.foir}}</td>
+                                <td class="text-center">{{calculation.percent_amount}}</td>
+                                <td><input class="requirement_input form-control text-center" type="number"
+                                        value={{data.loanamt}} data-product-policy-id="{{data.product_and_policy_id}}"
+                                        data-cocat-type="{{data.category}}"
+                                        data-net-sal="{{lead_holder_net_sal}}"
+                                        data-tenure="{{calculation.associated_tenure}}"
+                                        data-percent-amount="{{calculation.percent_amount}}"
+                                        data-x-amount="{{calculation.x_amount}}"
+                                        data-emi="{{calculation.emi}}"
+                                        data-prev-loan-amt="{{data.loanamt}}"
+                                        data-prev-roi="{{calculation.roi}}"
+                                        data-final-elig="{{calculation.final_eligibility}}"
+                                        aria-label="readonly input example" readonly></td>
+                                <td class="final_elig text-center">{{calculation.final_eligibility}}</td>
+                                <td class="roi text-center">{{calculation.roi}}</td>
+                                <td class="emi text-center">{{calculation.emi}}</td>
+                                <td class="text-center">{{calculation.associated_tenure}}</td>
+                                <td class="text-center">{{calculation.processing_fees}} + GST(18%) = {8*4}</td>
+                            </tr>
+                            {% endfor %}
+                            {% endfor %}
+
+
+                        </tbody>
+
+                        <tfoot>
+
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-    {% endif %}
 
 
-    {% if data.foir_calculations %}
-    <div class="mb-3 table-responsive">
-        <table class="m-0 table table-bordered">
-            <thead>
-                <tr>
-                    <th>Bank</th>
-                    <th>Loan Required</th>
-                    <th>Loan Eligibility</th>
-                    <th>Tenure</th>
-                    <th>Foir</th>
-                    <th>ROI</th>
-                </tr>
-            </thead>
 
-            <tbody>
-                {% for foir_calculations in  data.foir_calculations %}
-                <tr>
-                    <td>{{bank}}</td>
-                    <td>{{data.loanamt}}</td>
-                    <td>{{foir_calculations.eligible_amount}}</td>
-                    <td>{{foir_calculations.associated_tenure}}</td>
-                    <td>{{foir_calculations.foir}}</td>
-                    <td>{{foir_calculations.roi}}</td>
-                </tr>
-                {% endfor %}
-                
-                 
-            </tbody>
-            
-            <tfoot>
-                
-            </tfoot>
-        </table>
-    </div>
-    {% endif %}
-    {% endfor %}
+
+
+
+    {% include 'base/js.html' %}
+
+
+    <script>
+        eligibility_details_table = $("#eligibility_details_table")
+
+        eligibility_details_table.click(function (event) {
+
+            if (event.target.nodeName == "INPUT") {
+                console.log("Input Clicked")
+                $(event.target).prop("readonly", false)
+            }
+
+        })
+
+
+        eligibility_details_table.change(function (event) {
+            if (event.target.nodeName == "INPUT") {
+
+                let target = $(event.target)
+
+                let required_val = target.val()
+                let prev_loan_amt = target.attr('data-prev-loan-amt')
+                let pp_id = target.attr('data-product-policy-id');
+                let cocat_type = target.attr('data-cocat-type')
+                let net_sal = target.attr('data-net-sal')
+                let tenure = target.attr('data-tenure')
+                let percent_amount = target.attr('data-percent-amount')
+                let x_amount = target.attr('data-x-amount')
+                let emi = target.attr('data-emi')
+                let final_elig = target.attr('data-final-elig')
+                let prev_roi = target.attr('data-prev-roi')
+
+                let ajax_call_url = $(this).attr('data-url')
+                console.log("Table Changed");
+                $.ajax({
+                    url: ajax_call_url,
+                    type: 'GET',
+                    data: {
+                        'required_val': required_val,
+                        'pp_id' : pp_id,
+                        'cocat_type' : cocat_type,
+                        'net_sal' : net_sal,
+                        'tenure' : tenure,
+                        'percent_amount' : percent_amount,
+                        'x_amount' : x_amount,
+                        'prev_loan_amt' : prev_loan_amt,
+                        'prev_emi' : emi,
+                        'prev_final_elig' : final_elig,
+                        'prev_roi' : prev_roi
+                    },
+                    datatype: 'json',
+                    success: function (data_) {
+                        console.log(data_)
+                        let target_parent = target.parent()
+                        console.log(target_parent.siblings(".final_elig"))
+                        console.log(target_parent.siblings(".emi"))
+                        target_parent.siblings('.final_elig').text(data_.final_eligibility)
+                        target_parent.siblings('.emi').text(data_.emi)
+                        target_parent.siblings('.roi').text(data_.roi)
+                        target.val(data_.required_loan_amount)
+                        target.attr('data-prev-loan-amt' , data_.required_loan_amount)
+                        target.attr('data-emi' , data_.emi)
+                        target.attr('data-prev-roi' , data_.roi)
+                        target.attr('data-final-elig' , data_.final_eligibility)
+                    },
+
+                    error: function (data_) {
+                        console.log("Inside Error")
+                        console.log(data_.responseText);
+                    }
+                });
+            }
+        })
+
+
+        eligibility_details_table.on('blur', 'input', function (event) {
+            console.log("Blurred");
+            $(event.target).prop("readonly", true);
+        })
+
+
+        /*eligibility_details_table.addEventListener('focus',function(event){
+        },true);
+
+        eligibility_details_table.addEventListener('blur',function(event){
+        },true);*/
+    </script>
+
+
 </body>
+
 </html>

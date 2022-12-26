@@ -143,7 +143,8 @@ urlpatterns = [
     path("calculatecommission/", views.calculatecommission, name="calculatecommission"),
     path("showtype/", views.calculatortypeshow, name="showtype"),
 
-    path('add_existing_loan_form/' , views.addExistingLoanForm , name="add_existing_loan_form")
+    path('add_existing_loan_form/' , views.addExistingLoanForm , name="add_existing_loan_form"),
+    path('handle_loan_requirement_change/' , views.handleLoanRequirementChange , name="handle_loan_requirement_change"),
 ]
 
 

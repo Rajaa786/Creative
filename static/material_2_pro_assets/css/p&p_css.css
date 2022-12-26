@@ -49,9 +49,13 @@ table tr:last-child td:last-child {
     border-bottom-right-radius: 10px;
 } */
 
+.table-responsive{
+    overflow-y: hidden;
+}
 
 .table-responsive::-webkit-scrollbar{
-    height: 0.1rem;
+    height: 0.3rem;
+    width: 0.2rem;
 }
 
 .table-responsive::-webkit-scrollbar-thumb { 
