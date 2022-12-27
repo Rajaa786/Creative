@@ -1,4 +1,5 @@
 {% load static %}
+{% load mathfilters %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -37,6 +38,7 @@
     {% comment %} <div>{{data}}</div> {% endcomment %}
     {% comment %} <h4>{{eligibility_details_data}}</h4> {% endcomment %}
     {% comment %} {% if data.multiplier_calculations %} {% endcomment %}
+    <div>{{eligibility_details_data}}</div>
     <div class="container-fluid">
         <div class="row py-3 bg-white rounded-3">
             <div class="col-12">
@@ -66,7 +68,7 @@
 
                             <tr>
                                 <td class="text-center ">{{bank}}</td>
-                                <td class="text-center">A</td>
+                                <td class="text-center">{{calculation.applicants}}</td>
                                 <td class="text-center">{{calculation.multiplier}}</td>
                                 <td class="text-center">{{calculation.x_amount}}</td>
                                 <td class="text-center">{{calculation.foir}}</td>
@@ -74,7 +76,7 @@
                                 <td><input class="requirement_input form-control text-center" type="number"
                                         value={{data.loanamt}} data-product-policy-id="{{data.product_and_policy_id}}"
                                         data-cocat-type="{{data.category}}"
-                                        data-net-sal="{{lead_holder_net_sal}}"
+                                        data-net-sal="{{highest_net_sal_holder}}"
                                         data-tenure="{{calculation.associated_tenure}}"
                                         data-percent-amount="{{calculation.percent_amount}}"
                                         data-x-amount="{{calculation.x_amount}}"
@@ -82,12 +84,14 @@
                                         data-prev-loan-amt="{{data.loanamt}}"
                                         data-prev-roi="{{calculation.roi}}"
                                         data-final-elig="{{calculation.final_eligibility}}"
+                                        data-prev-processing-fee="{{calculation.processing_fees}}"
                                         aria-label="readonly input example" readonly></td>
                                 <td class="final_elig text-center">{{calculation.final_eligibility}}</td>
                                 <td class="roi text-center">{{calculation.roi}}</td>
                                 <td class="emi text-center">{{calculation.emi}}</td>
                                 <td class="text-center">{{calculation.associated_tenure}}</td>
-                                <td class="text-center">{{calculation.processing_fees}} + GST(18%) = {8*4}</td>
+                                <td class="processing_fee text-center"><span class="pf">{{calculation.processing_fees}}</span> + GST(18%) = <span class="pf_gst">{{calculation.processing_fees|mul:1.18|floatformat:2}}</span>
+                                </td>
                             </tr>
                             {% endfor %}
                             {% endfor %}
@@ -113,6 +117,10 @@
 
 
     <script>
+
+        $(document).ready(() => {
+
+
         eligibility_details_table = $("#eligibility_details_table")
 
         eligibility_details_table.click(function (event) {
@@ -141,6 +149,7 @@
                 let emi = target.attr('data-emi')
                 let final_elig = target.attr('data-final-elig')
                 let prev_roi = target.attr('data-prev-roi')
+                let prev_processing_fee = target.attr('data-prev-processing-fee')
 
                 let ajax_call_url = $(this).attr('data-url')
                 console.log("Table Changed");
@@ -158,7 +167,8 @@
                         'prev_loan_amt' : prev_loan_amt,
                         'prev_emi' : emi,
                         'prev_final_elig' : final_elig,
-                        'prev_roi' : prev_roi
+                        'prev_roi' : prev_roi,
+                        'prev_processing_fee' : prev_processing_fee
                     },
                     datatype: 'json',
                     success: function (data_) {
@@ -169,13 +179,18 @@
                         target_parent.siblings('.final_elig').text(data_.final_eligibility)
                         target_parent.siblings('.emi').text(data_.emi)
                         target_parent.siblings('.roi').text(data_.roi)
+                        let pf = target_parent.siblings('.processing_fee')
+                        pf.children('.pf').text(data_.processing_fee)
+                        let pf_gst_calc = data_.processing_fee * 1.18
+                        pf.children('.pf_gst').text(pf_gst_calc.toFixed(2))
                         target.val(data_.required_loan_amount)
                         target.attr('data-prev-loan-amt' , data_.required_loan_amount)
                         target.attr('data-emi' , data_.emi)
                         target.attr('data-prev-roi' , data_.roi)
                         target.attr('data-final-elig' , data_.final_eligibility)
+                        target.attr('data-prev-processing-fee' , data_.processing_fee)
                     },
-
+                    
                     error: function (data_) {
                         console.log("Inside Error")
                         console.log(data_.responseText);
@@ -189,16 +204,17 @@
             console.log("Blurred");
             $(event.target).prop("readonly", true);
         })
-
+        
 
         /*eligibility_details_table.addEventListener('focus',function(event){
         },true);
-
+        
         eligibility_details_table.addEventListener('blur',function(event){
         },true);*/
+    })
     </script>
 
-
+    
 </body>
 
 </html>

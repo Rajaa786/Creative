@@ -530,6 +530,7 @@ class Product_and_Policy_Master(models.Model):
         BankName, on_delete=models.CASCADE, null=False, blank=False
     )
     is_salary_account = models.BooleanField(null=False, choices=YES_NO_CHOICES)
+    co_applicant_allowed = models.BooleanField(null=False, choices=YES_NO_CHOICES)
     designation = models.ForeignKey(
         DesignationType, on_delete=models.CASCADE, null=False, blank=False
     )
