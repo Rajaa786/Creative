@@ -211,7 +211,8 @@ def register_referral(request):
 
         'role': Role.objects.filter(role="Referral Partner").first(),
         'professions': Profession.objects.all(),
-        'cities': City.objects.all()
+        'cities': City.objects.all(),
+        'prefixes' : Prefix.objects.all()
 
     }
 

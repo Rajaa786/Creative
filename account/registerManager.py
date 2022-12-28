@@ -32,29 +32,21 @@ from django.contrib import messages
 
 def handleUserFileInputs(request , user):
     
-    # To-Do
+    if not request.FILES:
+        return
     print(request.FILES)
 
-    photo = request.FILES.get('identity_photo')
-    pan_card = request.FILES.get('pan_card')
-    aadhar_card = request.FILES.get('aadhar_card')
-    cancelled_cheque = request.FILES.get('cancelled_cheque')
-    
+    # photo = request.FILES.get('identity_photo')
+    # pan_card = request.FILES.get('pan_card')
+    # aadhar_card = request.FILES.get('aadhar_card')
+    # cancelled_cheque = request.FILES.get('cancelled_cheque')
+
+
     for file in request.FILES:
-        print('******')
-        print(file)
-        print(file.filename)
-        print(request.POST[file])
-        print('******')
-
-    # print(photo)
-    # print(pan_card)
-    # print(aadhar_card)
-    # print(cancelled_cheque)
-
-    user_document = UserDocuments()
-
-    pass
+        file_content = request.FILES[file]
+        filename = request.FILES[file].name
+        user_document = UserDocuments(user = user , documentName = filename , document = file_content)
+        user_document.save()
 
 
 
@@ -80,8 +72,6 @@ def register_referral_logic(request):
     has_gst = request.POST["has_gst"]
     reference = request.POST["reference"]
     referral_code = request.POST.get("referral_code", "")
-    handleUserFileInputs(request , "user")
-    return redirect('register_referral')
     if CustomUser.objects.filter(email=Email).exists():
         messages.info(request, "Email Taken")
         return redirect("register_referral")
@@ -120,35 +110,36 @@ def register_referral_logic(request):
 
 
     referral_profile.save()
+    handleUserFileInputs(request , user)
     ini = ""
-    if referral_profile.profession == "Salaried":
-        ini += "SAL"
-    elif referral_profile.profession == "Self Employed":
-        ini += "SE"
-    elif referral_profile.profession == "Freelancer":
-        ini += "FL"
-    elif referral_profile.profession == "Student":
-        ini += "ST"
-    elif referral_profile.profession == "Home Maker":
-        ini += "HM"
-    elif referral_profile.profession == "DSA":
-        ini += "DSA"
-    elif referral_profile.profession == "Insurance Agent":
-        ini += "IA"
-    elif referral_profile.profession == "Chartered Accountant":
-        ini += "CA"
-    elif referral_profile.profession == "Tax Consultants":
-        ini += "TC"
-    elif referral_profile.profession == "Banker":
-        ini += "BNK"
-    elif referral_profile.profession == "Company Secretary":
-        ini += "CS"
-    elif referral_profile.profession == "Real Estate Agent":
-        ini += "REA"
-    elif referral_profile.profession == "Builder":
-        ini += "BLD"
-    else:
-        ini += "O"
+    # if referral_profile.profession == "Salaried":
+    #     ini += "SAL"
+    # elif referral_profile.profession == "Self Employed":
+    #     ini += "SE"
+    # elif referral_profile.profession == "Freelancer":
+    #     ini += "FL"
+    # elif referral_profile.profession == "Student":
+    #     ini += "ST"
+    # elif referral_profile.profession == "Home Maker":
+    #     ini += "HM"
+    # elif referral_profile.profession == "DSA":
+    #     ini += "DSA"
+    # elif referral_profile.profession == "Insurance Agent":
+    #     ini += "IA"
+    # elif referral_profile.profession == "Chartered Accountant":
+    #     ini += "CA"
+    # elif referral_profile.profession == "Tax Consultants":
+    #     ini += "TC"
+    # elif referral_profile.profession == "Banker":
+    #     ini += "BNK"
+    # elif referral_profile.profession == "Company Secretary":
+    #     ini += "CS"
+    # elif referral_profile.profession == "Real Estate Agent":
+    #     ini += "REA"
+    # elif referral_profile.profession == "Builder":
+    #     ini += "BLD"
+    # else:
+    ini += "O"
     if user.system_role.role == "Referral Partner":
         ini += "RP"
     num = "{:04d}".format(user.id)
@@ -194,7 +185,7 @@ def register_referral_logic(request):
     response = HttpResponse(pdf, content_type="application/pdf")
     filename = "Agreement_%s.pdf" % (user.username)
 
-    content = "attachment; filename='%s'" % (filename)
+    # content = "attachment; filename='%s'" % (filename)
     response["Content-Disposition"] = 'attachment; filename="report.pdf"'
     referral_profile.agreement.save(filename, ContentFile(pdf.content))
     print(referral_profile.agreement)
@@ -217,7 +208,7 @@ def register_referral_logic(request):
 
     # return referral
 
-    pass
+    
 
 
 def register_vendor_logic():
