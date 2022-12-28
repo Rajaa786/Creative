@@ -13,9 +13,11 @@ from master.models import *
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime
 
-YES_NO_CHOICES = ((None, ("Select Yes Or No")), (True, ("Yes")), (False, ("No")))
+YES_NO_CHOICES = ((None, ("Select Yes Or No")),
+                  (True, ("Yes")), (False, ("No")))
 
-GOOD_BAD_CHOICES = ((None, "-- Good or Bad --"), ("Good", "Good"), ("Bad", "Bad"))
+GOOD_BAD_CHOICES = ((None, "-- Good or Bad --"),
+                    ("Good", "Good"), ("Bad", "Bad"))
 
 KNOWN_UNKNOWN_CHOICES = (
     (None, "-- Select Cibil Type --"),
@@ -58,6 +60,11 @@ def create_path(instance, filename):
     )
 
 
+def create_user_documents_path(instance, filename):
+    return os.path.join(
+        "userDocuments", f"UserDocList_{instance.user.username}", filename
+    )
+
 # Create your models here.
 
 
@@ -77,10 +84,12 @@ class CustomUser(AbstractUser):
 
 
 class ReferralProfile(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, blank=False)
+    user = models.OneToOneField(
+        CustomUser, on_delete=models.CASCADE, blank=False)
     full_name = models.CharField(max_length=200)
     profession = models.CharField(max_length=200, blank=False)
-    has_GST = models.BooleanField(blank=False, null=False, choices=YES_NO_CHOICES)
+    has_GST = models.BooleanField(
+        blank=False, null=False, choices=YES_NO_CHOICES)
     reference = models.CharField(max_length=200, blank=False)
     referral_code = models.CharField(max_length=200, blank=True)
     agreement = models.FileField(upload_to="agreements", default="terms.pdf")
@@ -109,17 +118,27 @@ class Leads(models.Model):
 class LoanApplication(models.Model):
     lead_id = models.ForeignKey(Leads, on_delete=models.CASCADE)
     websiteUrl = models.CharField(max_length=254, null=True, blank=True)
-    coApplicantWebsiteUrl = models.CharField(max_length=254, null=True, blank=True)
+    coApplicantWebsiteUrl = models.CharField(
+        max_length=254, null=True, blank=True)
     loan = models.CharField(max_length=124)
     loanCustomerType = models.CharField(max_length=50, null=True, blank=True)
-    loanCustomerCoApplicantType = models.CharField(max_length=50, null=True, blank=True)
+    loanCustomerCoApplicantType = models.CharField(
+        max_length=50, null=True, blank=True)
     remark = models.TextField()
 
 
 class LoanDocuments(models.Model):
-    loanApplication = models.ForeignKey(LoanApplication, on_delete=models.CASCADE)
+    loanApplication = models.ForeignKey(
+        LoanApplication, on_delete=models.CASCADE)
     documentName = models.CharField(max_length=124)
     document = models.FileField(blank=True, upload_to=create_path)
+
+
+class UserDocuments(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    documentName = models.CharField(max_length=250)
+    document = models.FileField(
+        blank=True, upload_to=create_user_documents_path)
 
 
 class AdditionalDetails(models.Model):
@@ -158,13 +177,15 @@ class SalPersonalDetails(models.Model):
         DefaultYear, on_delete=models.CASCADE, blank=True, null=True
     )
     details_about_default = models.CharField(max_length=200, blank=True)
-    gender = models.ForeignKey(Gender, on_delete=models.CASCADE, blank=True, null=True)
+    gender = models.ForeignKey(
+        Gender, on_delete=models.CASCADE, blank=True, null=True)
     dob = models.DateField(blank=True, null=True)
     age = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     retirement_age = models.IntegerField(
         blank=True, null=True, validators=[MinValueValidator(50), MaxValueValidator(70)]
     )
-    retirement_proof = models.BooleanField(choices=YES_NO_CHOICES, default=None)
+    retirement_proof = models.BooleanField(
+        choices=YES_NO_CHOICES, default=None)
     marital_status = models.ForeignKey(
         MaritalStatus, on_delete=models.CASCADE, blank=True, null=True
     )
@@ -175,7 +196,8 @@ class SalPersonalDetails(models.Model):
         Profession, on_delete=models.CASCADE, blank=True, null=True
     )
     degree_others = models.CharField(max_length=100, blank=True, null=True)
-    degree = models.ForeignKey(Degree, on_delete=models.CASCADE, blank=True, null=True)
+    degree = models.ForeignKey(
+        Degree, on_delete=models.CASCADE, blank=True, null=True)
     Lawyer_Type = models.ForeignKey(
         LawyerType, on_delete=models.CASCADE, blank=True, null=True
     )
@@ -214,18 +236,23 @@ class SalIncomeDetails(models.Model):
     )
     gross_sal = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     net_sal = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    bonus_type = models.CharField(max_length=11, choices=Bonus_Type, default=None)
+    bonus_type = models.CharField(
+        max_length=11, choices=Bonus_Type, default=None)
     bonus_duration = models.PositiveIntegerField(blank=True, null=True)
-    bonus_amount = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    incentive_duration = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    incentive_amount = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    bonus_amount = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
+    incentive_duration = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
+    incentive_amount = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     # deduction = models.ForeignKey(
     #     DeductionType, on_delete=models.CASCADE, blank=True, null=True
     # )
     # deduction_choice = models.BooleanField(
     #     choices=YES_NO_CHOICES, blank=True, null=True
     # )
-    addi_details_id = models.ForeignKey(AdditionalDetails, on_delete=models.CASCADE)
+    addi_details_id = models.ForeignKey(
+        AdditionalDetails, on_delete=models.CASCADE)
     # bonus_tenure       = models.PositiveIntegerField(validators=[MinValueValidator(1)])
 
 
@@ -235,10 +262,14 @@ class SalOtherIncomes(models.Model):
         LesseType, on_delete=models.CASCADE, blank=True, null=True
     )
     lessee_name = models.CharField(max_length=50, blank=True, null=True)
-    rent_amount = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    tenure_of_agreement = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    tenure_pending = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    valid_rent_agreement = models.BooleanField(choices=YES_NO_CHOICES, default=False)
+    rent_amount = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
+    tenure_of_agreement = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
+    tenure_pending = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
+    valid_rent_agreement = models.BooleanField(
+        choices=YES_NO_CHOICES, default=False)
     will_you_make_agreement = models.BooleanField(
         choices=YES_NO_CHOICES, blank=True, null=True
     )
@@ -257,14 +288,17 @@ class SalOtherIncomes(models.Model):
     extension_expected_years = models.PositiveIntegerField(
         validators=[MinValueValidator(1)]
     )
-    addi_details_id = models.ForeignKey(AdditionalDetails, on_delete=models.CASCADE)
+    addi_details_id = models.ForeignKey(
+        AdditionalDetails, on_delete=models.CASCADE)
 
 
 class SalAdditionalOtherIncomes(models.Model):
     add_oth_inc_id = models.AutoField(primary_key=True)
     Future_Rent = models.BooleanField(choices=YES_NO_CHOICES)
-    income_amount = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    addi_details_id = models.ForeignKey(AdditionalDetails, on_delete=models.CASCADE)
+    income_amount = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
+    addi_details_id = models.ForeignKey(
+        AdditionalDetails, on_delete=models.CASCADE)
 
 
 class ContactPerson(models.Model):
@@ -285,23 +319,29 @@ class SalCompanyDetails(models.Model):
         default=None,
     )
     other_company_name = models.CharField(max_length=20)
-    paid_up_capital = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    company_age = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    paid_up_capital = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
+    company_age = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     designation = models.CharField(max_length=50)
-    location = models.ForeignKey(City, on_delete=models.CASCADE, blank=True, null=True)
+    location = models.ForeignKey(
+        City, on_delete=models.CASCADE, blank=True, null=True)
 
     nature_of_business = models.CharField(max_length=50)
 
     designation_type = models.ForeignKey(
         DesignationType, on_delete=models.CASCADE, blank=True, null=True
     )
-    current_experience = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    total_experience = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    current_experience = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
+    total_experience = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     employment_type = models.ForeignKey(
         EmploymentType, on_delete=models.CASCADE, blank=True, null=True
     )
     form_16 = models.BooleanField(choices=YES_NO_CHOICES, default=False)
-    Provident_Fund_deduction = models.BooleanField(choices=YES_NO_CHOICES, default=None)
+    Provident_Fund_deduction = models.BooleanField(
+        choices=YES_NO_CHOICES, default=None)
     TDS_deduction = models.BooleanField(choices=YES_NO_CHOICES, default=None)
     office_phone = models.CharField(max_length=10)
     office_email = models.EmailField(max_length=50)
@@ -317,7 +357,8 @@ class SalExistingLoanDetails(models.Model):
     products_or_services = models.ForeignKey(
         Product, on_delete=models.CASCADE, null=False
     )
-    loan_amount = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    loan_amount = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     emi = models.DecimalField(max_digits=12, decimal_places=2)
     rate_of_interest = models.DecimalField(max_digits=12, decimal_places=2)
     tenure = models.PositiveIntegerField(validators=[MinValueValidator(1)])
@@ -326,25 +367,34 @@ class SalExistingLoanDetails(models.Model):
     outstanding_amount_paid_by_customer = models.PositiveIntegerField(
         validators=[MinValueValidator(1)]
     )
-    outstanding_amount = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    outstanding_amount = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     any_bounces = models.BooleanField(choices=YES_NO_CHOICES, default=False)
-    moratorium_taken = models.BooleanField(choices=YES_NO_CHOICES, default=False)
+    moratorium_taken = models.BooleanField(
+        choices=YES_NO_CHOICES, default=False)
     applicant_type = models.ForeignKey(ApplicantType, on_delete=models.CASCADE)
-    addi_details_id = models.ForeignKey(AdditionalDetails, on_delete=models.CASCADE)
+    addi_details_id = models.ForeignKey(
+        AdditionalDetails, on_delete=models.CASCADE)
 
 
 class SalExistingCreditCard(models.Model):
     existing_credit_card_id = models.AutoField(primary_key=True)
     bank_name = models.ForeignKey(BankName, on_delete=models.CASCADE)
     other_bank_name = models.CharField(max_length=10, default=None)
-    credit_limit = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    limit_utilized = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    credit_limit = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
+    limit_utilized = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     minimum_due = models.DecimalField(max_digits=12, decimal_places=2)
-    credit_card_age = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    credit_card_age = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     payment_delay = models.BooleanField(choices=YES_NO_CHOICES, default=False)
-    payment_delay_year = models.ForeignKey(PaymentDelayYear, on_delete=models.CASCADE)
-    moratorium_taken = models.BooleanField(choices=YES_NO_CHOICES, default=False)
-    addi_details_id = models.ForeignKey(AdditionalDetails, on_delete=models.CASCADE)
+    payment_delay_year = models.ForeignKey(
+        PaymentDelayYear, on_delete=models.CASCADE)
+    moratorium_taken = models.BooleanField(
+        choices=YES_NO_CHOICES, default=False)
+    addi_details_id = models.ForeignKey(
+        AdditionalDetails, on_delete=models.CASCADE)
 
 
 class SalAdditionalDetails(models.Model):
@@ -356,35 +406,40 @@ class SalAdditionalDetails(models.Model):
         choices=YES_NO_CHOICES, default=False
     )
     loan_inquiry_disbursement_details = models.TextField(blank=True, null=True)
-    addi_details_id = models.ForeignKey(AdditionalDetails, on_delete=models.CASCADE)
+    addi_details_id = models.ForeignKey(
+        AdditionalDetails, on_delete=models.CASCADE)
 
 
 class SalInvestments(models.Model):
     sal_inv_id = models.AutoField(primary_key=True)
     bank_sav_dep = models.PositiveIntegerField(
         validators=[MinValueValidator(1)]
-                    )
+    )
     current_bal = models.PositiveIntegerField(
         validators=[MinValueValidator(1)]
-                    )
+    )
     life_ins = models.PositiveIntegerField(
         validators=[MinValueValidator(1)]
-                    )
+    )
     share_sec = models.PositiveIntegerField(
         validators=[MinValueValidator(1)]
-                    )
-    
+    )
+
     Other_Assets = models.CharField(max_length=100, default=None)
-    Other_Owned_Property_Details = models.CharField(max_length=100, default=None)
-    addi_details_id = models.ForeignKey(AdditionalDetails, on_delete=models.CASCADE)
+    Other_Owned_Property_Details = models.CharField(
+        max_length=100, default=None)
+    addi_details_id = models.ForeignKey(
+        AdditionalDetails, on_delete=models.CASCADE)
 
 
 class SalResidenceDetails(models.Model):
     sal_res_det_id = models.AutoField(primary_key=True)
-    current_residence_type = models.ForeignKey(ResidenceType, on_delete=models.CASCADE)
+    current_residence_type = models.ForeignKey(
+        ResidenceType, on_delete=models.CASCADE)
     state = models.ForeignKey(State, on_delete=models.CASCADE)
     current_location_city = models.ForeignKey(City, on_delete=models.CASCADE)
-    addi_details_id = models.ForeignKey(AdditionalDetails, on_delete=models.CASCADE)
+    addi_details_id = models.ForeignKey(
+        AdditionalDetails, on_delete=models.CASCADE)
 
 
 # --------------------------------------------------------Property Details--------------------------------------------------------------#
@@ -407,17 +462,20 @@ class PropType1(models.Model):  # Underconstruction buying from builder
     const_stage = models.CharField(max_length=50)
     per_complete = models.FloatField()
     possession_date = models.DateField()
-    total_floors = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    total_floors = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     buy_floor = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     slabs_done = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    agreement_val = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    agreement_val = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     market_val = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     prop_loc = models.CharField(max_length=50)
     prop_city = models.ForeignKey(City, on_delete=models.CASCADE)
     prop_state = models.ForeignKey(State, on_delete=models.CASCADE)
     prop_in = models.ForeignKey(PropertyIn, on_delete=CASCADE)
     cc_rec = models.BooleanField(choices=YES_NO_CHOICES)
-    cc_rec_upto = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    cc_rec_upto = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     municipal_approved = models.BooleanField(choices=YES_NO_CHOICES)
     area_size = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     area_in = models.ForeignKey(AreaIn, on_delete=models.CASCADE)
@@ -430,8 +488,10 @@ class PropType1(models.Model):  # Underconstruction buying from builder
     cost_sheet = models.BooleanField(choices=YES_NO_CHOICES, default=True)
     cost_sheet_amt = models.CharField(max_length=7, blank=True, null=True)
     lead_id = models.ForeignKey(Leads, on_delete=models.CASCADE)
-    future_rent = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    car_parking_amt = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    future_rent = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
+    car_parking_amt = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     subvention_scheme = models.BooleanField(
         choices=YES_NO_CHOICES, blank=True, null=True
     )
@@ -447,17 +507,20 @@ class PropType2(models.Model):  # Underconstruction buying from seller
     const_stage = models.CharField(max_length=50)
     per_complete = models.FloatField()
     possession_date = models.DateField()
-    total_floors = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    total_floors = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     buy_floor = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     slabs_done = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    agreement_val = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    agreement_val = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     market_val = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     prop_loc = models.CharField(max_length=50)
     prop_city = models.ForeignKey(City, on_delete=models.CASCADE)
     prop_state = models.ForeignKey(State, on_delete=models.CASCADE)
     prop_in = models.ForeignKey(PropertyIn, on_delete=CASCADE)
     cc_rec = models.BooleanField(choices=YES_NO_CHOICES)
-    cc_rec_upto = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    cc_rec_upto = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     municipal_approved = models.BooleanField(choices=YES_NO_CHOICES)
     area_size = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     area_in = models.ForeignKey(AreaIn, on_delete=models.CASCADE)
@@ -466,12 +529,16 @@ class PropType2(models.Model):  # Underconstruction buying from seller
     agreement_type = models.ForeignKey(AgreementType, on_delete=models.CASCADE)
     pay_till_date = models.CharField(blank=True, null=True, max_length=20)
     stamp_duty = models.BooleanField(choices=YES_NO_CHOICES)
-    stamp_duty_amt = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    stamp_duty_amt = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     cost_sheet = models.BooleanField(default=False, choices=YES_NO_CHOICES)
-    cost_sheet_amt = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    cost_sheet_amt = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     lead_id = models.ForeignKey(Leads, on_delete=models.CASCADE)
-    future_rent = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    car_parking_amt = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    future_rent = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
+    car_parking_amt = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     car_parking = models.BooleanField(choices=YES_NO_CHOICES)
 
 
@@ -480,10 +547,13 @@ class PropType3(models.Model):
     proj_name = models.CharField(max_length=50)
     apf_num = models.CharField(max_length=50)
     apf_approved_lender = models.ManyToManyField(BankName)
-    total_floors = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    total_floors = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     buy_floor = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    building_age = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    agreement_val = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    building_age = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
+    agreement_val = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     market_val = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     prop_loc = models.CharField(max_length=50)
     prop_city = models.ForeignKey(City, on_delete=models.CASCADE)
@@ -499,11 +569,14 @@ class PropType3(models.Model):
     agreement_type = models.ForeignKey(AgreementType, on_delete=models.CASCADE)
     pay_till_date = models.CharField(max_length=10)
     stamp_duty = models.BooleanField(choices=YES_NO_CHOICES)
-    stamp_duty_amt = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    stamp_duty_amt = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     cost_sheet = models.BooleanField(choices=YES_NO_CHOICES)
-    cost_sheet_amt = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    cost_sheet_amt = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     lead_id = models.ForeignKey(Leads, on_delete=models.CASCADE)
-    car_parking_amt = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    car_parking_amt = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     car_parking = models.BooleanField(choices=YES_NO_CHOICES)
 
 
@@ -514,10 +587,13 @@ class PropType4(models.Model):
     project_name = models.CharField(max_length=50)
     apf_num = models.CharField(max_length=50)
     apf_approved_lender = models.ManyToManyField(BankName)
-    total_floors = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    total_floors = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     buy_floor = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    building_age = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    agreement_val = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    building_age = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
+    agreement_val = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     market_val = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     prop_loc = models.CharField(max_length=50)
     prop_city = models.ForeignKey(City, on_delete=models.CASCADE)
@@ -525,7 +601,8 @@ class PropType4(models.Model):
     prop_in = models.ForeignKey(PropertyIn, on_delete=CASCADE)
     cc_available = models.BooleanField(choices=YES_NO_CHOICES)
     oc_rec = models.BooleanField(choices=YES_NO_CHOICES)
-    oc_rec_floor = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    oc_rec_floor = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     municipal_approved = models.BooleanField(choices=YES_NO_CHOICES)
     area_size = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     area_in = models.ForeignKey(AreaIn, on_delete=models.CASCADE)
@@ -539,14 +616,16 @@ class PropType4(models.Model):
     registration_done_previous_aggremnet = models.CharField(max_length=100)
     concern_area = models.CharField(max_length=100)
     stamp_duty_registration_paid = models.BooleanField(choices=YES_NO_CHOICES)
-    stamp_duty_amt = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    stamp_duty_amt = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     property_tax_paid = models.BooleanField(
         null=True, blank=True, choices=YES_NO_CHOICES
     )
     society_informed = models.BooleanField(
         null=True, blank=True, choices=YES_NO_CHOICES
     )
-    car_parking_amt = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    car_parking_amt = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
     car_parking = models.BooleanField(choices=YES_NO_CHOICES)
     lead_id = models.ForeignKey(Leads, on_delete=models.CASCADE)
 

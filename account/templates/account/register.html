@@ -4,6 +4,7 @@
 
 {% block other_css %}
 <link rel="stylesheet" href="{% static 'material_2_pro_assets/css/agreement.css' %}" />
+<link rel="stylesheet" href="{% static 'material_2_pro_assets/css/file_input.css' %}" />
 
 <style>
   @media (min-width: 576px) {
@@ -12,31 +13,37 @@
     }
   }
 
-  .close-btn:hover{
-    opacity : 1
+  .close-btn:hover {
+    opacity: 1
   }
 
   .close-btn {
-    border : none;
-    outline : none;
-    background : none;
-    opacity : 0.7
+    border: none;
+    outline: none;
+    background: none;
+    opacity: 0.7
+  }
+
+  .fake_display_none {
+    visibility: hidden;
   }
 </style>
 {% endblock other_css %}
 
 {% block title %}Registration Form{% endblock title %}
 
+{% block other_body_css %}id="page-top"{% endblock other_body_css %}
+
 {% block other_body %}
 <h1 class="mb-5 mt-3 display-3 text-center bg-transparent text-dark">New Partner Registration</h1>
 <form action="{% url 'register' %}" method="POST" class="bg-white rounded p-5 shadow-blur border-0"
-  style="width: 95%; margin: 25px auto;">
+  style="width: 95%; margin: 25px auto;" enctype="multipart/form-data">
   {% csrf_token %}
   <div class="row">
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="fname" class="form-label text-primary fw-bold">Full Name</label>
-        <input type="text" name="fname" id="fname" class="form-control" required>
+        <input type="text" name="fname" id="fname" class="form-control" rajaa>
       </div>
     </div>
     <div class="col-md-4">
@@ -44,20 +51,19 @@
         <label for="password" class="form-label text-primary fw-bold">Password</label>
         <input type="password" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,12}$" name="password"
           oninvalid="this.setCustomValidity('Password must be between 8-12 characters with atleast 1 uppercase,1 lowercase ,and 1 special character.')"
-          oninput="this.setCustomValidity('')" id="password" class="form-control" required>
+          oninput="this.setCustomValidity('')" id="password" class="form-control" rajaa>
       </div>
     </div>
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="email" class="form-label text-primary fw-bold">E-mail</label>
-        <input type="email" name="email" id="email" class="form-control" required>
+        <input type="email" name="email" id="email" class="form-control" rajaa>
       </div>
     </div>
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="phone" class="form-label text-primary fw-bold">Mobile Number</label>
-        <input type="tel" pattern="[1-9]{1}[0-9]{9}" name="phone" id="phone" class="form-control" maxlength="10"
-          required>
+        <input type="tel" pattern="[1-9]{1}[0-9]{9}" name="phone" id="phone" class="form-control" maxlength="10" rajaa>
       </div>
     </div>
 
@@ -65,14 +71,14 @@
       <label for="address" class="form-label text-primary fw-bold mb-0">Address</label>
       <div class="input-group input-group-dynamic mb-4">
         <textarea name="address" id="address" class="form-control" rows="1" placeholder="eg. Address" spellcheck="false"
-          required></textarea>
+          rajaa></textarea>
       </div>
     </div>
     <div class="col-md-4">
       <div class="form-group row">
         <div class="input-group input-group-static mb-4">
           <label for="city" class="ms-0 text-primary fw-bold col-12">City</label>
-          <select class="form-control col-12" name="city" id="city" required>
+          <select class="form-control col-12" name="city" id="city" rajaa>
             <option value="">-- Select City --</option>
             {% for city in  cities%}
             <option value={{city.city_name}}>{{city.city_name}}</option>
@@ -84,13 +90,13 @@
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="pincode" class="form-label text-primary fw-bold">PinCode</label>
-        <input type="text" name="pincode" id="pincode" class="form-control" required>
+        <input type="text" name="pincode" id="pincode" class="form-control" rajaa>
       </div>
     </div>
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="reference" class="form-label text-primary fw-bold">How did you know about us?</label>
-        <input type="text" name="reference" id="reference" class="form-control" required>
+        <input type="text" name="reference" id="reference" class="form-control" rajaa>
       </div>
     </div>
     <div class="col-md-4">
@@ -104,7 +110,7 @@
       <div class="form-group row">
         <div class="input-group input-group-static mb-4">
           <label for="has_gst" class="ms-0 text-primary fw-bold col-12">Do you have GST?</label>
-          <select class="form-control col-12" name="has_gst" id="has_gst" required>
+          <select class="form-control col-12" name="has_gst" id="has_gst" rajaa>
             <option value="">-- Select Yes or No --</option>
             <option default value={{True}}>Yes</option>
             <option default value={{False}}>No</option>
@@ -118,7 +124,7 @@
       <div class="form-group row">
         <div class="input-group input-group-static mb-4">
           <label for="system_role" class="ms-0 text-primary fw-bold col-12">System Role</label>
-          <select class="form-control col-12" name="system_role" id="system_role" required>
+          <select class="form-control col-12" name="system_role" id="system_role" rajaa>
             {% comment %} <option value="">-- Select Role --</option> {% endcomment %}
             {% if role%}
             <option default value="{{role.role}}">{{role.role}}</option>
@@ -130,12 +136,13 @@
 
 
 
+
     <div class="col-md-4">
       <div class="form-group row">
         <div class="input-group input-group-static mb-4">
           <label for="profession" class="ms-0 text-primary fw-bold col-12">Profession</label>
           <select class="form-control col-12" name="profession" id="profession"
-            onchange="showfield(this.options[this.selectedIndex].value)" required>
+            onchange="showfield(this.options[this.selectedIndex].value)" rajaa>
             <option value="">-- Select Profession --</option>
             {% for profession in  professions%}
             <option value={{profession.profession}}>{{profession.profession}}</option>
@@ -151,22 +158,34 @@
 
 
 
+
   <div class="container text-danger">
     {% for message in messages %}
     {{message}}
     {% endfor %}
   </div>
-  <div class="form-check p-0">
-    <input type="checkbox" name="terms" id="terms" class="form-check-input" data-bs-toggle="modal"
-      data-bs-target="#exampleModal" style="border-color: grey;" 
-      oninvalid="this.setCustomValidity('You must agree to our Terms and Conditions before proceeding.')"
-      oninput="this.setCustomValidity('')"
-      required>
-    <label for="terms" class="form-check-label d-inline ms-0 text-center">I agree to the <span>Terms &
-        Conditions</span>.</label>
+
+  <div class="row align-items-center mb-3 gy-3 gx-1">
+    <div class="col-sm-9">
+      <div class="form-check p-0">
+        <input type="checkbox" name="terms" id="terms" class="form-check-input" data-bs-toggle="modal"
+          data-bs-target="#exampleModal" style="border-color: grey;"
+          oninvalid="this.setCustomValidity('You must agree to our Terms and Conditions before proceeding.')"
+          oninput="this.setCustomValidity('')" rajaa>
+        <label for="terms" class="form-check-label d-inline ms-0 text-center">I agree to the <span>Terms &
+            Conditions</span>.</label>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <button id="file_upload_btn" class="btn btn-secondary bg-gradient-secondary w-100 m-0" type="button"
+        data-bs-toggle="modal" data-bs-target="#fileInputModal">Upload Documents</button>
+    </div>
   </div>
-  <div class="row justify-content-center">
-    <button type="submit" class="col-3 btn bg-gradient-primary">Register</button>
+  <div class="row justify-content-center mb-3">
+    <div class="col-sm-3">
+      <button type="submit" class="btn bg-gradient-primary w-100 m-0">Register</button>
+    </div>
+
   </div>
   {% if not request.user.is_authenticated %}
   <div class="container text-center">
@@ -175,6 +194,7 @@
     </p>
   </div>
   {% endif %}
+  {% include 'account/referral_upload_documents.html' %}
 </form>
 
 
@@ -204,6 +224,8 @@
 </div>
 
 
+
+
 {% endblock other_body %}
 
 {% block other_js %}
@@ -221,16 +243,16 @@
   }
 
   $('input[name="agreement"]').change(function (event) {
-    required_checkbox = $('input[name="terms"]')
+    rajaa_checkbox = $('input[name="terms"]')
     if (this.checked) {
-      required_checkbox.prop("checked", true);
-      required_checkbox.removeAttr("data-bs-target")
-      required_checkbox.removeAttr("data-bs-toggle")
+      rajaa_checkbox.prop("checked", true);
+      rajaa_checkbox.removeAttr("data-bs-target")
+      rajaa_checkbox.removeAttr("data-bs-toggle")
       console.log("Terms wala " + $('input[name="terms"]').prop('checked'))
     } else {
-      required_checkbox.prop("checked", false);
-      required_checkbox.attr("data-bs-target", "#exampleModal")
-      required_checkbox.attr("data-bs-toggle", "modal")
+      rajaa_checkbox.prop("checked", false);
+      rajaa_checkbox.attr("data-bs-target", "#exampleModal")
+      rajaa_checkbox.attr("data-bs-toggle", "modal")
       console.log("Terms wala " + $('input[name="terms"]').prop('checked'))
     }
   })
@@ -248,5 +270,22 @@
     $('input[name="agreement"]').prop("checked", false)
 
   });
+  $(".custom-file-input").on("change", function () {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  });
+
+  /*$("#file_upload_btn").click(function(event){
+    $("#fileInputModal").removeClass("fake_display_none")
+  })
+
+
+  $("#fileInputModal .modal-footer > button").click(function(event){
+    console.log("Why clicked me")
+    $("#fileInputModal").addClass("d-block");
+    const myTimeout = setTimeout(() => {
+      $("#fileInputModal").addClass("fake_display_none");
+    }, 300);
+  })*/
 </script>
 {% endblock other_js %}

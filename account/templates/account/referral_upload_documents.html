@@ -1,0 +1,47 @@
+{% comment %} TODO {% endcomment %}
+
+<div class="modal fade" id="fileInputModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="fileInputModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fileInputModalLabel">Referral Agreement</h5>
+                <button type="button" class="close-btn text-dark" style="font-size : 2rem;" data-bs-dismiss="modal"
+                    aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="file_input_container">
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="identity_photo" id="identity_photo" accept="application/pdf,image/*">
+                            <label class="font-weight-bolder custom-file-label" for="identity_photo">Photo</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="pan_card" id="pan_card" accept="application/pdf,image/*">
+                            <label class="font-weight-bolder custom-file-label" for="pan_card">Pan Card</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="aadhar_card" id="aadhar_card" accept="application/pdf,image/*">
+                            <label class="font-weight-bolder custom-file-label" for="aadhar_card">Aadhar Card</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="cancelled_cheque" id="cancelled_cheque" accept="application/pdf,image/*">
+                            <label class="font-weight-bolder custom-file-label" for="cancelled_cheque">Cancelled Cheque</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+

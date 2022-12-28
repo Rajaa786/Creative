@@ -1,5 +1,6 @@
 from account.models import ReferralProfile, CustomUser
 from master.models import Role, City
+from .models import UserDocuments
 from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -29,13 +30,40 @@ from django.contrib import messages
 
 # DATABASES_PASSWORD = ""
 
+def handleUserFileInputs(request , user):
+    
+    # To-Do
+    print(request.FILES)
+
+    photo = request.FILES.get('identity_photo')
+    pan_card = request.FILES.get('pan_card')
+    aadhar_card = request.FILES.get('aadhar_card')
+    cancelled_cheque = request.FILES.get('cancelled_cheque')
+    
+    for file in request.FILES:
+        print('******')
+        print(file)
+        print(file.filename)
+        print(request.POST[file])
+        print('******')
+
+    # print(photo)
+    # print(pan_card)
+    # print(aadhar_card)
+    # print(cancelled_cheque)
+
+    user_document = UserDocuments()
+
+    pass
+
+
+
 
 def get_tenure_months(current_age, retirement_age):
     return (retirement_age - current_age) * 12
 
 
 def register_referral_logic(request):
-
     print(request.POST)
     group = Group.objects.get(name="Referral Partner")
     fname = request.POST["fname"]
@@ -52,6 +80,8 @@ def register_referral_logic(request):
     has_gst = request.POST["has_gst"]
     reference = request.POST["reference"]
     referral_code = request.POST.get("referral_code", "")
+    handleUserFileInputs(request , "user")
+    return redirect('register_referral')
     if CustomUser.objects.filter(email=Email).exists():
         messages.info(request, "Email Taken")
         return redirect("register_referral")
@@ -87,6 +117,8 @@ def register_referral_logic(request):
         reference=reference,
         referral_code=referral_code,
     )
+
+
     referral_profile.save()
     ini = ""
     if referral_profile.profession == "Salaried":

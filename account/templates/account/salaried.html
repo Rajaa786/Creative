@@ -70,7 +70,7 @@
             <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
                 {% csrf_token %}
                 <div class="text-center">
-                    <button class="btn btn-primary mr-3" name="next" type="submit">NEXT</button>
+                    <button class="btn btn-primary mr-3" name="next" value="{{loan_type}}" type="submit">NEXT</button>
                 </div>
             </form>
         </div>
@@ -83,7 +83,7 @@
             <div class="modal-header">
                 <h5 class="modal-title font-weight-normal" id="personalDetailsModalLabel">Personal details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+
                 </button>
             </div>
             <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
@@ -115,7 +115,7 @@
             <div class="modal-header">
                 <h5 class="modal-title font-weight-normal" id="incomeDetailsLabel">Income Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+
                 </button>
             </div>
             <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
@@ -147,7 +147,7 @@
             <div class="modal-header">
                 <h5 class="modal-title font-weight-normal" id="otherIncomesLabel">Rental Income</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+
                 </button>
             </div>
             <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
@@ -182,7 +182,7 @@
                     Mentioned
                     Above</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+
                 </button>
             </div>
             <form method="POST" action="{% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}">
@@ -214,7 +214,7 @@
             <div class="modal-header">
                 <h5 class="modal-title font-weight-normal" id="companyDetailsModalLabel">Company Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+
                 </button>
             </div>
             <form method="POST" action="{% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}">
@@ -246,7 +246,7 @@
             <div class="modal-header">
                 <h5 class="modal-title font-weight-normal" id="residenceDetailModalLabel">Residence Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+
                 </button>
             </div>
             <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
@@ -281,14 +281,13 @@
                 <h5 class="modal-title font-weight-normal" id="existingloanDetailModalLabel">Existing Loan
                     Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+
                 </button>
             </div>
             <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
                 {% csrf_token %}
                 <div class="modal-body">
                     <div id="existing_loan_form_container">
-                        <h4>1.</h4>
                         <div class="row g-4 p-4 mb-4">
                             {% for field in existing_loan_details_form %}
                             <div class="col-sm-4">
@@ -300,7 +299,8 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <button id="add_existing_loan_details_form" data-loan-form-url="{% url 'add_existing_loan_form' %}" class="btn btn-primary" type="button">Add More Loan Information</button>
+                    <button id="add_existing_loan_details_form" data-loan-form-url="{% url 'add_existing_loan_form' %}"
+                        class="btn btn-primary" type="button">Add More Loan Information</button>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
@@ -312,28 +312,34 @@
 </div>
 <div class="modal fade" id="existingcardDetailModal" role="dialog" tabindex="-1" role="dialog"
     aria-labelledby="existingcardDetailModalLabel" aria-hidden="true">
+
+    <input type="hidden" name="existing_credit_details_form_count" value=1>
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title font-weight-normal" id="existingcardDetailModalLabel">Existing Card
                     Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
                 {% csrf_token %}
                 <div class="modal-body">
-                    <div class="row g-4 p-4">
-                        {% for field in existing_card_details_form %}
-                        <div class="col-sm-4">
-                            <div class="input-group input-group-static">
-                                <label class="ms-0 text-primary fw-bold">{{ field.label }}</label>
-                                {{ field }}
+                    <div id="existing_credit_form_container">
+                        <div class="row g-4 p-4">
+                            {% for field in existing_card_details_form %}
+                            <div class="col-sm-4">
+                                <div class="input-group input-group-static">
+                                    <label class="ms-0 text-primary fw-bold">{{ field.label }}</label>
+                                    {{ field }}
+                                </div>
                             </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                     </div>
+                    <button id="add_existing_credit_details_form"
+                        data-credit-form-url="{% url 'add_existing_credit_form' %}" class="btn btn-primary"
+                        type="button">Add More Credit Card Information</button>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
@@ -351,7 +357,7 @@
             <div class="modal-header">
                 <h5 class="modal-title font-weight-normal" id="additionalDetailsModalLabel">Additional Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+
                 </button>
             </div>
             <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
@@ -383,7 +389,7 @@
             <div class="modal-header">
                 <h5 class="modal-title font-weight-normal" id="investmentDetailModalLabel">Investment Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+
                 </button>
             </div>
             <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
@@ -412,9 +418,8 @@
 
 {% block other_js %}
 <script>
-    var qualifications = {}; 
-    {% for instance in personal_details_qualification %}
-        qualifications["{{instance.qualification}}"] = ("{{instance.degree}}" == 'True'); 
+    var qualifications = {}; {% for instance in personal_details_qualification %}
+    qualifications["{{instance.qualification}}"] = ("{{instance.degree}}" == 'True'); 
     {% endfor %}
     var id_company_name, id_other_company_name, id_how_old_is_agreement, id_will_you_make_agreement,
         id_valid_rent_agreement, id_lessee_name, id_lessee_type, id_bonus_amount, id_repayment_history_col,
@@ -642,7 +647,7 @@
     $('#add_existing_loan_details_form').click(function (event) {
 
         let form_count = parseInt($('input[name="existing_loan_details_form_count"]').val())
-        $('input[name="existing_loan_details_form_count"]').val(form_count+1)
+        $('input[name="existing_loan_details_form_count"]').val(form_count + 1)
 
         let getform_url = $(this).attr("data-loan-form-url")
         console.log(getform_url)
@@ -651,15 +656,19 @@
             url: getform_url,
             type: 'GET',
             data: {
-                'loan_form_count': form_count+1,
+                'loan_form_count': form_count + 1,
             },
             datatype: 'JSON',
             success: function (data_) {
                 $("#existing_loan_form_container").append(
-                    `
-                    <h4>${form_count+1}.</h4>
-                    ${data_}`
-                    )
+                    `<div class="container_wrapper pt-3">
+                        <hr style="height : 1.5px">
+                        <h4 class="position-relative">
+                            <button type="button" class="loan_close_btn position-absolute top-0 end-0 btn-close" style="background-size : 0.7em" aria-label="Close"></button>
+                        </h4>
+                        ${data_}
+                    </div>`
+                )
 
             },
 
@@ -667,6 +676,61 @@
                 console.log(data_);
             }
         });
+    })
+
+
+
+    //Existing Credit Details Handler
+    $('#add_existing_credit_details_form').click(function (event) {
+
+        let form_count1 = parseInt($('input[name="existing_credit_details_form_count"]').val())
+        $('input[name="existing_credit_details_form_count"]').val(form_count1 + 1)
+
+        let getform_url2 = $(this).attr("data-credit-form-url")
+        console.log(getform_url2)
+
+        $.ajax({
+            url: getform_url2,
+            type: 'GET',
+            data: {
+                'credit_form_count': form_count1 + 1,
+            },
+            datatype: 'JSON',
+            success: function (data_) {
+                $("#existing_credit_form_container").append(
+                    `<div class="container_wrapper">
+                        <hr style="height : 1.5px>
+                        <h4 class="position-relative">
+                            <button type="button" class="credit_close_btn position-absolute top-0 end-0 btn-close" style="background-size : 0.7em" aria-label="Close"></button>
+                        </h4>
+                        ${data_}
+                    </div>`
+                )
+
+            },
+
+            error: function (data_) {
+                console.log(data_);
+            }
+        });
+    })
+
+
+    $("#existing_loan_form_container").click(function(event){
+        if (event.target.nodeName == "BUTTON") {
+            $(event.target).parent().parent().remove();
+            let cur_val = $('input[name="existing_loan_details_form_count"]').val()
+            $('input[name="existing_loan_details_form_count"]').val(cur_val-1)
+        }
+    })
+
+
+    $("#existing_credit_form_container").click(function(event){
+        if (event.target.nodeName == "BUTTON") {
+            $(event.target).parent().parent().remove();
+            let cur_val2 = $('input[name="existing_credit_details_form_count"]').val()
+            $('input[name="existing_credit_details_form_count"]').val(cur_val2-1)
+        }
     })
 </script>
 {% endblock other_js %}

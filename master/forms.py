@@ -25,7 +25,8 @@ class ProductAndPolicyMasterForm(ModelForm):
         labels = {
             "current_experience": "Current Experience (in months)",
             "is_salary_account": "Salary account in this Bank?",
-            "total_experience": "Total Experience (in years)"
+            "total_experience": "Total Experience (in years)",
+            "co_applicant_allowed": "Are Co-Applicants Allowed?"
         }
 
         exclude = ('effective_date', 'ineffective_date', 'multiplier_info' , 'foir_info' , 'rate_of_interest' , 'salary_type', 'residence_type', 'tenure', 'company_type')
