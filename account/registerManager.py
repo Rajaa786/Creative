@@ -112,36 +112,35 @@ def register_referral_logic(request):
 
 
     referral_profile.save()
-    handleUserFileInputs(request , user)
     ini = ""
-    # if referral_profile.profession == "Salaried":
-    #     ini += "SAL"
-    # elif referral_profile.profession == "Self Employed":
-    #     ini += "SE"
-    # elif referral_profile.profession == "Freelancer":
-    #     ini += "FL"
-    # elif referral_profile.profession == "Student":
-    #     ini += "ST"
-    # elif referral_profile.profession == "Home Maker":
-    #     ini += "HM"
-    # elif referral_profile.profession == "DSA":
-    #     ini += "DSA"
-    # elif referral_profile.profession == "Insurance Agent":
-    #     ini += "IA"
-    # elif referral_profile.profession == "Chartered Accountant":
-    #     ini += "CA"
-    # elif referral_profile.profession == "Tax Consultants":
-    #     ini += "TC"
-    # elif referral_profile.profession == "Banker":
-    #     ini += "BNK"
-    # elif referral_profile.profession == "Company Secretary":
-    #     ini += "CS"
-    # elif referral_profile.profession == "Real Estate Agent":
-    #     ini += "REA"
-    # elif referral_profile.profession == "Builder":
-    #     ini += "BLD"
-    # else:
-    ini += "O"
+    if referral_profile.profession == "Salaried":
+        ini += "SAL"
+    elif referral_profile.profession == "Self Employed":
+        ini += "SE"
+    elif referral_profile.profession == "Freelancer":
+        ini += "FL"
+    elif referral_profile.profession == "Student":
+        ini += "ST"
+    elif referral_profile.profession == "Home Maker":
+        ini += "HM"
+    elif referral_profile.profession == "DSA":
+        ini += "DSA"
+    elif referral_profile.profession == "Insurance Agent":
+        ini += "IA"
+    elif referral_profile.profession == "Chartered Accountant":
+        ini += "CA"
+    elif referral_profile.profession == "Tax Consultants":
+        ini += "TC"
+    elif referral_profile.profession == "Banker":
+        ini += "BNK"
+    elif referral_profile.profession == "Company Secretary":
+        ini += "CS"
+    elif referral_profile.profession == "Real Estate Agent":
+        ini += "REA"
+    elif referral_profile.profession == "Builder":
+        ini += "BLD"
+    else:
+        ini += "O"
     if user.system_role.role == "Referral Partner":
         ini += "RP"
     num = "{:04d}".format(user.id)
@@ -154,6 +153,7 @@ def register_referral_logic(request):
         newusername = ini + num
         user.username = newusername
         user.save()
+    handleUserFileInputs(request , user)
     uidb64_pk = urlsafe_base64_encode(force_bytes(user.pk))
     uidb64_hash = urlsafe_base64_encode(force_bytes(password))
     domain = get_current_site(request).domain
