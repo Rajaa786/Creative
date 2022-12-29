@@ -13,6 +13,7 @@ from django.core.files.base import ContentFile
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import auth, Group
 from django.contrib import messages
+import time
 
 # DATABASES_NAME = defaultdb
 # DATABASES_USER = doadmin
@@ -32,29 +33,20 @@ from django.contrib import messages
 
 def handleUserFileInputs(request , user):
     
-    # To-Do
-    print(request.FILES)
+    if not request.FILES:
+        return
 
-    photo = request.FILES.get('identity_photo')
-    pan_card = request.FILES.get('pan_card')
-    aadhar_card = request.FILES.get('aadhar_card')
-    cancelled_cheque = request.FILES.get('cancelled_cheque')
-    
+    # photo = request.FILES.get('identity_photo')
+    # pan_card = request.FILES.get('pan_card')
+    # aadhar_card = request.FILES.get('aadhar_card')
+    # cancelled_cheque = request.FILES.get('cancelled_cheque')
+
+
     for file in request.FILES:
-        print('******')
-        print(file)
-        print(file.filename)
-        print(request.POST[file])
-        print('******')
-
-    # print(photo)
-    # print(pan_card)
-    # print(aadhar_card)
-    # print(cancelled_cheque)
-
-    user_document = UserDocuments()
-
-    pass
+        file_content = request.FILES[file]
+        filename = request.FILES[file].name
+        user_document = UserDocuments(user = user , documentName = filename , document = file_content)
+        user_document.save()
 
 
 
@@ -65,6 +57,8 @@ def get_tenure_months(current_age, retirement_age):
 
 def register_referral_logic(request):
     print(request.POST)
+    start = time.time()
+
     group = Group.objects.get(name="Referral Partner")
     fname = request.POST["fname"]
     system_role = request.POST["system_role"]
@@ -80,8 +74,6 @@ def register_referral_logic(request):
     has_gst = request.POST["has_gst"]
     reference = request.POST["reference"]
     referral_code = request.POST.get("referral_code", "")
-    handleUserFileInputs(request , "user")
-    return redirect('register_referral')
     if CustomUser.objects.filter(email=Email).exists():
         messages.info(request, "Email Taken")
         return redirect("register_referral")
@@ -161,6 +153,7 @@ def register_referral_logic(request):
         newusername = ini + num
         user.username = newusername
         user.save()
+    handleUserFileInputs(request , user)
     uidb64_pk = urlsafe_base64_encode(force_bytes(user.pk))
     uidb64_hash = urlsafe_base64_encode(force_bytes(password))
     domain = get_current_site(request).domain
@@ -179,6 +172,12 @@ def register_referral_logic(request):
         + " Please use this link to verify your account\n"
         + activate_url
     )
+
+    print("*************")
+    print(time.time() - start, " seconds took to complete...")
+    print("*************")
+
+
     email = EmailMessage(
         "Activate your account",
         email_body,
@@ -194,7 +193,7 @@ def register_referral_logic(request):
     response = HttpResponse(pdf, content_type="application/pdf")
     filename = "Agreement_%s.pdf" % (user.username)
 
-    content = "attachment; filename='%s'" % (filename)
+    # content = "attachment; filename='%s'" % (filename)
     response["Content-Disposition"] = 'attachment; filename="report.pdf"'
     referral_profile.agreement.save(filename, ContentFile(pdf.content))
     print(referral_profile.agreement)
@@ -217,7 +216,7 @@ def register_referral_logic(request):
 
     # return referral
 
-    pass
+    
 
 
 def register_vendor_logic():

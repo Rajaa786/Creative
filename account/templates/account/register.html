@@ -27,6 +27,10 @@
   .fake_display_none {
     visibility: hidden;
   }
+
+  .display_none {
+    display: none;
+  }
 </style>
 {% endblock other_css %}
 
@@ -39,11 +43,28 @@
 <form action="{% url 'register' %}" method="POST" class="bg-white rounded p-5 shadow-blur border-0"
   style="width: 95%; margin: 25px auto;" enctype="multipart/form-data">
   {% csrf_token %}
-  <div class="row">
+  <div id="form_container" class="row">
+    <div class="col-md-4">
+      <div class="form-group row">
+
+        <div class="input-group input-group-static mb-4">
+
+          {% comment %} <label for="prefix" class="ms-0 text-primary fw-bold col-12">Title</label> {% endcomment %}
+          <select class="form-control" name="prefix" id="prefix" required>
+            <option value="">-- Select Title --</option>
+            {% for prefix in  prefixes%}
+            <option value={{prefix.prefix}}>{{prefix.prefix}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="fname" class="form-label text-primary fw-bold">Full Name</label>
-        <input type="text" name="fname" id="fname" class="form-control" rajaa>
+        <input type="text" name="fname" id="fname" class="form-control" required>
       </div>
     </div>
     <div class="col-md-4">
@@ -51,34 +72,38 @@
         <label for="password" class="form-label text-primary fw-bold">Password</label>
         <input type="password" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,12}$" name="password"
           oninvalid="this.setCustomValidity('Password must be between 8-12 characters with atleast 1 uppercase,1 lowercase ,and 1 special character.')"
-          oninput="this.setCustomValidity('')" id="password" class="form-control" rajaa>
+          oninput="this.setCustomValidity('')" id="password" class="form-control" required>
       </div>
     </div>
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="email" class="form-label text-primary fw-bold">E-mail</label>
-        <input type="email" name="email" id="email" class="form-control" rajaa>
+        <input type="email" name="email" id="email" class="form-control" required>
       </div>
     </div>
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="phone" class="form-label text-primary fw-bold">Mobile Number</label>
-        <input type="tel" pattern="[1-9]{1}[0-9]{9}" name="phone" id="phone" class="form-control" maxlength="10" rajaa>
+        <input type="tel" pattern="[1-9]{1}[0-9]{9}" name="phone" id="phone" class="form-control" maxlength="10"
+          required>
       </div>
     </div>
 
+
     <div class="col-md-4">
-      <label for="address" class="form-label text-primary fw-bold mb-0">Address</label>
-      <div class="input-group input-group-dynamic mb-4">
-        <textarea name="address" id="address" class="form-control" rows="1" placeholder="eg. Address" spellcheck="false"
-          rajaa></textarea>
+      <div class="form-group row">
+        {% comment %} <label for="address" class="form-label text-primary fw-bold mb-0">Address</label> {% endcomment %}
+        <div class="input-group input-group-dynamic mb-4">
+          <textarea name="address" id="address" class="form-control" rows="3" placeholder="Enter Your Address"
+            spellcheck="false" required></textarea>
+        </div>
       </div>
     </div>
     <div class="col-md-4">
       <div class="form-group row">
         <div class="input-group input-group-static mb-4">
-          <label for="city" class="ms-0 text-primary fw-bold col-12">City</label>
-          <select class="form-control col-12" name="city" id="city" rajaa>
+          {% comment %} <label for="city" class="ms-0 text-primary fw-bold col-12">City</label> {% endcomment %}
+          <select class="form-control col-12" name="city" id="city" required>
             <option value="">-- Select City --</option>
             {% for city in  cities%}
             <option value={{city.city_name}}>{{city.city_name}}</option>
@@ -90,19 +115,13 @@
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="pincode" class="form-label text-primary fw-bold">PinCode</label>
-        <input type="text" name="pincode" id="pincode" class="form-control" rajaa>
+        <input type="text" name="pincode" id="pincode" class="form-control" required>
       </div>
     </div>
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="reference" class="form-label text-primary fw-bold">How did you know about us?</label>
-        <input type="text" name="reference" id="reference" class="form-control" rajaa>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="input-group input-group-outline mb-4">
-        <label for="referral_code" class="form-label text-primary fw-bold">Referral Code</label>
-        <input type="text" name="referral_code" id="referral_code" class="form-control">
+        <input type="text" name="reference" id="reference" class="form-control" required>
       </div>
     </div>
 
@@ -110,7 +129,7 @@
       <div class="form-group row">
         <div class="input-group input-group-static mb-4">
           <label for="has_gst" class="ms-0 text-primary fw-bold col-12">Do you have GST?</label>
-          <select class="form-control col-12" name="has_gst" id="has_gst" rajaa>
+          <select class="form-control col-12" name="has_gst" id="has_gst" required>
             <option value="">-- Select Yes or No --</option>
             <option default value={{True}}>Yes</option>
             <option default value={{False}}>No</option>
@@ -124,7 +143,7 @@
       <div class="form-group row">
         <div class="input-group input-group-static mb-4">
           <label for="system_role" class="ms-0 text-primary fw-bold col-12">System Role</label>
-          <select class="form-control col-12" name="system_role" id="system_role" rajaa>
+          <select class="form-control col-12" name="system_role" id="system_role" required>
             {% comment %} <option value="">-- Select Role --</option> {% endcomment %}
             {% if role%}
             <option default value="{{role.role}}">{{role.role}}</option>
@@ -142,19 +161,33 @@
         <div class="input-group input-group-static mb-4">
           <label for="profession" class="ms-0 text-primary fw-bold col-12">Profession</label>
           <select class="form-control col-12" name="profession" id="profession"
-            onchange="showfield(this.options[this.selectedIndex].value)" rajaa>
+            onchange="showfield(this.options[this.selectedIndex].value)" required>
             <option value="">-- Select Profession --</option>
             {% for profession in  professions%}
             <option value={{profession.profession}}>{{profession.profession}}</option>
             {% endfor %}
-            <option>Other</option>
+            <option value="other">Other</option>
           </select>
         </div>
       </div>
     </div>
-    <div class="col-md-4" id="div1">
+    <div id="div1" class="col-md-4 display_none">
+      <div class="input-group input-group-outline mb-4">
+        <label for="other" class="form-label text-primary fw-bold">Other</label>
+        <input type="text" name="other" id="other" class="form-control" onfocus="focused(this)"
+          onfocusout="defocused(this)">
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="input-group input-group-outline mb-4">
+        <label for="referral_code" class="form-label text-primary fw-bold">Referral Code</label>
+        <input type="text" name="referral_code" id="referral_code" class="form-control">
+      </div>
     </div>
   </div>
+
+
 
 
 
@@ -168,10 +201,9 @@
   <div class="row align-items-center mb-3 gy-3 gx-1">
     <div class="col-sm-9">
       <div class="form-check p-0">
-        <input type="checkbox" name="terms" id="terms" class="form-check-input" data-bs-toggle="modal"
-          data-bs-target="#exampleModal" style="border-color: grey;"
+        <input type="checkbox" name="terms" id="terms" class="form-check-input" style="border-color: grey;"
           oninvalid="this.setCustomValidity('You must agree to our Terms and Conditions before proceeding.')"
-          oninput="this.setCustomValidity('')" rajaa>
+          oninput="this.setCustomValidity('')" required>
         <label for="terms" class="form-check-label d-inline ms-0 text-center">I agree to the <span>Terms &
             Conditions</span>.</label>
       </div>
@@ -229,47 +261,88 @@
 {% endblock other_body %}
 
 {% block other_js %}
+
+
+
+
+
+
+
+
+
+
 <script>
   function showfield(name) {
     console.log(name)
-    if (name == 'Other')
-      document.getElementById('div1').innerHTML =
-      '  <label  for="other" class="form-label text-primary fw-bold">Other</label>' +
-      '  <div class="input-group input-group-outline mb-4">' +
-      '      <input type="text" name="other" id="other" class="form-control" placeholder="eg. Other Designation">' +
-      '  </div>';
-    else
-      document.getElementById('div1').innerHTML = '';
+    if (name == 'other') {
+      document.getElementById('div1').classList.remove('display_none')
+    } else {
+      document.getElementById('div1').classList.add('display_none')
+    }
   }
 
+  $("#form_container").on("input", function (event) {
+
+    if (event.target.id == "fname") {
+      if (event.target.value != "") {
+        $("#referral_name").text(event.target.value)
+        return;
+      }
+      $('input[name="terms"]').prop('checked' , false);
+      return;
+    }
+
+
+    if (event.target.id == "prefix") {
+      if (event.target.value != "") {
+        $("#referral_prefix").text(event.target.value)
+        return
+      }
+      $('input[name="terms"]').prop('checked' , false);
+      return;
+    }
+
+  })
+
   $('input[name="agreement"]').change(function (event) {
-    rajaa_checkbox = $('input[name="terms"]')
+    required_checkbox = $('input[name="terms"]')
     if (this.checked) {
-      rajaa_checkbox.prop("checked", true);
-      rajaa_checkbox.removeAttr("data-bs-target")
-      rajaa_checkbox.removeAttr("data-bs-toggle")
-      console.log("Terms wala " + $('input[name="terms"]').prop('checked'))
+      required_checkbox.prop("checked", true);
     } else {
-      rajaa_checkbox.prop("checked", false);
-      rajaa_checkbox.attr("data-bs-target", "#exampleModal")
-      rajaa_checkbox.attr("data-bs-toggle", "modal")
-      console.log("Terms wala " + $('input[name="terms"]').prop('checked'))
+      required_checkbox.prop("checked", false);
     }
   })
 
 
-  $('input[name="terms"]').change(function (event) {
-    console.log("Termsdsdsdsds wala " + this.checked)
-    if (!this.checked) {
-      $(this).attr("data-bs-target", "#exampleModal")
-      $(this).attr("data-bs-toggle", "modal")
+
+  $('input[name="terms"]').click(function (event) {
+
+    if(this.checked){
+      event.preventDefault()
     }
-
-    this.checked = false;
-
+    console.log(this.checked)
+    
+    let alert_msg = "Please First "
+    if ($('select[name="prefix"]').val() == "") {
+      alert(alert_msg + "Select The Title.")
+      return;
+    }
+    
+    if ($('input[name="fname"]').val() == "") {
+      alert(alert_msg + "Enter Your Full Name.")
+      return;
+    }
+    
     $('input[name="agreement"]').prop("checked", false)
-
+    
+    if(this.checked){
+      $("#exampleModal").modal('show')
+    }
+    
+    //this.checked = false;
   });
+
+
   $(".custom-file-input").on("change", function () {
     var fileName = $(this).val().split("\\").pop();
     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
