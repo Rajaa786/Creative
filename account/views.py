@@ -187,9 +187,9 @@ def base_dashboard(request):
 
 
 # @login_required()
-def register(request):
+async def register(request):
     if request.method == "POST":
-        redir = register_manager_dict[request.POST["system_role"]](request)
+        redir = await register_manager_dict[request.POST["system_role"]](request)
         print(redir)
         return redir
 
