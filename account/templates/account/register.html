@@ -28,8 +28,8 @@
     visibility: hidden;
   }
 
-  .display_none{
-    display : none;
+  .display_none {
+    display: none;
   }
 </style>
 {% endblock other_css %}
@@ -173,8 +173,9 @@
     </div>
     <div id="div1" class="col-md-4 display_none">
       <div class="input-group input-group-outline mb-4">
-        <label  for="other" class="form-label text-primary fw-bold">Other</label>
-        <input type="text" name="other" id="other" class="form-control" onfocus="focused(this)" onfocusout="defocused(this)">
+        <label for="other" class="form-label text-primary fw-bold">Other</label>
+        <input type="text" name="other" id="other" class="form-control" onfocus="focused(this)"
+          onfocusout="defocused(this)">
       </div>
     </div>
 
@@ -200,8 +201,7 @@
   <div class="row align-items-center mb-3 gy-3 gx-1">
     <div class="col-sm-9">
       <div class="form-check p-0">
-        <input type="checkbox" name="terms" id="terms" class="form-check-input" data-bs-toggle="" data-bs-target=""
-          style="border-color: grey;"
+        <input type="checkbox" name="terms" id="terms" class="form-check-input" style="border-color: grey;"
           oninvalid="this.setCustomValidity('You must agree to our Terms and Conditions before proceeding.')"
           oninput="this.setCustomValidity('')" required>
         <label for="terms" class="form-check-label d-inline ms-0 text-center">I agree to the <span>Terms &
@@ -272,99 +272,77 @@
 
 
 <script>
-
-  let form_checks = 0
-
   function showfield(name) {
     console.log(name)
-    if (name == 'other'){
+    if (name == 'other') {
       document.getElementById('div1').classList.remove('display_none')
-    }
-    else{
+    } else {
       document.getElementById('div1').classList.add('display_none')
     }
   }
 
   $("#form_container").on("input", function (event) {
-    console.log("Form Inputed")
-    console.log(event)
+
     if (event.target.id == "fname") {
-      console.log(event.target.value)
       if (event.target.value != "") {
         $("#referral_name").text(event.target.value)
-        form_checks+=1
-        if(form_checks >= 2){
-          $('input[name="terms"]').attr("data-bs-target", "#exampleModal")
-          $('input[name="terms"]').attr("data-bs-toggle", "modal")
-        }
-      } else {
-        form_checks-=1
-        $('input[name="terms"]').removeAttr("data-bs-target", "#exampleModal")
-        $('input[name="terms"]').removeAttr("data-bs-toggle", "modal")
+        return;
       }
-
+      $('input[name="terms"]').prop('checked' , false);
       return;
     }
 
 
-    if(event.target.id == "prefix"){
-      console.log(event.target.value)
+    if (event.target.id == "prefix") {
       if (event.target.value != "") {
         $("#referral_prefix").text(event.target.value)
-        form_checks+=1
-        if(form_checks >= 2){
-          $('input[name="terms"]').attr("data-bs-target", "#exampleModal")
-          $('input[name="terms"]').attr("data-bs-toggle", "modal")
-        }
-      } else {
-        form_checks-=1
-        $('input[name="terms"]').removeAttr("data-bs-target", "#exampleModal")
-        $('input[name="terms"]').removeAttr("data-bs-toggle", "modal")
+        return
       }
+      $('input[name="terms"]').prop('checked' , false);
+      return;
     }
+
   })
 
   $('input[name="agreement"]').change(function (event) {
     required_checkbox = $('input[name="terms"]')
     if (this.checked) {
       required_checkbox.prop("checked", true);
-      required_checkbox.removeAttr("data-bs-target")
-      required_checkbox.removeAttr("data-bs-toggle")
     } else {
       required_checkbox.prop("checked", false);
-      required_checkbox.attr("data-bs-target", "#exampleModal")
-      required_checkbox.attr("data-bs-toggle", "modal")
     }
   })
 
 
-  $('input[name="terms"]').change(function (event) {
-    this.checked = false;
-    console.log("event called ")
+
+  $('input[name="terms"]').click(function (event) {
+
+    if(this.checked){
+      event.preventDefault()
+    }
+    console.log(this.checked)
+    
     let alert_msg = "Please First "
-    console.log()
-    if($('select[name="prefix"]').val() == ""){
+    if ($('select[name="prefix"]').val() == "") {
       alert(alert_msg + "Select The Title.")
       return;
     }
-
     
     if ($('input[name="fname"]').val() == "") {
       alert(alert_msg + "Enter Your Full Name.")
       return;
     }
-
-
-    if (!this.checked) {
-      $(this).attr("data-bs-target", "#exampleModal")
-      $(this).attr("data-bs-toggle", "modal")
-    }
-
-
-
+    
     $('input[name="agreement"]').prop("checked", false)
-
+    
+    if(this.checked){
+      $("#exampleModal").modal('show')
+    }
+    
+    //this.checked = false;
   });
+
+
   $(".custom-file-input").on("change", function () {
     var fileName = $(this).val().split("\\").pop();
     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);

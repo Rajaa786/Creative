@@ -13,6 +13,7 @@ from django.core.files.base import ContentFile
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import auth, Group
 from django.contrib import messages
+import time
 
 # DATABASES_NAME = defaultdb
 # DATABASES_USER = doadmin
@@ -34,7 +35,6 @@ def handleUserFileInputs(request , user):
     
     if not request.FILES:
         return
-    print(request.FILES)
 
     # photo = request.FILES.get('identity_photo')
     # pan_card = request.FILES.get('pan_card')
@@ -57,6 +57,8 @@ def get_tenure_months(current_age, retirement_age):
 
 def register_referral_logic(request):
     print(request.POST)
+    start = time.time()
+
     group = Group.objects.get(name="Referral Partner")
     fname = request.POST["fname"]
     system_role = request.POST["system_role"]
@@ -170,6 +172,12 @@ def register_referral_logic(request):
         + " Please use this link to verify your account\n"
         + activate_url
     )
+
+    print("*************")
+    print(time.time() - start, " seconds took to complete...")
+    print("*************")
+
+
     email = EmailMessage(
         "Activate your account",
         email_body,

@@ -43,6 +43,7 @@ from .eligibilityManager import *
 from .registerManager import *
 from .generalManager import *
 from numpy_financial import pmt
+import time
 
 
 NOT_ELIGIBLE = False
@@ -188,7 +189,6 @@ def base_dashboard(request):
 # @login_required()
 def register(request):
     if request.method == "POST":
-        print()
         redir = register_manager_dict[request.POST["system_role"]](request)
         print(redir)
         return redir
