@@ -20,13 +20,28 @@ from django.conf import settings
 from django.views.generic import TemplateView
 from django.views.static import serve
 from account.views import view_leads
+from django.contrib.auth.decorators import login_required, user_passes_test
+from decorator_include import decorator_include
+from django.core.exceptions import PermissionDenied
+
+
+def user_is_super_user_check():
+    def check(user):
+        if user.is_superuser:
+            return True
+        raise PermissionDenied
+    return user_passes_test(check)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
     path('account/', include('account.urls')),
     path('homeloan/', include('HomeLoan.urls')),
-    path('master/', include('master.urls')),
+    # path('master/', include('master.urls')),
+    # path('master/', user_passes_test(lambda u: u.has_perm('master.add_profession'))(include('master.urls'))),
+
+    path('master/', decorator_include(user_is_super_user_check() , 'master.urls')),
     path('trial/', TemplateView.as_view(template_name='account/password_reset_form.html')),
 
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}), 
