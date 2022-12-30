@@ -187,9 +187,9 @@ def base_dashboard(request):
 
 
 # @login_required()
-def register(request):
+async def register(request):
     if request.method == "POST":
-        redir = register_manager_dict[request.POST["system_role"]](request)
+        redir = await register_manager_dict[request.POST["system_role"]](request)
         print(redir)
         return redir
 
@@ -358,8 +358,8 @@ def add_leads(request):
                 form = LeadsForm(request.POST, request.FILES)
                 files = request.FILES.getlist("upload_documents")
                 if form.is_valid():
-                    for f in files:
-                        print(f)
+                    # for f in files:
+                    #     print(f)
                         # handle_uploaded_file(f)
                     instance = form.save(commit=False)
                     print(instance)
@@ -2855,6 +2855,9 @@ def getFinalEligibility(current_calc_data_instance , loan_amount):
 
 
 def check_eligibility(request, id):
+
+    eligibility_count = 0
+    
     lead = Leads.objects.get(pk=id)
 
     # Main Applicant Details
@@ -2929,6 +2932,7 @@ def check_eligibility(request, id):
             #         cocat_type=main_categ).first()
 
             if main_applicant_eligible:
+                eligibility_count += 1
                 for tenure in Tenure.objects.all():
 
                     if not check_tenure_availability(
@@ -2975,9 +2979,16 @@ def check_eligibility(request, id):
                             store_eligibility_details[product.bank_names.bank_name]['eligibility_calculations'].append(
                                 current_calc_data_instance)
 
+            if not main_applicant_eligible:
+                store_eligibility_details[product.bank_names.bank_name]['eligibility'] = NOT_ELIGIBLE
+                
+
+    eligibility_count = 0
     context = {
         "eligibility_details_data": store_eligibility_details,
-        'highest_net_sal_holder': highest_net_sal_holder
+        'highest_net_sal_holder': highest_net_sal_holder,
+        'lead_id' : id,
+        'eligibility' : 1 if eligibility_count > 0 else 0
     }
     return render(request, "account/temporary_test_eligibility.html", context=context)
 
@@ -3576,6 +3587,14 @@ def addExistingCreditForm(request):
     }
 
     return render(request, "account/add_existing_credit_form.html", context=context)
+
+def eligibilityNextBtnHandler(request, lead_id , eligibility):
+    
+    if eligibility == 1:
+        return redirect('upload_documents' , lead_id)
+    else:
+        return render(request , "account/not_eligible.html")
+
 
 
 register_manager = {"Referral Partner": register_referral,
