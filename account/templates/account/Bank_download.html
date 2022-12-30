@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %} {% load static %} {% block other_body %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 <h1 class="mb-5 mt-3 display-3 text-center">Apply Now</h1>
 <section class="bg-3blue pb-4">
   <form method="POST" action="/applyNow" enctype="multipart/form-data">
@@ -109,7 +109,7 @@
     </div>
   </form>
 </section>
-{% endblock other_body %} {% block other_js %}
+{% endblock content %} {% block other_js %}
 <script>
   var moreDocsNumber = 0;
   var moreDocsNumber2 = 0;

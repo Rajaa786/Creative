@@ -1,20 +1,13 @@
-{% extends 'base/base.html' %}
-{% load static %}
+{% extends 'base.html' %} {% load static %}
 
-{% block other_css %}
-{% comment %}
-<link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet"> {% endcomment %}
-{% endblock other_css %}
 
-{% block title %}Master{% endblock title %}
 
-{% block other_body_css %}id="page-top"{% endblock other_body_css %}
+ {% block content %} 
 
-{% block other_body %}
-<div class="container-fluid">
+ <div class="container-fluid">
 	<div id="content-wrapper" class="d-flex flex-column">
 		<div class="container">
-			<div class="row justify-content-center mb-5 mt-3">
+			<div class="row justify-content-center mb-3 mt-4">
 				<div class="col-auto">
 					<h1 class="display-3">General Master</h1>
 				</div>
@@ -22,8 +15,8 @@
 
 
 
-			<div class="card z-index-2 pb-3 mb-5">
-				<div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+			<div class="card z-index-2 pb-10 mb-5">
+				<div class="card-header p-0 position-relative mt-n4 mb-5 mx-3 z-index-2 bg-transparent">
 					<div class="bg-gradient-primary shadow-primary border-radius-lg p-3 ">
 						<div class="row">
 							<div class="col">
@@ -36,7 +29,7 @@
 							</div>
 							<div class="col-auto d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal" data-bs-target="#addPrefix"><span
-										class="material-icons">add</span> Add</a>
+										class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -122,7 +115,7 @@
 							</div>
 							<div class="col-auto d-flex align-items-center ">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addQualification"><span class="material-icons">add</span> Add</a>
+									data-bs-target="#addQualification"><span class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -205,7 +198,7 @@
 							</div>
 							<div class="col-auto d-flex align-items-center ">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addProfession"><span class="material-icons">add</span> Add</a>
+									data-bs-target="#addProfession"><span class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -299,7 +292,7 @@
 							</div>
 							<div class="col-auto d-flex align-items-center ">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addCompanyName"><span class="material-icons">add</span> Add</a>
+									data-bs-target="#addCompanyName"><span class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -388,7 +381,7 @@
 							</div>
 							<div class="col-auto d-flex align-items-center ">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addCompanyType"><span class="material-icons">add</span> Add</a>
+									data-bs-target="#addCompanyType"><span class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -476,7 +469,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addCompanyCategoryType"><span class="material-icons">add</span>
+									data-bs-target="#addCompanyCategoryType"><span class="material-icons">+</span>
 									Add</a>
 							</div>
 						</div>
@@ -570,7 +563,7 @@
 							</div>
 							<div class="col-auto d-flex align-items-center ">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal" data-bs-target="#addTenure"><span
-										class="material-icons">add</span> Add</a>
+										class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -658,7 +651,7 @@
 							</div>
 							<div class="col-auto d-flex align-items-center ">
 								<a class="btn btn-info mb-0 " data-bs-toggle="modal" data-bs-target="#addRole"><span
-										class="material-icons">add</span> Add</a>
+										class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -741,7 +734,7 @@
 							</div>
 							<div class="col-auto d-flex align-items-center  ">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal" data-bs-target="#addProduct"><span
-										class="material-icons">add</span> Add</a>
+										class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -821,7 +814,7 @@
 							</div>
 							<div class="col-auto d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addSubProduct"><span class="material-icons">add</span> Add</a>
+									data-bs-target="#addSubProduct"><span class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -904,7 +897,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addCustomerType"><span class="material-icons">add</span>Add</a>
+									data-bs-target="#addCustomerType"><span class="material-icons">+</span>Add</a>
 							</div>
 						</div>
 					</div>
@@ -982,7 +975,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addDesignationType"><span class="material-icons">add</span>Add</a>
+									data-bs-target="#addDesignationType"><span class="material-icons">+</span>Add</a>
 							</div>
 						</div>
 					</div>
@@ -1059,7 +1052,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addSalaryType"><span class="material-icons">add</span> Add</a>
+									data-bs-target="#addSalaryType"><span class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -1148,7 +1141,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addResidenceType"><span class="material-icons">add</span> Add</a>
+									data-bs-target="#addResidenceType"><span class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -1234,7 +1227,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal" data-bs-target="#addBankName"><span
-										class="material-icons">add</span> Add</a>
+										class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -1312,7 +1305,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addLeadSource"><span class="material-icons">add</span> Add</a>
+									data-bs-target="#addLeadSource"><span class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -1390,7 +1383,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal" data-bs-target="#addDegree"><span
-										class="material-icons">add</span> Add</a>
+										class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -1468,7 +1461,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addNationality"><span class="material-icons">add</span> Add</a>
+									data-bs-target="#addNationality"><span class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -1546,7 +1539,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal" data-bs-target="#addState"><span
-										class="material-icons">add</span> Add</a>
+										class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -1624,7 +1617,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal" data-bs-target="#addCity"><span
-										class="material-icons">add</span> Add</a>
+										class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -1700,7 +1693,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addApplicanttype"><span class="material-icons">add</span> Add</a>
+									data-bs-target="#addApplicanttype"><span class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -1778,7 +1771,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addPropertyIn"><span class="material-icons">add</span> Add</a>
+									data-bs-target="#addPropertyIn"><span class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -1856,7 +1849,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal" data-bs-target="#addStatus"><span
-										class="material-icons">add</span> Add</a>
+										class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -1934,7 +1927,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addNatureOfBusiness"><span class="material-icons">add</span>
+									data-bs-target="#addNatureOfBusiness"><span class="material-icons">+</span>
 									Add</a>
 							</div>
 						</div>
@@ -2014,7 +2007,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal" data-bs-target="#addAYyear"><span
-										class="material-icons">add</span> Add</a>
+										class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -2092,7 +2085,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addAgreementtype"><span class="material-icons">add</span> Add</a>
+									data-bs-target="#addAgreementtype"><span class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -2171,7 +2164,7 @@
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
 									data-bs-target="#addStageOfConstruction"><span
-										class="material-icons">add</span>Add</a>
+										class="material-icons">+</span>Add</a>
 							</div>
 						</div>
 					</div>
@@ -2250,7 +2243,7 @@
 							</div>
 							<div class="col-auto  d-flex align-items-center">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addRejectionType"><span class="material-icons">add</span> Add</a>
+									data-bs-target="#addRejectionType"><span class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -2332,7 +2325,7 @@
 							</div>
 							<div class="col-auto d-flex align-items-center ">
 								<a class="btn btn-info mb-0" data-bs-toggle="modal"
-									data-bs-target="#addcommission"><span class="material-icons">add</span> Add</a>
+									data-bs-target="#addcommission"><span class="material-icons">+</span> Add</a>
 							</div>
 						</div>
 					</div>
@@ -2438,7 +2431,6 @@
 			</div>
 		</div>
 	</div>
-</div>
-{% endblock other_body %}
+</div>				
 
-{% block other_js %}{% endblock other_js %}
+{% endblock content %}

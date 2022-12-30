@@ -54,6 +54,9 @@ PENDING_EMI_OBLIGATION_DURATION_UPPER_BOUND = 6
 NEW VIEWS
 """
 
+def base(request):
+    return render(request,'base.html')
+
 
 def view_leads(request):
     leads = Leads.objects.all()
@@ -181,8 +184,7 @@ def lead_delete(request, pk):
 
 @login_required()
 def base_dashboard(request):
-    context = {"title": "Dashboard"}
-    return render(request, "account/dashboard.html", context)
+    return render(request, "base/dashboard.html")
 
 
 # @login_required()
@@ -961,8 +963,7 @@ def dashboard(request):
     return render(request, "account/dashboard.html")
 
 
-def base(request):
-    return render(request, "account/home.html")
+
 
 
 @login_required()

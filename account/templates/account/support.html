@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block other_css %}
@@ -8,7 +8,7 @@
 
 {% block other_body_css %}id="page-top"{% endblock other_body_css %}
 
-{% block other_body %}
+{% block content %}
   <div class ="container-fluid">
     <h1 class="mb-5 mt-3 display-3 text-center">Support</h1>
     <div class="container form-container bg-white rounded shadow-blur p-3" style="overflow-x:auto; width: 95%; margin:0 auto">
@@ -261,7 +261,7 @@
       </div>
     </div>
   </div>
-{% endblock other_body %}
+{% endblock content %}
 
 {% block other_js %}
   <script>

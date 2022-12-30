@@ -9,6 +9,8 @@ from django.conf import settings
 
 # app_name = "accounts"
 urlpatterns = [
+    path("ff/", views.base, name="base"), 
+
     path("dashboard/", views.base_dashboard, name="base_dashboard"),
     # --------------------------------------------------------#
     # new_LEADS
@@ -149,6 +151,6 @@ urlpatterns = [
 ]
 
 
-urlpatterns = urlpatterns + static(
+urlpatterns += urlpatterns + static(
     settings.STATIC_URL, document_root=settings.STATIC_ROOT
 )

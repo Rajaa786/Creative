@@ -1,12 +1,10 @@
-{% extends 'base/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block other_css %}
-{% endblock other_css %}
 
 {% block title %}Add Leads{% endblock title %}
 
-{% block other_body %}
+{% block content %}
 <div class="container" style="margin:25px auto;">
   {% csrf_token %}
   <div class="form-group row"></div>
@@ -37,7 +35,7 @@
     </div>
   </div>
 </div>
-{% endblock other_body %}
+{% endblock content %}
 
 {% block other_js %}
 <script>
