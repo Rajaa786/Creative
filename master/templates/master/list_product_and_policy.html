@@ -23,7 +23,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered sortable" id="dataTable" width="100%" cellspacing="0">
+                <table bordercolor="white" class="table table-bordered sortable" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -38,7 +38,7 @@
                     </thead>
                     <tbody>
                         {% for product in ProductsAndPolicy %}
-                        <tr class="item text-center">
+                        <tr bordercolor="white" class="item text-center">
                             <td>{{forloop.counter}}</td>
                             <td>
                                 <a href={% url 'ProductsAndPolicyReviewOrEdit' id=product.id %}>
