@@ -65,7 +65,33 @@ def view_leads(request):
 
 
 def lead_detail(request, pk):
-    lead = Leads.objects.get(id=pk)
+    lead = Leads.objects.get(pk=pk)
+    additional_details = AdditionalDetails.objects.filter(lead_id=lead).first()
+    co_applicant = AdditionalDetails.objects.filter(
+        lead_id=lead, applicant_type__applicant_type="1st Co-Applicant"
+    ).first()
+    personal_details_form_id = SalPersonalDetails.objects.filter(additional_details_id=additional_details).first()
+    print(personal_details_form_id)
+    income_details_form_id = SalIncomeDetails.objects.filter(addi_details_id=additional_details)
+    print(income_details_form_id)
+    other_income_form_id = SalOtherIncomes.objects.filter(addi_details_id=additional_details)
+    additional_other_incomes_form_id = SalAdditionalOtherIncomes.objects.filter(addi_details_id=additional_details)
+    company_details_form_id = SalCompanyDetails.objects.filter(addi_details_id=additional_details)
+    residence_details_form_id = SalResidenceDetails.objects.filter(addi_details_id=additional_details)
+    existing_loan_details_form_id = SalExistingLoanDetails.objects.filter(addi_details_id=additional_details)
+    existing_card_details_form_id = SalExistingCreditCard.objects.filter(addi_details_id=additional_details)
+    additional_details_form_id = SalAdditionalDetails.objects.filter(addi_details_id=additional_details)
+    investment_form_id = SalInvestments.objects.filter(addi_details_id=additional_details)
+
+
+
+    # salperdet = {}
+    # for val in SalPersonalDetailsForm():
+    #     salperdet[val.label] = f"{personal_details_form_id}.{val.name}"
+    #     name = val.name
+    #     print(f"{personal_details_form_id}.{name}")
+
+
     loan_applicant = LoanApplication.objects.filter(lead_id=lead)
     loan_documents = LoanDocuments.objects.filter(
         loanApplication__in=loan_applicant)
@@ -75,6 +101,31 @@ def lead_detail(request, pk):
         "lead": lead,
         "loan_appicant": loan_applicant,
         "loan_documents": loan_documents,
+        "additionaldetails_id": additional_details.pk,
+        "personal_details_form_id": personal_details_form_id,
+        "other_income_form_id": other_income_form_id,
+        "additional_other_incomes_form_id": additional_other_incomes_form_id,
+        "company_details_form_id": company_details_form_id,
+        "residence_details_form_id": residence_details_form_id,
+        "existing_loan_details_form_id": existing_loan_details_form_id,
+        "existing_card_details_form_id": existing_card_details_form_id,
+        "additional_details_form_id": additional_details_form_id,
+        "investment_form_id": investment_form_id,
+        "lead_id": pk,
+        # "name": additional_details_instance.cust_name,
+        # "applicant_type": additional_details_instance.applicant_type,
+        "personal_details_form": SalPersonalDetailsForm(),
+        "personal_details_qualification": Qualification.objects.all(),
+        "personal_details_profession": Profession.objects.all(),
+        "income_details_form": SalIncomeDetailsForm(),
+        "other_incomes_form": SalOtherIncomesForm(),
+        "additional_other_incomes_form": SalAdditionalOtherIncomesForm(),
+        "company_details_form": SalCompanyDetailsForm(),
+        "residence_details_form": SalResidenceDetailsForm(),
+        "existing_loan_details_form": SalExistingLoanDetailsForm(prefix="1"),
+        "existing_card_details_form": SalExistingCreditCardForm(),
+        "additional_details_form": SalAdditionalDetailsForm(),
+        "investment_form": SalInvestmentsForm(),
     }
 
     return render(request, "account/lead_detail.html", context)

@@ -39,18 +39,22 @@
 
 {% block other_body_css %}id="page-top"{% endblock other_body_css %}
 
+
 {% block content %}
 
-<section class="text-gray-600 body-font overflow-hidden">
-  <div class="container px-3 py-24 mx-auto">
+<section class="text-gray-800 body-font overflow-hidden">
+  <div class="container px-4 py-24 mx-auto">
     <div class="mx-auto d-flex flex-wrap">
       <div class="flex-grow-1 mb-6 m-4">
         <h1 class="text-3xl title-font font-medium mb-4">{{lead.prefix}}.{{lead.name}}</h1>
-        <div id="menu_container" class="d-flex mb-4 ">
-          <a data-name="description" class="flex-grow py-0 text_e91e63 text-center text-decoration-none py-0 px-1"
+        <div id="menu_container" class="">
+          <a data-name="description" class="flex-grow py-0 text_e91e63 text-center text-decoration-none font-small py-0 px-1"
             data-target="desc">Description</a>
+            <a data-name="other_details" class="flex-grow py-0 bord text-center text-decoration-none py-0 px-1"
+            data-target="other">Other Details</a>
           <a data-name="documents" class="flex-grow py-0 bord text-center text-decoration-none py-0 px-1"
             data-target="docs">Uploaded Docs</a>
+          
           <div id="slide_container"></div>
         </div>
 
@@ -60,13 +64,8 @@
           <div class="ms-auto my-auto">
             <a href="{% url 'list_leads' %}" class="btn bg-gradient-primary btn-sm mb-0">
 
-
-
-              </span>
-
               <span class='fas fa-arrow-left text py-1 px-1'>
                 Back to Leads
-
               </span>
             </a>
           </div>
@@ -82,7 +81,1212 @@
           {% endfor %}
         </div>
 
-        <div id="desc">
+        <div id="other">
+          <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                data-bs-target="#personalDetailsModal">
+                <b>Personal Details</b>
+            </div>
+            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                data-bs-target="#incomeDetails">
+                <b>Income Details</b>
+            </div>
+            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                data-bs-target="#otherIncomes">
+                <b>Other Income Details</b>
+            </div>
+            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                data-bs-target="#otherThanIncomeMentionedAbove">
+                <b>Other Than Income Mentioned Above Details</b>
+            </div>
+            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                data-bs-target="#companyDetailsModal">
+                <b>Company Details</b>
+            </div>
+            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                data-bs-target="#residenceDetailModal">
+                <b>Residence Details</b>
+            </div>
+            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                data-bs-target="#existingloanDetailModal">
+                <b>Existing Loan Details</b>
+            </div>
+            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                data-bs-target="#existingcardDetailModal">
+                <b>Existing Card Details</b>
+            </div>
+            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                data-bs-target="#additionalDetailsModal">
+                <b>Additional Details</b>
+            </div>
+            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                data-bs-target="#investmentDetailModal">
+                <b>Investment Details</b>
+            </div>
+            <div class="modal fade" id="personalDetailsModal" tabindex="-1" role="dialog"
+          aria-labelledby="personalDetailsModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title font-weight-normal" id="personalDetailsModalLabel">Personal details</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
+                      {% csrf_token %}
+                      <div class="modal-body">
+                          <div class="row g-4 p-4">
+
+                              <!--
+                              {% for label, name in salperdet.items %}
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>{{ label }}</b> </label>
+                                    <div class="col-sm-12">
+                                         
+                                        
+                                        <input type="text" value="{{name}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              {% endfor %}
+                              -->
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Loan Amount</b> </label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{personal_details_form_id.loan_amount}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Cibil Score</b> </label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{personal_details_form_id.cibil_score}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Loan Taken</b> </label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{personal_details_form_id.loan_taken}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Tenure</b> </label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{personal_details_form_id.tenure}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Default year</b> </label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{personal_details_form_id.default_year}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Details about default</b> </label>
+                                    <div class="col-sm-12">
+                                         
+                                        
+                                        <input type="text" value="{{personal_details_form_id.details_about_default}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Gender</b> </label>
+                                    <div class="col-sm-12">
+                                         
+                                        
+                                        <input type="text" value="{{personal_details_form_id.gender}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>DOB</b> </label>
+                                    <div class="col-sm-12">
+                                         
+                                        
+                                        <input type="text" value="{{personal_details_form_id.dob}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Age</b> </label>
+                                    <div class="col-sm-12">
+                                         
+                                        
+                                        <input type="text" value="{{personal_details_form_id.age}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Retirement Age</b> </label>
+                                    <div class="col-sm-12">
+                                         
+                                        
+                                        <input type="text" value="{{personal_details_form_id.retirement_age}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Retirement Proof</b> </label>
+                                    <div class="col-sm-12">
+                                         
+                                        
+                                        <input type="text" value="{{personal_details_form_id.retirement_proof}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Marital Status</b> </label>
+                                    <div class="col-sm-12">
+                                         
+                                        
+                                        <input type="text" value="{{personal_details_form_id.marital_status}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Qualification</b> </label>
+                                    <div class="col-sm-12">
+                                         
+                                        
+                                        <input type="text" value="{{personal_details_form_id.qualification}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Profession</b> </label>
+                                    <div class="col-sm-12">
+                                         
+                                        
+                                        <input type="text" value="{{personal_details_form_id.profession}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Nationality</b> </label>
+                                    <div class="col-sm-12">
+                                         
+                                        
+                                        <input type="text" value="{{personal_details_form_id.nationality}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Enduse</b> </label>
+                                    <div class="col-sm-12">
+                                         
+                                        
+                                        <input type="text" value="{{personal_details_form_id.enduse}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              {% if personal_details_form_id.profession == "Lawyer" %}
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"> <b>Lawwyer Type</b> </label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{personal_details_form_id.Lawyer_Type}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              {% endif %}
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+        <div class="modal fade" id="incomeDetails" tabindex="-1" role="dialog" aria-labelledby="incomeDetailsLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title font-weight-normal" id="incomeDetailsLabel">Income Details</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
+                      {% csrf_token %}
+                      <div class="modal-body">
+                          <div class="row g-4 p-4">
+
+                            <!--
+                              {% for field in income_details_form %}
+                              <div class="col-sm-4">
+                                  <div class="input-group input-group-static">
+                                      <label class="ms-0 text-primary fw-bold">{{ field.label }}</label>
+                                      {{ field }}
+                                  </div>
+                              </div>
+                              {% endfor %}
+                            -->
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Salary Type</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{income_details_form_id.salary_type}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Bank Name</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{income_details_form_id.bank_name}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                            {% if income_details_form_id.bank_name == "Other" %}
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Other Bank Name</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{income_details_form_id.Other_Bank_Name}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                            {% endif %}
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Gross Sal</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{income_details_form_id.gross_sal}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Net Sal</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{income_details_form_id.net_sal}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Bonus Type</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{income_details_form_id.bonus_type}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Bonus Duration</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{income_details_form_id.bonus_duration}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Bonus Amount</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{income_details_form_id.bonus_amount}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Incentive Duration</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{income_details_form_id.incentive_duration}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Incentive Amount</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{income_details_form_id.incentive_amount}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+        <div class="modal fade" id="otherIncomes" tabindex="-1" role="dialog" aria-labelledby="otherIncomesLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title font-weight-normal" id="otherIncomesLabel">Rental Income</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
+                      {% csrf_token %}
+                      <div class="modal-body">
+                          <div class="row g-4 p-4">
+
+                            <!--
+                              {% for field in other_incomes_form %}
+                              <div class="col-sm-4">
+                                  <div class="input-group input-group-static">
+                                      <label class="ms-0 text-primary fw-bold">{{ field.label }}</label>
+                                      {{ field }}
+                                  </div>
+                              </div>
+                              {% endfor %}
+                            -->
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Lessee type</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{other_income_form_id.lessee_type}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                            
+                            {% if other_income_form_id.lessee_type == "Corporate" %}
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Lessee Name</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{other_income_form_id.lessee_name}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                            {% endif %}
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Rent Amount</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{other_income_form_id.rent_amount}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Tenure of Agreement</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{other_income_form_id.tenure_of_agreement}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Tenure Pending</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{other_income_form_id.tenure_pending}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Valid Rent Agreement</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{other_income_form_id.valid_rent_agreement}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Will you make agreement</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{other_income_form_id.will_you_make_agreement}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>How old is agreement</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{other_income_form_id.how_old_is_agreement}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Agreement type</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{other_income_form_id.agreement_type}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Reflection in Bank account</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{other_income_form_id.reflection_in_bank_account}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Reflection in itr</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{other_income_form_id.reflection_in_itr}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Extension expected years</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{other_income_form_id.extension_expected_years}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="otherThanIncomeMentionedAbove" tabindex="-1" role="dialog"
+          aria-labelledby="otherThanIncomeMentionedAboveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title font-weight-normal" id="otherThanIncomeMentionedAboveLabel">Other Than Income
+                          Mentioned
+                          Above</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <form method="POST" action="{% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}">
+                      {% csrf_token %}
+                      <div class="modal-body">
+                          <div class="row g-4 p-4">
+                            <!--
+                              {% for field in additional_other_incomes_form %}
+                              <div class="col-sm-4">
+                                  <div class="input-group input-group-static">
+                                      <label class="ms-0 text-primary fw-bold">{{ field.label }}</label>
+                                      {{ field }}
+                                  </div>
+                              </div>
+                              {% endfor %}
+                            -->
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Future Rent</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{additional_other_incomes_form_id.Future_Rent}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Income Amount</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{additional_other_incomes_form_id.income_amount}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+        <div class="modal fade" id="companyDetailsModal" role="dialog" tabindex="-1" role="dialog"
+          aria-labelledby="companyDetailsModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title font-weight-normal" id="companyDetailsModalLabel">Company Details</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <form method="POST" action="{% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}">
+                      {% csrf_token %}
+                      <div class="modal-body">
+                          <div class="row g-4 p-4">
+                            <!--
+                              {% for field in company_details_form %}
+                              <div class="col-sm-4">
+                                  <div class="input-group input-group-static">
+                                      <label class="ms-0 text-primary fw-bold">{{ field.label }}</label>
+                                      {{ field }}
+                                  </div>
+                              </div>
+                              {% endfor %}
+                            -->
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Company Type</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.company_type}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Company Name</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.company_name}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                              {% if company_details_form_id.company_name == "Other" %}
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Other Company</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.other_company_name}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              {% endif %}
+
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Paid Up Capital</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.paid_up_capital}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Company Age</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.company_age}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Designation</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.designation}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Location</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.location}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Nature of Business</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.nature_of_business}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Designation Type</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.designation_type}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Current Experience</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.current_experience}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Total Experience</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.total_experience}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Employment Type</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.employment_type}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Form 16</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.form_16}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Provident Fund deduction</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.Provident_Fund_deduction}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>TDS Deduction</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.TDS_deduction}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Office phone</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.office_phone}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Office email</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{company_details_form_id.office_email}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+        <div class="modal fade" id="residenceDetailModal" role="dialog" tabindex="-1" role="dialog"
+          aria-labelledby="residenceDetailModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title font-weight-normal" id="residenceDetailModalLabel">Residence Details</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
+                      {% csrf_token %}
+                      <div class="modal-body">
+                          <div class="row g-4 p-4">
+                            <!--
+                              {% for field in residence_details_form %}
+                              <div class="col-sm-4">
+                                  <div class="input-group input-group-static">
+                                      <label class="ms-0 text-primary fw-bold">{{ field.label }}</label>
+                                      {{ field }}
+                                  </div>
+                              </div>
+                              {% endfor %}
+                            -->
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Current Residence Type</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{residence_details_form_id.current_residence_type}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>State</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{residence_details_form_id.state}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-4">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-form-label text-primary"><b>Current Location City</b></label>
+                                    <div class="col-sm-12">
+                                        <input type="text" value="{{residence_details_form_id.current_location_city}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                              </div>
+
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+        <div class="modal fade" id="existingloanDetailModal" role="dialog" tabindex="-1" role="dialog"
+          aria-labelledby="existingloanDetailModalLabel" aria-hidden="true">
+
+          <input type="hidden" name="existing_loan_details_form_count" value=1>
+          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title font-weight-normal" id="existingloanDetailModalLabel">Existing Loan
+                          Details</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
+                      {% csrf_token %}
+                      <div class="modal-body">
+                          <div id="existing_loan_form_container">
+                              <h4>1.</h4>
+                              <div class="row g-4 p-4 mb-4">
+                                <!--
+                                  {% for field in existing_loan_details_form %}
+                                  <div class="col-sm-4">
+                                      <div class="input-group input-group-static">
+                                          <label class="ms-0 text-primary fw-bold">{{ field.label }}</label>
+                                          {{ field }}
+                                      </div>
+                                  </div>
+                                  {% endfor %}
+                                -->
+
+                                <div class="col-sm-4">
+                                  <div class="form-group row">
+                                      <label class="col-sm-12 col-form-label text-primary"><b>Bank Name</b></label>
+                                      <div class="col-sm-12">
+                                          <input type="text" value="{{existing_loan_details_form_id.bank_name}}" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="form-group row">
+                                      <label class="col-sm-12 col-form-label text-primary"><b>Other Bank Name</b></label>
+                                      <div class="col-sm-12">
+                                          <input type="text" value="{{existing_loan_details_form_id.other_bank_name}}" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="form-group row">
+                                      <label class="col-sm-12 col-form-label text-primary"><b>Product or Services</b></label>
+                                      <div class="col-sm-12">
+                                          <input type="text" value="{{existing_loan_details_form_id.products_or_services}}" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="form-group row">
+                                      <label class="col-sm-12 col-form-label text-primary"><b>Loan Amount</b></label>
+                                      <div class="col-sm-12">
+                                          <input type="text" value="{{existing_loan_details_form_id.loan_amount}}" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="form-group row">
+                                      <label class="col-sm-12 col-form-label text-primary"><b>EMI</b></label>
+                                      <div class="col-sm-12">
+                                          <input type="text" value="{{existing_loan_details_form_id.emi}}" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="form-group row">
+                                      <label class="col-sm-12 col-form-label text-primary"><b>Rate of Interest</b></label>
+                                      <div class="col-sm-12">
+                                          <input type="text" value="{{existing_loan_details_form_id.rate_of_interest}}" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="form-group row">
+                                      <label class="col-sm-12 col-form-label text-primary"><b>Tenure</b></label>
+                                      <div class="col-sm-12">
+                                          <input type="text" value="{{existing_loan_details_form_id.tenure}}" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="form-group row">
+                                      <label class="col-sm-12 col-form-label text-primary"><b>EMI Start date</b></label>
+                                      <div class="col-sm-12">
+                                          <input type="text" value="{{existing_loan_details_form_id.emi_start_date}}" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="form-group row">
+                                      <label class="col-sm-12 col-form-label text-primary"><b>EMI End date</b></label>
+                                      <div class="col-sm-12">
+                                          <input type="text" value="{{existing_loan_details_form_id.emi_end_date}}" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="form-group row">
+                                      <label class="col-sm-12 col-form-label text-primary"><b>Outstanding amount paid by customer</b></label>
+                                      <div class="col-sm-12">
+                                          <input type="text" value="{{existing_loan_details_form_id.outstanding_amount_paid_by_customer}}" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="form-group row">
+                                      <label class="col-sm-12 col-form-label text-primary"><b>Outstanding amount</b></label>
+                                      <div class="col-sm-12">
+                                          <input type="text" value="{{existing_loan_details_form_id.outstanding_amount}}" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="form-group row">
+                                      <label class="col-sm-12 col-form-label text-primary"><b>Any bounces</b></label>
+                                      <div class="col-sm-12">
+                                          <input type="text" value="{{existing_loan_details_form_id.any_bounces}}" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="form-group row">
+                                      <label class="col-sm-12 col-form-label text-primary"><b>Moratorium taken</b></label>
+                                      <div class="col-sm-12">
+                                          <input type="text" value="{{existing_loan_details_form_id.moratorium_taken}}" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-4">
+                                  <div class="form-group row">
+                                      <label class="col-sm-12 col-form-label text-primary"><b>Applicant type</b></label>
+                                      <div class="col-sm-12">
+                                          <input type="text" value="{{existing_loan_details_form_id.applicant_type}}" class="form-control" disabled>
+                                      </div>
+                                  </div>
+                                </div>
+
+                              </div>
+                          </div>
+                          <button id="add_existing_loan_details_form" data-loan-form-url="{% url 'add_existing_loan_form' %}" class="btn btn-primary" type="button">Add More Loan Information</button>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+        <div class="modal fade" id="existingcardDetailModal" role="dialog" tabindex="-1" role="dialog"
+          aria-labelledby="existingcardDetailModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title font-weight-normal" id="existingcardDetailModalLabel">Existing Card
+                          Details</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
+                      {% csrf_token %}
+                      <div class="modal-body">
+                          <div class="row g-4 p-4">
+                            <!--
+                              {% for field in existing_card_details_form %}
+                              <div class="col-sm-4">
+                                  <div class="input-group input-group-static">
+                                      <label class="ms-0 text-primary fw-bold">{{ field.label }}</label>
+                                      {{ field }}
+                                  </div>
+                              </div>
+                              {% endfor %}
+                            -->
+
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Bank Name</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{existing_card_details_form_id.bank_name}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Other Bank Name</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{existing_card_details_form_id.other_bank_name}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Credit Limit</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{existing_card_details_form_id.credit_limit}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Limit Utilized</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{existing_card_details_form_id.limit_utilized}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Minimum due</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{existing_card_details_form_id.minimum_due}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Credit Card Age</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{existing_card_details_form_id.credit_card_age}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Payment delay</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{existing_card_details_form_id.payment_delay}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Payment delay year</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{existing_card_details_form_id.payment_delay_year}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Moratorium taken</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{existing_card_details_form_id.moratorium_taken}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+        </div>
+        <div class="modal fade" id="additionalDetailsModal" role="dialog" tabindex="-1" role="dialog"
+          aria-labelledby="additionalDetailsModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title font-weight-normal" id="additionalDetailsModalLabel">Additional Details</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
+                      {% csrf_token %}
+                      <div class="modal-body">
+                          <div class="row g-4 p-4">
+                            <!--
+                              {% for field in additional_details_form %}
+                              <div class="col-sm-6">
+                                  <div class="input-group input-group-static">
+                                      <label class="ms-0 text-primary fw-bold">{{ field.label }}</label>
+                                      {{ field }}
+                                  </div>
+                              </div>
+                              {% endfor %}
+                            -->
+
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Inward Cheque return</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{additional_details_form_id.inward_cheque_return}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Loan Inquiry disbursement</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{additional_details_form_id.loan_inquiry_disbursement}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+
+                            {% if additional_details_form_id.loan_inquiry_disbursement == "Yes" %}
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Loan inquiry disbursement details</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{additional_details_form_id.loan_inquiry_disbursement_details}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            {% endif %}
+
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+        <div class="modal fade" id="investmentDetailModal" role="dialog" tabindex="-1" role="dialog"
+          aria-labelledby="investmentDetailModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title font-weight-normal" id="investmentDetailModalLabel">Investment Details</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
+                      {% csrf_token %}
+                      <div class="modal-body">
+                          <div class="row g-4 p-4">
+                            <!--
+                              {% for field in investment_form %}
+                              <div class="col-sm-6">
+                                  <div class="input-group input-group-static">
+                                      <label class="ms-0 text-primary fw-bold">{{ field.label }}</label>
+                                      {{ field }}
+                                  </div>
+                              </div>
+                              {% endfor %}
+                            -->
+
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Bank Savings/Deposits</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{investment_form_id.bank_sav_dep}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Current Balance in PF/PPF</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{investment_form_id.current_bal}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Life Insurance Policies/PLI</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{investment_form_id.life_ins}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Shares and Securities</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{investment_form_id.share_sec}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Other Assets</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{investment_form_id.Other_Assets}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="form-group row">
+                                  <label class="col-sm-12 col-form-label text-primary"><b>Other Owned Property Details</b></label>
+                                  <div class="col-sm-12">
+                                      <input type="text" value="{{investment_form_id.Other_Owned_Property_Details}}" class="form-control" disabled>
+                                  </div>
+                              </div>
+                            </div>
+
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+        </div>
+        </div>
+
+
+        <div id="desc" class="container">
 
           <div class="d-flex border-t border-gray-200 py-2">
             <span class="text-dark">Age</span>
@@ -155,15 +1359,14 @@
           </div>
 
         </div>
-
-
-
-
-
+    
       </div>
+
+      
     </div>
   </div>
 </section>
+
 
 {% endblock content %}
 
@@ -177,25 +1380,42 @@
   });*/
 
   document.getElementById("docs").style.display = "none";
-
+  document.getElementById("other").style.display = "none";
 
 
   $('a[data-name="description"]').click(function () {
     $('a[data-name="documents"]').removeClass("text_e91e63")
+    $('a[data-name="other_details"]').removeClass("text_e91e63")
     $('a[data-name="description"]').addClass("text_e91e63")
     $('#slide_container').css("transform", "translateX(0%)");
 
     $('#docs').hide();
+    $('#other').hide();
     var target = '#' + $(this).data('target');
     $(target).show();
   })
+
+
+  $('a[data-name="other_details"]').click(function () {
+    $('a[data-name="documents"]').removeClass("text_e91e63")
+    $('a[data-name="description"]').removeClass("text_e91e63")
+    $('a[data-name="other_details"]').addClass("text_e91e63")
+    $('#slide_container').css("transform", "translateX(0%)");
+
+    $('#docs').hide();
+    $('#desc').hide();
+    var target = '#' + $(this).data('target');
+    $(target).show();
+  })
+
 
   $('a[data-name="documents"]').click(function () {
     $('a[data-name="description"]').removeClass("text_e91e63")
     $('a[data-name="documents"]').addClass("text_e91e63")
     $('#slide_container').css("transform", "translateX(100%)");
-    $('#desc').hide();
 
+    $('#desc').hide();
+    $('#other').hide();
     var target = '#' + $(this).data('target');
     $(target).show();
   })

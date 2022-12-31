@@ -1,11 +1,13 @@
 {% extends request.user.is_superuser|yesno:"base.html,base/base_non_admin_template.html" %}
-{% load static %} {% block other_css %} {% endblock other_css %} {% block title%}Email{% endblock title %} {% block other_body_css %}id="page-top"{% endblock other_body_css %} {% block content %}
-<div class="container-fluid mb-2">
-  <div id="content-wrapper" class="d-flex flex-column">
-    <div id="content">
+{% load static %} 
+{% block other_css %} 
+{% endblock other_css %} 
+{% block title%}Email{% endblock title %} 
+{% block other_body_css %}id="page-top"{% endblock other_body_css %} 
+{% block content %}
       <div class="container-fluid">
         <div style="width: 800px; margin: 0 auto">
-          <h1 class="mb-5 mt-3 display-3 text-center">Send Gmail Message</h1>
+          <h1 class="mb-4 mt-3 display-3 text-center">Send Email Message</h1>
           <div class="row">
             <div class="col">
               <div class="card position-relative">
@@ -13,16 +15,12 @@
                   <form method="POST" action="wMsg" id="form">
                     {% csrf_token %}
                     <div class="input-group input-group-outline mb-4">
-                      <label
-                        for="mobile_no"
-                        class="form-label text-primary fw-bold"
-                        >Email ID</label
-                      >
                       <input
                         type="email"
-                        name="mobile_no"
-                        id="mobile_no"
+                        name="email"
+                        id="email"
                         class="form-control"
+                        placeholder="Email Address"
                         required
                       />
                     </div>

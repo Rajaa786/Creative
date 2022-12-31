@@ -1,7 +1,6 @@
 {% load static %}
 <html lang="en">
   <head>
-    {% block head%}
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta
@@ -64,9 +63,8 @@
       href="{% static 'vertical-dark-menu/src/assets/css/dark/elements/alert.css' %}"
     />
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
-    {% endblock head %}
   </head>
-  {% block body %}
+
   <body class="layout-boxed">
     <!-- BEGIN LOADER -->
     <div id="load_screen">
@@ -351,8 +349,7 @@
                   stroke-linejoin="round"
                   class="feather feather-minus"
                 >
-                  <line x1="5" y1="12" x2="19" y2="12"></line></svg
-                ><span>Registration</span>
+                  <line x1="5" y1="12" x2="19" y2="12"></line></svg><span>Registration</span>
               </div>
             </li>
             <li class="menu">
@@ -849,9 +846,12 @@
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <script>
+      if ( window.history.replaceState ) {
+      window.history.replaceState( null, null, window.location.href );
+      }
+    </script>
     {% block other_js %}{% endblock other_js %}
 
-    {% endblock body %} 
-    
   </body>
 </html>
