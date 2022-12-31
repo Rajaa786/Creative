@@ -8,7 +8,11 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no"
     />
-    <title>Full Width | CORK - Multipurpose Bootstrap Dashboard Template</title>
+    {% if title %}
+            <title>{{title}}</title>
+            {% else %}
+            <title>{% block title %}{% endblock title %}</title>
+        {% endif %}
 
     <link
       rel="icon"
@@ -846,6 +850,9 @@
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
-    {% endblock body%} {% block otherjs %}{% endblock otherjs %}
+    {% block other_js %}{% endblock other_js %}
+
+    {% endblock body %} 
+    
   </body>
 </html>
