@@ -8,7 +8,7 @@
 
 <style>
     #dashboard_content .card_container {
-        flex-basis: 17rem; 
+        flex-basis: 17rem;
         flex-grow: 1
     }
 
@@ -40,6 +40,7 @@
         <hr class="m-0">
     </div>
     <div id="dashboard_content" class="row g-3 my-3">
+        {% if request.user.groups.name == 'Referral Partner' %}
         <div class="card_container">
             <div class="card text-black bg-white mb-3">
                 <div class="card-body">
@@ -80,6 +81,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
 

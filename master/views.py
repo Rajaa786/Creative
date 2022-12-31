@@ -575,7 +575,8 @@ def companyCategoryData(request):
 
     context = {
         'tenures': Tenure.objects.all(),
-        'associatedCompanyCategories': associated_company_categories
+        'associatedCompanyCategories': associated_company_categories,
+        'bank_id' : bank_id
     }
 
     return render(request, 'master/associated_company_categories.html', context=context)
@@ -1285,9 +1286,13 @@ def addProductAndPolicyView(request):
                 print(current_cocat_type_min_salaries,
                       current_cocat_type_max_salaries)
 
-                current_multiplier_info = Multiplier_Info(
-                    cocat_type=current_cocat_type.cocat_type)
-                current_multiplier_info.save()
+                if Multiplier_Info.objects.filter(pp_id=product_and_policy_instance, cocat_type=current_cocat_type.cocat_type).exists():
+                    current_multiplier_info = Multiplier_Info.objects.filter(
+                        pp_id=product_and_policy_instance, cocat_type=current_cocat_type.cocat_type).first()
+                else:
+                    current_multiplier_info = Multiplier_Info(pp_id=product_and_policy_instance,
+                                                              cocat_type=current_cocat_type.cocat_type)
+                    current_multiplier_info.save()
 
                 for i in range(int(current_cocat_type_row_count_multiplier)):
                     current_min_multiplier_salary = current_cocat_type_min_salaries[i]
@@ -1299,28 +1304,28 @@ def addProductAndPolicyView(request):
                     current_multipliers = request.POST.getlist(
                         f"{cocat_type_id}_multiplier_no_{i+1}")
 
-                    current_multiplier_data = Multiplier_Data(
-                        min_salary=current_min_multiplier_salary, max_salary=current_max_multiplier_salary)
-                    current_multiplier_data.save()
+                    if Multiplier_Data.objects.filter(mult_info_id=current_multiplier_info,  min_salary=current_min_multiplier_salary, max_salary=current_max_multiplier_salary).exists():
+                        current_multiplier_data = Multiplier_Data.objects.filter(
+                            mult_info_id=current_multiplier_info,  min_salary=current_min_multiplier_salary, max_salary=current_max_multiplier_salary).first()
+                    else:
+                        current_multiplier_data = Multiplier_Data(mult_info_id=current_multiplier_info,
+                                                                  min_salary=current_min_multiplier_salary, max_salary=current_max_multiplier_salary)
+                        current_multiplier_data.save()
 
                     for (multiplier, tenure) in zip(current_multipliers, tenures):
 
                         if not multiplier:
                             continue
-                        per_tenure_multiplier_data = PerTenure_Multiplier_Data(
-                            associated_tenure=tenure, multiplier=multiplier)
-                        per_tenure_multiplier_data.save()
+                        if PerTenure_Multiplier_Data.objects.filter(associated_tenure=tenure, multiplier=multiplier).exists():
+                            per_tenure_multiplier_data = PerTenure_Multiplier_Data.objects.filter(
+                                associated_tenure=tenure, multiplier=multiplier).filter()
+                        else:
+                            per_tenure_multiplier_data = PerTenure_Multiplier_Data(
+                                associated_tenure=tenure, multiplier=multiplier)
+                            per_tenure_multiplier_data.save()
                         current_multiplier_data.tenure_multipliers.add(
                             per_tenure_multiplier_data)
                         current_multiplier_data.save()
-
-                    current_multiplier_info.multiplier_data.add(
-                        current_multiplier_data)
-                    current_multiplier_info.save()
-
-                product_and_policy_instance.multiplier_info.add(
-                    current_multiplier_info)
-                product_and_policy_instance.save()
 
                 # Store Foir Data
                 current_cocat_type_row_count_foir = row_count_per_cocat_type_foir[index]
@@ -1329,9 +1334,13 @@ def addProductAndPolicyView(request):
                 current_cocat_type_max_salaries = request.POST.getlist(
                     f"{cocat_type_id}_foir_max_salary")
 
-                current_foir_info = Foir_Info(
-                    cocat_type=current_cocat_type.cocat_type)
-                current_foir_info.save()
+                if Foir_Info.objects.filter(pp_id=product_and_policy_instance, cocat_type=current_cocat_type.cocat_type).exists():
+                    current_foir_info = Foir_Info.objects.filter(
+                        pp_id=product_and_policy_instance, cocat_type=current_cocat_type.cocat_type).first()
+                else:
+                    current_foir_info = Foir_Info(pp_id=product_and_policy_instance,
+                                                  cocat_type=current_cocat_type.cocat_type)
+                    current_foir_info.save()
 
                 for i in range(int(current_cocat_type_row_count_foir)):
                     current_min_salary = current_cocat_type_min_salaries[i]
@@ -1342,28 +1351,29 @@ def addProductAndPolicyView(request):
                     current_foirs = request.POST.getlist(
                         f"{cocat_type_id}_foir_no_{i+1}")
 
-                    current_foir_data = Foir_Data(
-                        min_salary=current_min_salary, max_salary=current_max_salary)
-                    current_foir_data.save()
+                    if Foir_Data.objects.filter(foir_info_id=current_foir_info,  min_salary=current_min_salary, max_salary=current_max_salary).exists():
+                        current_foir_data = Foir_Data.objects.filter(
+                            foir_info_id=current_foir_info, min_salary=current_min_salary, max_salary=current_max_salary).first()
+                    else:
+                        current_foir_data = Foir_Data(foir_info_id=current_foir_info,
+                                                      min_salary=current_min_salary, max_salary=current_max_salary)
+                        current_foir_data.save()
 
                     for (foir, tenure) in zip(current_foirs, tenures):
 
                         if not foir:
                             continue
-                        per_tenure_foir_data = PerTenure_Foir_Data(
-                            associated_tenure=tenure, foir=foir)
-                        per_tenure_foir_data.save()
+
+                        if PerTenure_Foir_Data.objects.filter(associated_tenure=tenure, foir=foir).exists():
+                            per_tenure_foir_data = PerTenure_Foir_Data.objects.filter(
+                                associated_tenure=tenure, foir=foir).first()
+                        else:
+                            per_tenure_foir_data = PerTenure_Foir_Data(
+                                associated_tenure=tenure, foir=foir)
+                            per_tenure_foir_data.save()
                         current_foir_data.tenure_foirs.add(
                             per_tenure_foir_data)
                         current_foir_data.save()
-
-                    # current_cocat_type_min_salary = request.POST[f""]
-                    current_foir_info.foir_data.add(current_foir_data)
-                    current_foir_info.save()
-
-                product_and_policy_instance.foir_info.add(
-                    current_foir_info)
-                product_and_policy_instance.save()
 
                 # Store Rate of Interest
 
@@ -1372,8 +1382,14 @@ def addProductAndPolicyView(request):
                 current_loan_max_amts = request.POST.getlist(
                     f"{cocat_type_id}_loan_max_amt")
 
-                current_rateofinterest_info = RateOfInterest_Info(cocat_type=current_cocat_type.cocat_type)
-                current_rateofinterest_info.save()
+                
+                if RateOfInterest_Info.objects.filter(pp_id=product_and_policy_instance,                     cocat_type=current_cocat_type.cocat_type).exists():
+                    current_rateofinterest_info = RateOfInterest_Info.objects.filter(
+                        pp_id=product_and_policy_instance,  cocat_type=current_cocat_type.cocat_type).first()
+                else:
+                    current_rateofinterest_info = RateOfInterest_Info(pp_id=product_and_policy_instance,
+                                                                      cocat_type=current_cocat_type.cocat_type)
+                    current_rateofinterest_info.save()
 
                 for index_, (current_loan_min_amount, current_loan_max_amount) in enumerate(zip(current_loan_min_amts, current_loan_max_amts)):
 
@@ -1383,28 +1399,32 @@ def addProductAndPolicyView(request):
                         f"{cocat_type_id}_rate_max_salary")
 
                     current_rate_of_interest_list = request.POST.getlist(
-                          f"{cocat_type_id}_rate_of_interest_no_{index_+1}")
+                        f"{cocat_type_id}_rate_of_interest_no_{index_+1}")
 
                     current_processing_fee_list = request.POST.getlist(
-                          f"{cocat_type_id}_processing_fee_no_{index_+1}")
+                        f"{cocat_type_id}_processing_fee_no_{index_+1}")
 
-                    for index_salary,  (current_rate_min_salary, current_rate_max_salary) in enumerate(zip(current_cocat_type_rate_min_salaries , current_cocat_type_rate_max_salaries)):
+                    for index_salary,  (current_rate_min_salary, current_rate_max_salary) in enumerate(zip(current_cocat_type_rate_min_salaries, current_cocat_type_rate_max_salaries)):
 
-                        print(current_rate_min_salary , current_rate_max_salary , current_rate_of_interest_list[index_salary])
+                        print(current_rate_min_salary, current_rate_max_salary,
+                              current_rate_of_interest_list[index_salary])
 
                         if not current_rate_of_interest_list[index_salary] or not current_processing_fee_list[index_salary] or not current_rate_min_salary or not current_rate_max_salary:
                             continue
 
-                        current_additionalrate_info = AdditionalRate_Info(min_salary=current_rate_min_salary, max_salary = current_rate_max_salary,  loan_min_amount = current_loan_min_amount , loan_max_amount = current_loan_max_amount , rate_of_interest = current_rate_of_interest_list[index_salary] , processing_fee = current_processing_fee_list[index_salary])
-                        current_additionalrate_info.save()
+                        if AdditionalRate_Info.objects.filter(min_salary=current_rate_min_salary, max_salary=current_rate_max_salary,  loan_min_amount=current_loan_min_amount,
+                                                              loan_max_amount=current_loan_max_amount, rate_of_interest=current_rate_of_interest_list[index_salary], processing_fee=current_processing_fee_list[index_salary]).exists():
+                            current_additionalrate_info = AdditionalRate_Info.objects.filter(min_salary=current_rate_min_salary, max_salary=current_rate_max_salary,  loan_min_amount=current_loan_min_amount,
+                                                                                             loan_max_amount=current_loan_max_amount, rate_of_interest=current_rate_of_interest_list[index_salary], processing_fee=current_processing_fee_list[index_salary]).first()
+                        else:
+                            current_additionalrate_info = AdditionalRate_Info(min_salary=current_rate_min_salary, max_salary=current_rate_max_salary,  loan_min_amount=current_loan_min_amount,
+                                                                              loan_max_amount=current_loan_max_amount, rate_of_interest=current_rate_of_interest_list[index_salary], processing_fee=current_processing_fee_list[index_salary])
+                            current_additionalrate_info.save()
 
                         current_rateofinterest_info.additional_rate_info.add(
                             current_additionalrate_info)
                         current_rateofinterest_info.save()
 
-                    product_and_policy_instance.rate_of_interest.add(
-                        current_rateofinterest_info)
-                    product_and_policy_instance.save()
 
         return redirect('list_product_and_policy')
 
