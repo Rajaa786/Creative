@@ -3074,9 +3074,10 @@ fieldset:disabled .btn {
     ====================
 */
 .table {
-  color: #515365;
+  color: #0014c5;
   border-collapse: separate;
   border-spacing: 0;
+  border-color: #300a0d;
 }
 .table th .form-check, .table td .form-check {
   margin-right: 0;

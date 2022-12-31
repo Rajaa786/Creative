@@ -27,9 +27,10 @@
       href="{% static 'vertical-dark-menu/layouts/vertical-dark-menu/css/dark/loader.css'%}"
       rel="stylesheet"
       type="text/css"
-    />
+    />z
     <script src="{% static 'vertical-dark-menu/layouts/vertical-dark-menu/loader.js' %}"></script>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
+  
     <link
       href="https://fonts.googleapis.com/css?family=Nunito:400,600,700"
       rel="stylesheet"
@@ -49,6 +50,14 @@
       rel="stylesheet"
       type="text/css"
     />
+  <link rel="stylesheet" href="{% static 'vertical-dark-menu/src/plugins/src/font-icons/fontawesome/css/regular.css' %}">
+    <link rel="stylesheet" href="{% static 'vertical-dark-menu/src/plugins/src/font-icons/fontawesome/css/fontawesome.css' %}">
+    
+    <link href="{% static 'vertical-dark-menu/src/assets/css/light/scrollspyNav.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'vertical-dark-menu/src/assets/css/light/components/font-icons.css' %}" rel="stylesheet" type="text/css">
+    
+    <link href="{% static 'vertical-dark-menu/src/assets/css/dark/scrollspyNav.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'vertical-dark-menu/src/assets/css/dark/components/font-icons.css' %}" rel="stylesheet" type="text/css">
     <!-- END GLOBAL MANDATORY STYLES -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
@@ -215,7 +224,7 @@
               <div class="nav-item theme-logo">
                 <a href="./index.html">
                   <img
-                    src="../src/assets/img/logo.svg"
+                    src="{% static 'vertical-dark-menu/src/assets/img/logo.svg"
                     class="navbar-logo"
                     alt="logo"
                   />
