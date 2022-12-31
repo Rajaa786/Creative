@@ -462,59 +462,6 @@ class BankCategory(models.Model):
         return str(self.bank_name.bank_name + "_" + self.company_name.company_name + "_" + self.category.cocat_type)
 
 
-class MultiplierCategory(models.Model):
-    cocat_type = models.CharField(max_length=200)
-    multiplier_number = models.IntegerField()
-    roi = models.FloatField()
-    min_loan_amt = models.BigIntegerField()
-    max_loan_amt = models.BigIntegerField()
-
-
-class PerTenure_Multiplier_Data(models.Model):
-    associated_tenure = models.ForeignKey(Tenure , on_delete=models.CASCADE)
-    multiplier = models.IntegerField()
-
-
-class PerTenure_Foir_Data(models.Model):
-    associated_tenure = models.ForeignKey(Tenure , on_delete=models.CASCADE)
-    foir = models.IntegerField()
-
-class Multiplier_Data(models.Model):
-    min_salary = models.BigIntegerField()
-    max_salary = models.BigIntegerField()
-    tenure_multipliers = models.ManyToManyField(PerTenure_Multiplier_Data)
-
-
-
-class Multiplier_Info(models.Model):
-    cocat_type = models.CharField(max_length=250)
-    multiplier_data = models.ManyToManyField(Multiplier_Data)
-
-
-class Foir_Data(models.Model):
-    min_salary = models.BigIntegerField()
-    max_salary = models.BigIntegerField()
-    tenure_foirs = models.ManyToManyField(PerTenure_Foir_Data)
-
-class Foir_Info(models.Model):
-    cocat_type = models.CharField(max_length=250)
-    foir_data = models.ManyToManyField(Foir_Data)
-
-class AdditionalRate_Info(models.Model):
-    min_salary = models.BigIntegerField(null=True)    
-    max_salary = models.BigIntegerField(null=True)
-    loan_min_amount = models.BigIntegerField()
-    loan_max_amount = models.BigIntegerField()
-    rate_of_interest = models.BigIntegerField()
-    processing_fee = models.BigIntegerField(null=True)
-
-
-class RateOfInterest_Info(models.Model):
-    cocat_type = models.CharField(max_length=250 , null=True)
-    additional_rate_info = models.ManyToManyField(AdditionalRate_Info)
-
-
-
 class Product_and_Policy_Master(models.Model):
     customer_type = models.ForeignKey(
         CustomerType,
@@ -553,14 +500,14 @@ class Product_and_Policy_Master(models.Model):
     credit_card_dpd = models.IntegerField()
     credit_card_obligation = models.IntegerField()
     emi_obligation = models.IntegerField()
-    multiplier_info = models.ManyToManyField(Multiplier_Info)
-    foir_info = models.ManyToManyField(Foir_Info)
+    # multiplier_info = models.ManyToManyField(Multiplier_Info)
+    # foir_info = models.ManyToManyField(Foir_Info)
     salary_type = models.ManyToManyField(
         SalaryType)
     residence_type = models.ManyToManyField(
         ResidenceType)
     company_type = models.ManyToManyField(CompanyType)
-    rate_of_interest = models.ManyToManyField(RateOfInterest_Info)
+    # rate_of_interest = models.ManyToManyField(RateOfInterest_Info)
 
     def __str__(self):
         s = (
@@ -569,6 +516,66 @@ class Product_and_Policy_Master(models.Model):
             + self.customer_type.cust_type[:3]
         )
         return s.upper()
+
+
+class MultiplierCategory(models.Model):
+    cocat_type = models.CharField(max_length=200)
+    multiplier_number = models.IntegerField()
+    roi = models.FloatField()
+    min_loan_amt = models.BigIntegerField()
+    max_loan_amt = models.BigIntegerField()
+
+
+class PerTenure_Multiplier_Data(models.Model):
+    associated_tenure = models.ForeignKey(Tenure , on_delete=models.CASCADE)
+    multiplier = models.IntegerField()
+
+
+class PerTenure_Foir_Data(models.Model):
+    associated_tenure = models.ForeignKey(Tenure , on_delete=models.CASCADE)
+    foir = models.IntegerField()
+
+
+
+class Multiplier_Info(models.Model):
+    pp_id = models.ForeignKey(Product_and_Policy_Master , on_delete=models.CASCADE)
+    cocat_type = models.CharField(max_length=250)
+    
+class Multiplier_Data(models.Model):
+    mult_info_id = models.ForeignKey(Multiplier_Info , on_delete=models.CASCADE)
+    min_salary = models.BigIntegerField()
+    max_salary = models.BigIntegerField()
+    tenure_multipliers = models.ManyToManyField(PerTenure_Multiplier_Data)
+
+
+
+class Foir_Info(models.Model):
+    pp_id = models.ForeignKey(Product_and_Policy_Master , on_delete=models.CASCADE)
+    cocat_type = models.CharField(max_length=250)
+
+
+class Foir_Data(models.Model):
+    foir_info_id = models.ForeignKey(Foir_Info , on_delete=models.CASCADE)
+    min_salary = models.BigIntegerField()
+    max_salary = models.BigIntegerField()
+    tenure_foirs = models.ManyToManyField(PerTenure_Foir_Data)
+
+class AdditionalRate_Info(models.Model):
+    min_salary = models.BigIntegerField(null=True)    
+    max_salary = models.BigIntegerField(null=True)
+    loan_min_amount = models.BigIntegerField()
+    loan_max_amount = models.BigIntegerField()
+    rate_of_interest = models.BigIntegerField()
+    processing_fee = models.BigIntegerField(null=True)
+
+
+class RateOfInterest_Info(models.Model):
+    pp_id = models.ForeignKey(Product_and_Policy_Master , on_delete=models.CASCADE)
+    cocat_type = models.CharField(max_length=250 , null=True)
+    additional_rate_info = models.ManyToManyField(AdditionalRate_Info)
+
+
+
 
 
 class CibilLoanType(models.Model):

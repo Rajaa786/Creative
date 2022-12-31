@@ -212,7 +212,7 @@ def register_referral(request):
         'role': Role.objects.filter(role="Referral Partner").first(),
         'professions': Profession.objects.all(),
         'cities': City.objects.all(),
-        'prefixes' : Prefix.objects.all()
+        'prefixes': Prefix.objects.all()
 
     }
 
@@ -285,6 +285,9 @@ def email_ver_msg(request):
 
 
 def login(request):
+    if request.user.is_authenticated:
+        redirect('base_dashboard')
+
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -360,7 +363,7 @@ def add_leads(request):
                 if form.is_valid():
                     # for f in files:
                     #     print(f)
-                        # handle_uploaded_file(f)
+                    # handle_uploaded_file(f)
                     instance = form.save(commit=False)
                     print(instance)
                     instance.added_by = request.user.username
@@ -1167,9 +1170,9 @@ def is_ajax(request):
     return request.META.get("HTTP_X_REQUESTED_WITH") == "XMLHttpRequest"
 
 
-@login_required()
+# @login_required()
 def additionaldetails(request, id):
-    request.session["testkey"] = "Rajaaa"
+    # request.session["testkey"] = "Rajaaa"
     redirect_temp = None
     add_instance_form_1 = None
     add_instance_form_2 = None
@@ -2152,21 +2155,18 @@ def retired(request, id):
     )
 
 
-def handle_salaried_next_btn(product_name , co_applicant , additionaldetails_id , lead_id):
+def handle_salaried_next_btn(product_name, co_applicant, additionaldetails_id, lead_id):
 
     if co_applicant and co_applicant.pk != additionaldetails_id:
         return redirect("salaried", lead_id, co_applicant.pk)
 
-            # return redirect('salaried', lead_id, additionaldetails_id)
-
+        # return redirect('salaried', lead_id, additionaldetails_id)
 
     return loan_info_dict[product_name](lead_id)
 
 
-
-
 def salaried(request, lead_id, additionaldetails_id):
-    print(request.session['testkey'])
+    # print(request.session['testkey'])
     print(loan_info_dict)
     co_applicant = None
     lead = Leads.objects.get(pk=lead_id)
@@ -2180,12 +2180,11 @@ def salaried(request, lead_id, additionaldetails_id):
 
         if "next" in request.POST:
 
-            return handle_salaried_next_btn(lead.product.product , co_applicant , additionaldetails_id , lead_id)
-       
-                    # messages.info(
-                    #     request, "Please add every details to proceed.")
-                    # return redirect('salaried', lead_id, additionaldetails_id)
+            return handle_salaried_next_btn(lead.product.product, co_applicant, additionaldetails_id, lead_id)
 
+            # messages.info(
+            #     request, "Please add every details to proceed.")
+            # return redirect('salaried', lead_id, additionaldetails_id)
 
         if "personal_details" in request.POST:
             form = SalPersonalDetailsForm(request.POST)
@@ -2317,7 +2316,7 @@ def salaried(request, lead_id, additionaldetails_id):
                     pk=additionaldetails_id
                 )
                 instance.save()
-            
+
             else:
                 messages.error(request, form.errors)
                 return redirect("salaried", lead_id, additionaldetails_id)
@@ -2345,7 +2344,6 @@ def salaried(request, lead_id, additionaldetails_id):
             messages.success(
                 request, '"Existing Card Details" Saved Successfully')
             return redirect("salaried", lead_id, additionaldetails_id)
-
 
         elif "additional_details" in request.POST:
             form = SalAdditionalDetailsForm(request.POST)
@@ -2394,7 +2392,7 @@ def salaried(request, lead_id, additionaldetails_id):
     context = {
         "additionaldetails_id": additionaldetails_id,
         "lead_id": lead_id,
-        "loan_type" : lead.product.product,
+        "loan_type": lead.product.product,
         "name": additional_details_instance.cust_name,
         "applicant_type": additional_details_instance.applicant_type,
         "personal_details_form": SalPersonalDetailsForm(),
@@ -2708,7 +2706,7 @@ def check_eligibility_status(store_eligibility_details, applicant_personal_detai
     return applicant_eligible
 
 
-def eligibility_calculation(current_calc_data_instance, store_eligibility_details, applicant_personal_details, applicant_company_details, applicant_existing_credit_card_details, applicant_income_details, applicant_existing_loan_details, product, tenure, loan_amount, applicant_type, multiplier_info, foir_info, roi_info, category):
+def eligibility_calculation(current_calc_data_instance, store_eligibility_details, applicant_personal_details, applicant_company_details, applicant_existing_credit_card_details_list, applicant_income_details, applicant_existing_loan_details_list, product, tenure, loan_amount, applicant_type, multiplier_info, foir_info, roi_info, category):
 
     applicant_data = {
         'x_amount': 0,
@@ -2734,28 +2732,32 @@ def eligibility_calculation(current_calc_data_instance, store_eligibility_detail
     per_lakh_emi = 0
     emi = 0
 
-    limit_utilized = applicant_existing_credit_card_details.limit_utilized
+    for applicant_existing_credit_card_details in applicant_existing_credit_card_details_list:
 
-    if limit_utilized:
-        obligation_amount = limit_utilized * product.credit_card_obligation / 100
+        limit_utilized = applicant_existing_credit_card_details.limit_utilized
 
-    d1 = applicant_existing_loan_details.emi_start_date
-    d2 = applicant_existing_loan_details.emi_end_date
-    emi_dration_remaining = abs(d2 - d1).days
+        if limit_utilized:
+            obligation_amount += (limit_utilized *
+                                  product.credit_card_obligation) / 100
 
-    pending_emi_duration_upperbound = PENDING_EMI_OBLIGATION_DURATION_UPPER_BOUND * 30
-    if emi_dration_remaining > pending_emi_duration_upperbound:
+    for applicant_existing_loan_details in applicant_existing_loan_details_list:
+        d1 = applicant_existing_loan_details.emi_start_date
+        d2 = applicant_existing_loan_details.emi_end_date
+        emi_dration_remaining = abs(d2 - d1).days
 
-        obligation_amount = obligation_amount + \
-            float(applicant_existing_loan_details.emi)
+        pending_emi_duration_upperbound = PENDING_EMI_OBLIGATION_DURATION_UPPER_BOUND * 30
+        if emi_dration_remaining > pending_emi_duration_upperbound:
+
+            obligation_amount = obligation_amount + \
+                float(applicant_existing_loan_details.emi)
 
     cust_considerable_amount = cust_considerable_amount - obligation_amount
     current_calc_data_instance['cust_considerable_amount'] = cust_considerable_amount
 
 # /****************** Calculation of Multiplier  ****************/
 
-    multiplier_data = multiplier_info.multiplier_data.filter(
-        min_salary__lte=applicant_income_details.net_sal, max_salary__gte=applicant_income_details.net_sal).first()
+    multiplier_data = Multiplier_Data.objects.filter(
+        mult_info_id=multiplier_info.id, min_salary__lte=applicant_income_details.net_sal, max_salary__gte=applicant_income_details.net_sal).first()
 
     associated_tenure_multiplier = multiplier_data.tenure_multipliers.filter(
         associated_tenure=tenure).first()
@@ -2769,8 +2771,8 @@ def eligibility_calculation(current_calc_data_instance, store_eligibility_detail
         applicant_data['x_amount'] = x_amount
 
     # /******************  Calculation of Foir ****************/
-    foir_data = foir_info.foir_data.filter(
-        min_salary__lte=applicant_income_details.net_sal, max_salary__gte=applicant_income_details.net_sal).first()
+    foir_data = Foir_Data.objects.filter(
+        foir_info_id=foir_info.id, min_salary__lte=applicant_income_details.net_sal, max_salary__gte=applicant_income_details.net_sal).first()
 
     roi_data = roi_info.additional_rate_info.filter(
         min_salary__lte=applicant_income_details.net_sal, max_salary__gte=applicant_income_details.net_sal,
@@ -2781,7 +2783,7 @@ def eligibility_calculation(current_calc_data_instance, store_eligibility_detail
         # applicant_data['roi'] = roi_data.rate_of_interest
         principal = -100000
         rate = roi_data.rate_of_interest / (12 * 100)
-        tenure_in_months = tenure.ten_type * 12
+        tenure_in_months = tenure.ten_type
         per_lakh_emi = pmt(
             rate=rate, nper=tenure_in_months, pv=principal)
 
@@ -2840,24 +2842,23 @@ def set_data_current_calc_data_instance(main_applicant_data, co_applicant_data, 
     #     current_calc_data_instance['roi'] = co_applicant_data['roi']
     #     store_eligibility_details[product.bank_names.bank_name]['category'] = co_applicant_data['category']
 
-def getFinalEligibility(current_calc_data_instance , loan_amount):
+
+def getFinalEligibility(current_calc_data_instance, loan_amount):
     if not current_calc_data_instance['x_amount']:
         current_calc_data_instance['x_amount'] = "-"
         return min(current_calc_data_instance['percent_amount'], loan_amount)
 
     if not current_calc_data_instance['percent_amount']:
         current_calc_data_instance['percent_amount'] = "-"
-        return min(current_calc_data_instance['x_amount'] , loan_amount)
+        return min(current_calc_data_instance['x_amount'], loan_amount)
 
     return min(current_calc_data_instance['x_amount'], current_calc_data_instance['percent_amount'], loan_amount)
-
-
 
 
 def check_eligibility(request, id):
 
     eligibility_count = 0
-    
+
     lead = Leads.objects.get(pk=id)
 
     # Main Applicant Details
@@ -2873,12 +2874,12 @@ def check_eligibility(request, id):
     main_applicant_income_details = SalIncomeDetails.objects.filter(
         addi_details_id=main_applicant
     ).first()
-    main_applicant_existing_loan_details = SalExistingLoanDetails.objects.filter(
+    main_applicant_existing_loan_details_list = SalExistingLoanDetails.objects.filter(
         addi_details_id=main_applicant
-    ).first()
-    main_applicant_existing_credit_card_details = SalExistingCreditCard.objects.filter(
+    )
+    main_applicant_existing_credit_card_details_list = SalExistingCreditCard.objects.filter(
         addi_details_id=main_applicant
-    ).first()
+    )
     main_applicant_residence_details = SalResidenceDetails.objects.filter(
         addi_details_id=main_applicant).first()
 
@@ -2911,12 +2912,12 @@ def check_eligibility(request, id):
             main_applicant_bank_category = get_related_bank_categories(
                 product.bank_names, main_applicant_company_details.company_name)
             main_categ = main_applicant_bank_category.category.cocat_type
-            multiplier_main_info = product.multiplier_info.filter(
-                cocat_type=main_categ).first()
-            foir_main_info = product.foir_info.filter(
-                cocat_type=main_categ).first()
-            roi_main_info = product.rate_of_interest.filter(
-                cocat_type=main_categ).first()
+            multiplier_main_info = Multiplier_Info.objects.filter(
+                pp_id=product.id, cocat_type=main_categ).first()
+            foir_main_info = Foir_Info.objects.filter(
+                pp_id=product.id, cocat_type=main_categ).first()
+            roi_main_info = RateOfInterest_Info.objects.filter(
+                pp_id=product.id, cocat_type=main_categ).first()
 
             store_eligibility_details[product.bank_names.bank_name]['category'] = main_categ
 
@@ -2956,8 +2957,8 @@ def check_eligibility(request, id):
                                                   'cust_considerable_amount': 0
                                                   }
 
-                    main_applicant_data = eligibility_calculation(current_calc_data_instance, store_eligibility_details, main_applicant_personal_details, main_applicant_company_details, main_applicant_existing_credit_card_details,
-                                                                  main_applicant_income_details, main_applicant_existing_loan_details, product, tenure, loan_amount, "applicant", multiplier_main_info, foir_main_info, roi_main_info, main_categ)
+                    main_applicant_data = eligibility_calculation(current_calc_data_instance, store_eligibility_details, main_applicant_personal_details, main_applicant_company_details, main_applicant_existing_credit_card_details_list,
+                                                                  main_applicant_income_details, main_applicant_existing_loan_details_list, product, tenure, loan_amount, "applicant", multiplier_main_info, foir_main_info, roi_main_info, main_categ)
 
                     # if co_applicant_eligible:
                     #     co_applicant_data = eligibility_calculation(current_calc_data_instance, store_eligibility_details, main_applicant_personal_details, main_applicant_company_details, main_applicant_existing_credit_card_details,
@@ -2970,9 +2971,11 @@ def check_eligibility(request, id):
                         print(current_calc_data_instance['x_amount'])
                         print(current_calc_data_instance['percent_amount'])
 
-                        getFinalEligibility(current_calc_data_instance , loan_amount)
+                        getFinalEligibility(
+                            current_calc_data_instance, loan_amount)
 
-                        current_calc_data_instance['final_eligibility'] = min(current_calc_data_instance['x_amount'], current_calc_data_instance['percent_amount'], loan_amount)
+                        current_calc_data_instance['final_eligibility'] = min(
+                            current_calc_data_instance['x_amount'], current_calc_data_instance['percent_amount'], loan_amount)
                         # print(current_calc_data_instance)
 
                         if current_calc_data_instance['emi'] != '-':
@@ -2981,14 +2984,13 @@ def check_eligibility(request, id):
 
             if not main_applicant_eligible:
                 store_eligibility_details[product.bank_names.bank_name]['eligibility'] = NOT_ELIGIBLE
-                
 
     eligibility_count = 0
     context = {
         "eligibility_details_data": store_eligibility_details,
         'highest_net_sal_holder': highest_net_sal_holder,
-        'lead_id' : id,
-        'eligibility' : 1 if eligibility_count > 0 else 0
+        'lead_id': id,
+        'eligibility': 1 if eligibility_count > 0 else 0
     }
     return render(request, "account/temporary_test_eligibility.html", context=context)
 
@@ -3015,8 +3017,8 @@ def handleLoanRequirementChange(request):
     associated_product = Product_and_Policy_Master.objects.get(pk=pp_id)
     print(associated_product)
 
-    roi_info_ = associated_product.rate_of_interest.filter(
-        cocat_type=company_category).first()
+    roi_info_ = RateOfInterest_Info.objects.filter(pp_id=associated_product.id,
+                                                   cocat_type=company_category).first()
 
     print(roi_info_)
 
@@ -3035,9 +3037,8 @@ def handleLoanRequirementChange(request):
         #     main_applicant_personal_details.age,  main_applicant_personal_details.retirement_age)
         # tenure_in_months = min(
         # tenure_in_months, product_max_tenure)
-        tenure_in_months = tenure_ * 12
 
-        per_lakh_emi = pmt(rate=rate, nper=tenure_in_months, pv=principal)
+        per_lakh_emi = pmt(rate=rate, nper=tenure_, pv=principal)
 
         emi = round(per_lakh_emi * (required_loan / 100000), 2)
         # PERCENT_amount = min(lead.loan_amt, PERCENT_amount)
@@ -3442,7 +3443,8 @@ def customer_details(request):
 @login_required(redirect_field_name="login", login_url="login")
 def partner_list(request):
     users = CustomUser.objects.all()
-    partners = [x for x in users if x.system_role.role == "Referral Partner"]
+    print(users)
+    partners = [x for x in users if not x.is_superuser and x.system_role.role == "Referral Partner"]
     context = {"partners": partners}
     return render(request, "account/partner_list.html", context=context)
 
@@ -3578,7 +3580,6 @@ def addExistingLoanForm(request):
     return render(request, "account/add_existing_loan_form.html", context=context)
 
 
-
 def addExistingCreditForm(request):
     current_prefix = int(request.GET.get("credit_form_count"))
 
@@ -3588,13 +3589,13 @@ def addExistingCreditForm(request):
 
     return render(request, "account/add_existing_credit_form.html", context=context)
 
-def eligibilityNextBtnHandler(request, lead_id , eligibility):
-    
-    if eligibility == 1:
-        return redirect('upload_documents' , lead_id)
-    else:
-        return render(request , "account/not_eligible.html")
 
+def eligibilityNextBtnHandler(request, lead_id, eligibility):
+
+    if eligibility == 1:
+        return redirect('upload_documents', lead_id)
+    else:
+        return render(request, "account/not_eligible.html")
 
 
 register_manager = {"Referral Partner": register_referral,
