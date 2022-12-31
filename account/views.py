@@ -184,7 +184,7 @@ def lead_delete(request, pk):
 
 @login_required()
 def base_dashboard(request):
-    return render(request, "base/dashboard.html")
+    return render(request, "dashboard.html")
 
 
 # @login_required()
@@ -301,9 +301,9 @@ def login(request):
                 return redirect(request.POST["next"])
 
             if user.is_superuser:
-                return redirect('base_dashboard')
+                return redirect('base')
             elif user.system_role.role == "Referral Partner":
-                return redirect("base_dashboard")
+                return redirect("base")
         else:
             messages.info(request, "Invalid Username or Password")
             return redirect("login")
