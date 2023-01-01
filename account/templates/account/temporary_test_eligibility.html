@@ -34,13 +34,12 @@
     <title>Check Eligibility</title>
 </head>
 
-<body class="g-sidenav-show  bg-gray-200">
+<body class="g-sidenav-show p-3 bg-gray-200">
     {% comment %} <div>{{data}}</div> {% endcomment %}
     {% comment %} <h4>{{eligibility_details_data}}</h4> {% endcomment %}
     {% comment %} {% if data.multiplier_calculations %} {% endcomment %}
-    <div>{{eligibility_details_data}}</div>
-    <div class="container-fluid">
-        <div class="row py-3 bg-white rounded-3">
+    <div class="container-xl bg-white rounded-3">
+        <div class="row py-3">
             <div class="col-12">
                 <div class="table-responsive">
                     <table id="eligibility_details_table" data-url="{% url 'handle_loan_requirement_change' %}"
@@ -70,9 +69,9 @@
                                 <td class="text-center ">{{bank}}</td>
                                 <td class="text-center">{{calculation.applicants}}</td>
                                 <td class="text-center">{{calculation.multiplier}}</td>
-                                <td class="text-center">{{calculation.x_amount}}</td>
+                                <td class="text-center">{{calculation.x_amount|floatformat:2}}</td>
                                 <td class="text-center">{{calculation.foir}}</td>
-                                <td class="text-center">{{calculation.percent_amount}}</td>
+                                <td class="text-center">{{calculation.percent_amount|floatformat:2}}</td>
                                 <td><input class="requirement_input form-control text-center" type="number"
                                         value={{data.loanamt}} data-product-policy-id="{{data.product_and_policy_id}}"
                                         data-cocat-type="{{data.category}}"
@@ -86,9 +85,9 @@
                                         data-final-elig="{{calculation.final_eligibility}}"
                                         data-prev-processing-fee="{{calculation.processing_fees}}"
                                         aria-label="readonly input example" readonly></td>
-                                <td class="final_elig text-center">{{calculation.final_eligibility}}</td>
+                                <td class="final_elig text-center">{{calculation.final_eligibility|floatformat:2}}</td>
                                 <td class="roi text-center">{{calculation.roi}}</td>
-                                <td class="emi text-center">{{calculation.emi}}</td>
+                                <td class="emi text-center">{{calculation.emi|floatformat:2}}</td>
                                 <td class="text-center">{{calculation.associated_tenure}}</td>
                                 <td class="processing_fee text-center"><span class="pf">{{calculation.processing_fees}}</span> + GST(18%) = <span class="pf_gst">{{calculation.processing_fees|mul:1.18|floatformat:2}}</span>
                                 </td>
@@ -104,6 +103,12 @@
                         </tfoot>
                     </table>
                 </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-md-12 text-center">
+                <a href="{% url 'eligibility_next' lead_id eligibility %}"><button type="button" class="btn btn-primary">Proceed</button></a>
             </div>
         </div>
     </div>

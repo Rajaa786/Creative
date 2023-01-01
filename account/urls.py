@@ -33,9 +33,9 @@ urlpatterns = [
     path("ajax/subproducts/", views.load_subproducts, name="ajax_load_subproducts"),
     path("homeloan/", include("HomeLoan.urls")),
     path("register/", views.register, name="register"),
-    path("register/staff", views.register_staff, name="register_staff"),
-    path("register/vendor", views.register_vendor, name="register_vendor"),
-    path("register/referral", views.register_referral, name="register_referral"),
+    path("register/staff/", views.register_staff, name="register_staff"),
+    path("register/vendor/", views.register_vendor, name="register_vendor"),
+    path("register/referral/", views.register_referral, name="register_referral"),
     path("login/", views.login, name="login"),
     path("logout", views.logout, name="logout"),
     path("deleteapplicant/<int:id>", views.delapplicant, name="deleteapplicant"),
@@ -148,6 +148,7 @@ urlpatterns = [
     path('add_existing_loan_form/' , views.addExistingLoanForm , name="add_existing_loan_form"),
     path('add_credit_loan_form/' , views.addExistingCreditForm , name="add_existing_credit_form"),
     path('handle_loan_requirement_change/' , views.handleLoanRequirementChange , name="handle_loan_requirement_change"),
+    path('eligibility_next/<int:lead_id>/<int:eligibility>' , views.eligibilityNextBtnHandler , name="eligibility_next"),
 ]
 
 

@@ -57,7 +57,7 @@
             <tfoot>
                 <td colspan="1000">
                     <button class="addMultiplierRow btn btn-primary" type="button" data-cat-type="{{categories.pk}}"
-                        data-calculation-type="_multiplier">
+                        data-calculation-type="_multiplier" data-cat-text="Multiplier">
                         Add Row +
                     </button>
                 </td>
@@ -126,7 +126,7 @@
             <tfoot>
                 <td colspan="1000">
                     <button class="addMultiplierRow btn btn-primary" type="button" data-cat-type="{{categories.pk}}"
-                        data-calculation-type="_foir">
+                        data-calculation-type="_foir" data-cat-text="FOIR(%)">
                         Add Row +
                     </button>
                 </td>
@@ -249,7 +249,7 @@
 
 <script>
 
-    const roi_add_row_handler = (company_cat , row_count) => {
+    let roi_add_row_handler_{{bank_id}} = (company_cat , row_count) => {
         let elementString = "";
 
         $('.salary_range_table').each( function(i , element){
@@ -273,6 +273,7 @@
 
           return elementString;
     }
+    
 
 
 
@@ -354,6 +355,8 @@
             console.log(info_count)
             $(`${tmp3} input[type=hidden]`).val(info_count + 1)
 
+            let cat_text = $(event.target).attr('data-cat-text');
+
 
             if (event.target.classList[0] != "addRateRow") {
 
@@ -377,7 +380,7 @@
           {% for tenure in tenures %}
           <td>
               <div class="input-group input-group-static"><input class="form-control
-                  multiplier_input" type="number" style="" placeholder="Multiplier"
+                  multiplier_input" type="number" style="" placeholder="${cat_text}"
                   name="${tmp1}${tmp2}_no_${info_count+1}"
                       onfocus="focused(this)" onfocusout="defocused(this)"></div>
           </td>
@@ -404,7 +407,7 @@
               </td>
 
               
-              ${roi_add_row_handler(tmp1 , info_count)}
+              ${roi_add_row_handler_{{bank_id}}(tmp1 , info_count)}
 
           </tr>
 

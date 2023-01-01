@@ -3,6 +3,7 @@
 
 
 
+
 {% block title %}Registration Form{% endblock title %}
 
 {% block other_body_css %}id="page-top"{% endblock other_body_css %}
@@ -74,6 +75,7 @@
         <input type="text" class="form-control" id="validationCustom03" required>
         <div class="invalid-feedback">
             Please enter a proper 10-digit Mobile Number.
+
         </div>
       </div>
 
@@ -81,12 +83,14 @@
           <label for="reference" class="form-label">How did you know about us?</label>
           <input type="text" name="reference" id="reference" class="form-control" rajaa>
 
+
       </div>
 
       <div class="col-sm-4 mb-2">
           <label for="referral_code" class="form-label ">Referral Code</label>
           <input type="text" name="referral_code" id="referral_code" class="form-control">
       </div>
+
 
       <div class="col-sm-4 mb-2">
             <label for="has_gst" class="form-label">Do you have GST?</label>
@@ -117,6 +121,9 @@
           {% endfor %}
           <option>Other</option>
         </select>
+
+
+  
       </div>
     </div>
       
@@ -168,47 +175,88 @@
 {% endblock content %}
 
 {% block other_js %}
+
+
+
+
+
+
+
+
+
+
 <script>
   function showfield(name) {
     console.log(name)
-    if (name == 'Other')
-      document.getElementById('div1').innerHTML =
-      '  <label  for="other" class="form-label text-primary fw-bold">Other</label>' +
-      '  <div class="input-group input-group-outline mb-4">' +
-      '      <input type="text" name="other" id="other" class="form-control" placeholder="eg. Other Designation">' +
-      '  </div>';
-    else
-      document.getElementById('div1').innerHTML = '';
+    if (name == 'other') {
+      document.getElementById('div1').classList.remove('display_none')
+    } else {
+      document.getElementById('div1').classList.add('display_none')
+    }
   }
 
+  $("#form_container").on("input", function (event) {
+
+    if (event.target.id == "fname") {
+      if (event.target.value != "") {
+        $("#referral_name").text(event.target.value)
+        return;
+      }
+      $('input[name="terms"]').prop('checked' , false);
+      return;
+    }
+
+
+    if (event.target.id == "prefix") {
+      if (event.target.value != "") {
+        $("#referral_prefix").text(event.target.value)
+        return
+      }
+      $('input[name="terms"]').prop('checked' , false);
+      return;
+    }
+
+  })
+
   $('input[name="agreement"]').change(function (event) {
-    rajaa_checkbox = $('input[name="terms"]')
+    required_checkbox = $('input[name="terms"]')
     if (this.checked) {
-      rajaa_checkbox.prop("checked", true);
-      rajaa_checkbox.removeAttr("data-bs-target")
-      rajaa_checkbox.removeAttr("data-bs-toggle")
-      console.log("Terms wala " + $('input[name="terms"]').prop('checked'))
+      required_checkbox.prop("checked", true);
     } else {
-      rajaa_checkbox.prop("checked", false);
-      rajaa_checkbox.attr("data-bs-target", "#exampleModal")
-      rajaa_checkbox.attr("data-bs-toggle", "modal")
-      console.log("Terms wala " + $('input[name="terms"]').prop('checked'))
+      required_checkbox.prop("checked", false);
     }
   })
 
 
-  $('input[name="terms"]').change(function (event) {
-    console.log("Termsdsdsdsds wala " + this.checked)
-    if (!this.checked) {
-      $(this).attr("data-bs-target", "#exampleModal")
-      $(this).attr("data-bs-toggle", "modal")
+
+  $('input[name="terms"]').click(function (event) {
+
+    if(this.checked){
+      event.preventDefault()
     }
-
-    this.checked = false;
-
+    console.log(this.checked)
+    
+    let alert_msg = "Please First "
+    if ($('select[name="prefix"]').val() == "") {
+      alert(alert_msg + "Select The Title.")
+      return;
+    }
+    
+    if ($('input[name="fname"]').val() == "") {
+      alert(alert_msg + "Enter Your Full Name.")
+      return;
+    }
+    
     $('input[name="agreement"]').prop("checked", false)
-
+    
+    if(this.checked){
+      $("#exampleModal").modal('show')
+    }
+    
+    //this.checked = false;
   });
+
+
   $(".custom-file-input").on("change", function () {
     var fileName = $(this).val().split("\\").pop();
     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);

@@ -165,7 +165,7 @@ class SalPersonalDetails(models.Model):
     cibil_score = models.IntegerField(null=True, blank=False)
     loan_taken = models.BooleanField(choices=YES_NO_CHOICES, default=False)
     tenure = models.ForeignKey(
-        Tenure, on_delete=models.CASCADE, blank=False, null=False
+        Tenure, on_delete=models.CASCADE, blank=True, null=True
     )
     repayment_history = models.CharField(
         max_length=4, choices=GOOD_BAD_CHOICES, default=None, blank=True, null=True
@@ -318,7 +318,7 @@ class SalCompanyDetails(models.Model):
         null=True,
         default=None,
     )
-    other_company_name = models.CharField(max_length=20)
+    other_company_name = models.CharField(max_length=20,blank=True,null=True)
     paid_up_capital = models.PositiveIntegerField(
         validators=[MinValueValidator(1)])
     company_age = models.PositiveIntegerField(
@@ -353,7 +353,7 @@ class SalCompanyDetails(models.Model):
 class SalExistingLoanDetails(models.Model):
     existing_loan_det_id = models.AutoField(primary_key=True)
     bank_name = models.ForeignKey(BankName, on_delete=models.CASCADE)
-    other_bank_name = models.CharField(max_length=10, default=None)
+    other_bank_name = models.CharField(max_length=10, default=None , null=True,blank=True)
     products_or_services = models.ForeignKey(
         Product, on_delete=models.CASCADE, null=False
     )
@@ -380,7 +380,7 @@ class SalExistingLoanDetails(models.Model):
 class SalExistingCreditCard(models.Model):
     existing_credit_card_id = models.AutoField(primary_key=True)
     bank_name = models.ForeignKey(BankName, on_delete=models.CASCADE)
-    other_bank_name = models.CharField(max_length=10, default=None)
+    other_bank_name = models.CharField(max_length=10, default=None,blank=True,null=True)
     credit_limit = models.PositiveIntegerField(
         validators=[MinValueValidator(1)])
     limit_utilized = models.PositiveIntegerField(

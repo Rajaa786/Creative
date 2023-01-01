@@ -13,6 +13,9 @@ from django.core.files.base import ContentFile
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import auth, Group
 from django.contrib import messages
+import time
+from asgiref.sync import sync_to_async
+import asyncio
 
 # DATABASES_NAME = defaultdb
 # DATABASES_USER = doadmin
@@ -30,31 +33,32 @@ from django.contrib import messages
 
 # DATABASES_PASSWORD = ""
 
-def handleUserFileInputs(request , user):
-    
-    # To-Do
-    print(request.FILES)
+async def async_mail_sender(email):
+    print("Entered Email")
+    await sync_to_async(email.send , thread_sensitive=False)(fail_silently=False)
+    print("Email Sent")
+    # email.send(fail_silently=False)
 
-    photo = request.FILES.get('identity_photo')
-    pan_card = request.FILES.get('pan_card')
-    aadhar_card = request.FILES.get('aadhar_card')
-    cancelled_cheque = request.FILES.get('cancelled_cheque')
+
+
+
+
+async def handleUserFileInputs(request , user):
     
+    if not request.FILES:
+        return
+
+    # photo = request.FILES.get('identity_photo')
+    # pan_card = request.FILES.get('pan_card')
+    # aadhar_card = request.FILES.get('aadhar_card')
+    # cancelled_cheque = request.FILES.get('cancelled_cheque')
+
+
     for file in request.FILES:
-        print('******')
-        print(file)
-        print(file.filename)
-        print(request.POST[file])
-        print('******')
-
-    # print(photo)
-    # print(pan_card)
-    # print(aadhar_card)
-    # print(cancelled_cheque)
-
-    user_document = UserDocuments()
-
-    pass
+        file_content = request.FILES[file]
+        filename = request.FILES[file].name
+        user_document = UserDocuments(user = user , documentName = filename , document = file_content)
+        await sync_to_async(user_document.save)()
 
 
 
@@ -63,9 +67,12 @@ def get_tenure_months(current_age, retirement_age):
     return (retirement_age - current_age) * 12
 
 
-def register_referral_logic(request):
+async def register_referral_logic(request):
     print(request.POST)
-    group = Group.objects.get(name="Referral Partner")
+    start = time.time()
+
+    group = await sync_to_async(Group.objects.get)(name="Referral Partner")
+    # group = Group.objects.get(name="Referral Partner")
     fname = request.POST["fname"]
     system_role = request.POST["system_role"]
     Email = request.POST["email"]
@@ -80,18 +87,16 @@ def register_referral_logic(request):
     has_gst = request.POST["has_gst"]
     reference = request.POST["reference"]
     referral_code = request.POST.get("referral_code", "")
-    handleUserFileInputs(request , "user")
-    return redirect('register_referral')
-    if CustomUser.objects.filter(email=Email).exists():
+    if await sync_to_async(CustomUser.objects.filter(email=Email).exists)():
         messages.info(request, "Email Taken")
         return redirect("register_referral")
     else:
-        system_role = Role.objects.filter(role=system_role).first()
-        city = City.objects.filter(city_name=city).first()
+        system_role = await sync_to_async(Role.objects.filter(role=system_role).first)()
+        city = await sync_to_async(City.objects.filter(city_name=city).first)()
         print(profession)
         print(system_role)
         print(city)
-        user = CustomUser.objects.create_user(
+        user = await sync_to_async(CustomUser.objects.create_user)(
             username="default",
             password=password,
             system_role=system_role,
@@ -106,10 +111,10 @@ def register_referral_logic(request):
         user.mapped_to_dept = "Admin"
         user.reporting_head = "Admin"
         user.is_active = False
-        user.groups.add(group)
-        user.save()
+        await sync_to_async(user.groups.add)(group)
+        await sync_to_async(user.save)()
 
-    referral_profile = ReferralProfile.objects.create(
+    referral_profile = await sync_to_async(ReferralProfile.objects.create)(
         user=user,
         full_name=fname,
         profession=profession,
@@ -119,7 +124,7 @@ def register_referral_logic(request):
     )
 
 
-    referral_profile.save()
+    await sync_to_async(referral_profile.save)()
     ini = ""
     if referral_profile.profession == "Salaried":
         ini += "SAL"
@@ -154,13 +159,14 @@ def register_referral_logic(request):
     num = "{:04d}".format(user.id)
     newusername = ini + num
     user.username = newusername
-    user.save()
+    await sync_to_async(user.save)()
     if user.system_role.role == "Referral Partner":
         ini = "ORP"
         num = "{:03d}".format(user.id)
         newusername = ini + num
         user.username = newusername
-        user.save()
+        await sync_to_async(user.save)()
+    await handleUserFileInputs(request , user)
     uidb64_pk = urlsafe_base64_encode(force_bytes(user.pk))
     uidb64_hash = urlsafe_base64_encode(force_bytes(password))
     domain = get_current_site(request).domain
@@ -179,13 +185,16 @@ def register_referral_logic(request):
         + " Please use this link to verify your account\n"
         + activate_url
     )
+
+
+
     email = EmailMessage(
         "Activate your account",
         email_body,
-        "rohan@gmail.com",
+        EMAIL_HOST_USER,
         [Email],
     )
-    email.send(fail_silently=False)
+    asyncio.create_task(async_mail_sender(email))
     # template = get_template('account/Agreement.html')
     context = {"partner_name": referral_profile.full_name}
     # html = template.render(context)
@@ -194,12 +203,12 @@ def register_referral_logic(request):
     response = HttpResponse(pdf, content_type="application/pdf")
     filename = "Agreement_%s.pdf" % (user.username)
 
-    content = "attachment; filename='%s'" % (filename)
+    # content = "attachment; filename='%s'" % (filename)
     response["Content-Disposition"] = 'attachment; filename="report.pdf"'
-    referral_profile.agreement.save(filename, ContentFile(pdf.content))
+    await sync_to_async(referral_profile.agreement.save)(filename, ContentFile(pdf.content))
     print(referral_profile.agreement)
     message = "this is test mail"
-    subject = "terms and conditions"
+    subject = "Terms and Conditions"
     mail_id = request.POST.get("email", "")
     email = EmailMessage(
         subject,
@@ -210,14 +219,18 @@ def register_referral_logic(request):
         ],
     )
     email.content_subtype = "html"
+    asyncio.create_task(async_mail_sender(email))
 
-    email.send()
 
+
+    print("*************")
+    print(time.time() - start, " seconds took to complete...")
+    print("*************")
     return redirect("email_ver_msg")
 
     # return referral
 
-    pass
+    
 
 
 def register_vendor_logic():
