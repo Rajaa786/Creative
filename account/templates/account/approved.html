@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block other_css %}
@@ -9,7 +9,7 @@
 
 {% block other_body_css %}id="page-top"{% endblock other_body_css %}
 
-{% block other_body %}
+{% block content %}
   <!-- Page Wrapper -->
   <div class ="container-fluid mt-4">
     <!-- Content Wrapper -->
@@ -64,7 +64,7 @@
     </div>
   </div>
   <!-- End of Page Wrapper -->
-{% endblock other_body %}
+{% endblock content %}
 
 {% block other_js %}
   <!-- Bootstrap core JavaScript-->

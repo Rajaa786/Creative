@@ -1,4 +1,4 @@
-{% extends "base/base.html" %}
+{% extends "base.html" %}
 
 {% load static %}
 
@@ -10,7 +10,7 @@
 
 {% block other_body_css %}id="page-top"{% endblock other_body_css %}
 
-{% block other_body %}
+{% block content %}
 <div class="container" style="margin:25px auto;">
     {% csrf_token %}
     <div class="form-group row"></div>
@@ -19,7 +19,7 @@
         <div class="card-body p-0">
             <div class="container p-0">
                 <form id="product_and_policy_form" method="POST" action="{% url 'add_products_and_policy_view' %}"
-                    class="form-container bg-white rounded shadow-blur p-3" id="leadform" data-cities-url="ajax/cities/"
+                    class="form-container bg-blue rounded shadow-blur p-3" id="leadform" data-cities-url="ajax/cities/"
                     data-subproducts-url="ajax/subproducts/" data-companycat-url="{% url 'get_company_categories_data' %}">
                     {% csrf_token %}
                     <div class="row g-4 p-4">
@@ -107,7 +107,7 @@
 
 
 
-{% endblock other_body %}
+{% endblock content %}
 
 
 {% block other_js %}

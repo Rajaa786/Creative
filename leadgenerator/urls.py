@@ -35,6 +35,7 @@ def user_is_super_user_check():
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('demo/' , TemplateView.as_view(template_name='base.html')),
     path('', include('home.urls')),
     path('account/', include('account.urls')),
     path('homeloan/', include('HomeLoan.urls')),
@@ -43,13 +44,10 @@ urlpatterns = [
 
     path('master/', decorator_include(user_is_super_user_check() , 'master.urls')),
     path('trial/', TemplateView.as_view(template_name='account/password_reset_form.html')),
-
-    re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}), 
-    re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}), 
 ]
 
 handler404 = "home.views.page_not_found_view"
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

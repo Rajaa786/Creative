@@ -1,4 +1,4 @@
-{% extends request.user.is_superuser|yesno:"base/base.html,base/base_non_admin_template.html" %}
+{% extends request.user.is_superuser|yesno:"base.html,base/base_non_admin_template.html" %}
 
 {% load static %}
 
@@ -22,7 +22,7 @@
               <span class="icon text-white-50">
                 <i class="fas fa-plus"></i>
               </span>
-              <span class="text">Add Customer Details</span>
+              <span class="text">+ Add Customer Details</span>
             </a>
           </div>
           <div class="card-body">
@@ -56,15 +56,17 @@
                       <td><center>{{ lead.pk }}.</center></td>
                       <td class="text-center">
                         <a href={% url 'eligibility' id=lead.pk %} title="Check Eligibility">
-                              <span class="text-warning">
-                                <i class="fa fa-check-circle"></i>
-                              </span>
+                              <div class="icon-container">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="icon-name"> check</span>
+                                                        </div>
                         </a>
                       </td>
                       <td class="text-center">
                         <a href={% url 'list_lead_view' id=lead.pk %} title="View Details">
                           <span class="text-info">
-                            <i class="fa fa-eye"></i>
+                              <div class="icon-container">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg><span class="icon-name"> eye</span>
+                                                        </div>
                           </span>
                         </a>
                       </td>

@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block other_css %}
@@ -6,7 +6,7 @@
 
 {% block title %}Bank Codes{% endblock title %}
 
-{% block other_body %}
+{% block content %}
   <div class ="container-fluid">
     <div class="container" style="width:95%; margin:20px auto;" >
       <h1 class="mb-5 mt-3 display-3 text-center">Bank Codes</h1> 
@@ -100,7 +100,7 @@
       </table>
     </div>
   </div>
-{% endblock other_body %}
+{% endblock content %}
 
 {% block other_js %}
 {% endblock other_js %}
