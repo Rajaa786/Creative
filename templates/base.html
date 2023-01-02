@@ -30,7 +30,8 @@
     />z
     <script src="{% static 'vertical-dark-menu/layouts/vertical-dark-menu/loader.js' %}"></script>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
-  
+    {% block other_css %}
+    {% endblock other_css %}
     <link
       href="https://fonts.googleapis.com/css?family=Nunito:400,600,700"
       rel="stylesheet"
@@ -842,6 +843,7 @@
       <!--  END CONTENT AREA  -->
     </div>
     <!-- END MAIN CONTAINER -->
+    {% block other_js %}{% endblock other_js %}
 
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
 `    <script src="{% static 'vertical-dark-menu/src/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -859,7 +861,6 @@
       window.history.replaceState( null, null, window.location.href );
       }
     </script>
-    {% block other_js %}{% endblock other_js %}
 
   </body>
 </html>
