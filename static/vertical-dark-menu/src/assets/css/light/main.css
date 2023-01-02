@@ -100,7 +100,7 @@ select.form-custom::-ms-expand {
 }
 
 .modal-content {
-  background: #0e1726;
+  background: #f9f6f9;
 }
 
 .code-section-container {
@@ -304,7 +304,7 @@ span.red {
   padding: 24px 20px;
 }
 .card .card-title {
-  color: #0e1726;
+  color: auto;
   line-height: 1.5;
 }
 .card .card-text {

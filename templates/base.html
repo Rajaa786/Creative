@@ -13,6 +13,13 @@
             <title>{% block title %}{% endblock title %}</title>
         {% endif %}
 
+   <link
+      rel="icon"
+      type="image/x-icon"
+      href="{% static 'vertical-dark-menu/jquery.min.js' %}"
+    />
+
+
     <link
       rel="icon"
       type="image/x-icon"
@@ -173,11 +180,17 @@
               class="dropdown-menu position-absolute"
               aria-labelledby="userProfileDropdown"
             >
+
               <div class="user-profile-section">
                 <div class="media mx-auto">
                   <div class="emoji me-2">&#x1F44B;</div>
                   <div class="media-body">
-                    <h5>Shaun Park</h5>
+                       {% if not request.user.is_superuser  %}
+                    <h5>{{ request.user.referralprofile.full_name }}</h5>
+                           {% else %}
+                                               <h5>Admin</h5>
+
+                      {% endif %}
                     <p>Project Leader</p>
                   </div>
                 </div>
@@ -843,7 +856,7 @@
       <!--  END CONTENT AREA  -->
     </div>
     <!-- END MAIN CONTAINER -->
-    {% block other_js %}{% endblock other_js %}
+
 
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
 `    <script src="{% static 'vertical-dark-menu/src/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -851,7 +864,11 @@
     <script src="{% static 'vertical-dark-menu/src/plugins/src/mousetrap/mousetrap.min.js' %}"></script>
     <script src="{% static 'vertical-dark-menu/src/plugins/src/waves/waves.min.js' %}"></script>
     <script src="{% static 'vertical-dark-menu/layouts/vertical-dark-menu/app.js' %}"></script>
-    <!-- END GLOBAL MANDATORY SCRIPTS -->
+    <script
+      src="{% static 'vertical-dark-menu/jquery.min.js' %}"
+    ></script>
+       {% block other_js %}{% endblock other_js %}
+        <!-- END GLOBAL MANDATORY SCRIPTS -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
 
