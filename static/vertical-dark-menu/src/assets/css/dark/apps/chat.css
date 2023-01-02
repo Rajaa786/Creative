@@ -291,7 +291,7 @@ body.dark .chat-system .chat-box .overlay-video-call.video-call-show {
   z-index: 4;
 }
 body.dark .chat-system .chat-box .overlay-video-call.onConnect {
-  background-image: url(../../../assets/img/video-chat-2.jpg);
+  background-image: None;
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
