@@ -82,7 +82,7 @@ urlpatterns = [
     path(
         "check_eligibility/<int:id>/",
         views.check_eligibility,
-        name="account_eligibility",
+        name="check_eligibility",
     ),
     path("base", views.base, name="base"),
     path("list_leads/", views.list_leads, name="list_leads"),

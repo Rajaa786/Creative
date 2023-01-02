@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+    <main class="main-content position-relative border-radius-lg ">
+
+        {% block other_body %}{% endblock other_body %}
+
+        {% include 'base/js.html' %}
+
+    </main>
+
+{% endblock content %}
+
+
+    {% block other_js %}
+        <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>{% endblock other_js %}
+
+</body>
+
+</html>

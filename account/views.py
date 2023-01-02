@@ -2341,7 +2341,7 @@ def salaried(request, lead_id, additionaldetails_id):
 
             error_string = ""
 
-            for i in range(form_count):
+            for i in range(int(form_count)):
                 form = SalExistingLoanDetailsForm(request.POST, prefix=i+1)
                 if form.is_valid():
                     instance = form.save(commit=False)
@@ -2378,7 +2378,7 @@ def salaried(request, lead_id, additionaldetails_id):
 
             error_string = ""
 
-            for i in range(form_count):
+            for i in range(int(form_count)):
                 form = SalExistingCreditCardForm(request.POST, prefix=i+1)
                 if form.is_valid():
                     instance = form.save(commit=False)
@@ -2387,7 +2387,7 @@ def salaried(request, lead_id, additionaldetails_id):
                     )
                     instance.save()
                 else:
-                    error_string += form.errors
+                    pass
 
             if error_string:
                 messages.error(request, error_string)

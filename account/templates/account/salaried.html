@@ -274,7 +274,6 @@
 <div class="modal fade" id="existingloanDetailModal" role="dialog" tabindex="-1" role="dialog"
     aria-labelledby="existingloanDetailModalLabel" aria-hidden="true">
 
-    <input type="hidden" name="existing_loan_details_form_count" value=1>
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -286,6 +285,8 @@
             </div>
             <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
                 {% csrf_token %}
+                <input type="hidden" name="existing_loan_details_form_count" value=1>
+
                 <div class="modal-body">
                     <div id="existing_loan_form_container">
                         <div class="row g-4 p-4 mb-4">
@@ -313,7 +314,7 @@
 <div class="modal fade" id="existingcardDetailModal" role="dialog" tabindex="-1" role="dialog"
     aria-labelledby="existingcardDetailModalLabel" aria-hidden="true">
 
-    <input type="hidden" name="existing_credit_details_form_count" value=1>
+
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -324,6 +325,7 @@
             </div>
             <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
                 {% csrf_token %}
+            <input type="hidden" name="existing_credit_details_form_count" value=1>
                 <div class="modal-body">
                     <div id="existing_credit_form_container">
                         <div class="row g-4 p-4">
