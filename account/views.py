@@ -67,7 +67,7 @@ def view_leads(request):
 
 def lead_detail(request, pk):
     lead = Leads.objects.get(pk=pk)
-    additional_details = AdditionalDetails.objects.filter(lead_id=lead).first()
+    additional_details = AdditionalDetails.objects.filter(lead_id=lead, applicant_type__applicant_type="Applicant").first()
     co_applicant = AdditionalDetails.objects.filter(
         lead_id=lead, applicant_type__applicant_type="1st Co-Applicant"
     ).first()
