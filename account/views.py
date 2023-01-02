@@ -104,6 +104,7 @@ def lead_detail(request, pk):
         "loan_documents": loan_documents,
         "additionaldetails_id": additional_details.pk,
         "personal_details_form_id": personal_details_form_id,
+        "income_details_form_id":income_details_form_id,
         "other_income_form_id": other_income_form_id,
         "additional_other_incomes_form_id": additional_other_incomes_form_id,
         "company_details_form_id": company_details_form_id,
