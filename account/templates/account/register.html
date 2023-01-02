@@ -50,7 +50,7 @@
         <div class="input-group input-group-static mb-4">
 
           {% comment %} <label for="prefix" class="ms-0 text-primary fw-bold col-12">Title</label> {% endcomment %}
-          <select class="form-control" name="prefix" id="prefix" required>
+          <select class="form-control" name="prefix" id="prefix" rajaa>
             <option value="">-- Select Title --</option>
             {% for prefix in  prefixes%}
             <option value={{prefix.prefix}}>{{prefix.prefix}}</option>
@@ -64,7 +64,7 @@
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="fname" class="form-label text-primary fw-bold">Full Name</label>
-        <input type="text" name="fname" id="fname" class="form-control" required>
+        <input type="text" name="fname" id="fname" class="form-control" rajaa>
       </div>
     </div>
     <div class="col-md-4">
@@ -72,20 +72,20 @@
         <label for="password" class="form-label text-primary fw-bold">Password</label>
         <input type="password" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,12}$" name="password"
           oninvalid="this.setCustomValidity('Password must be between 8-12 characters with atleast 1 uppercase,1 lowercase ,and 1 special character.')"
-          oninput="this.setCustomValidity('')" id="password" class="form-control" required>
+          oninput="this.setCustomValidity('')" id="password" class="form-control" rajaa>
       </div>
     </div>
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="email" class="form-label text-primary fw-bold">E-mail</label>
-        <input type="email" name="email" id="email" class="form-control" required>
+        <input type="email" name="email" id="email" class="form-control" rajaa>
       </div>
     </div>
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="phone" class="form-label text-primary fw-bold">Mobile Number</label>
         <input type="tel" pattern="[1-9]{1}[0-9]{9}" name="phone" id="phone" class="form-control" maxlength="10"
-          required>
+          rajaa>
       </div>
     </div>
 
@@ -95,7 +95,7 @@
         {% comment %} <label for="address" class="form-label text-primary fw-bold mb-0">Address</label> {% endcomment %}
         <div class="input-group input-group-dynamic mb-4">
           <textarea name="address" id="address" class="form-control" rows="3" placeholder="Enter Your Address"
-            spellcheck="false" required></textarea>
+            spellcheck="false" rajaa></textarea>
         </div>
       </div>
     </div>
@@ -103,7 +103,7 @@
       <div class="form-group row">
         <div class="input-group input-group-static mb-4">
           {% comment %} <label for="city" class="ms-0 text-primary fw-bold col-12">City</label> {% endcomment %}
-          <select class="form-control col-12" name="city" id="city" required>
+          <select class="form-control col-12" name="city" id="city" rajaa>
             <option value="">-- Select City --</option>
             {% for city in  cities%}
             <option value={{city.city_name}}>{{city.city_name}}</option>
@@ -115,13 +115,13 @@
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="pincode" class="form-label text-primary fw-bold">PinCode</label>
-        <input type="text" name="pincode" id="pincode" class="form-control" required>
+        <input type="text" name="pincode" id="pincode" class="form-control" rajaa>
       </div>
     </div>
     <div class="col-md-4">
       <div class="input-group input-group-outline mb-4">
         <label for="reference" class="form-label text-primary fw-bold">How did you know about us?</label>
-        <input type="text" name="reference" id="reference" class="form-control" required>
+        <input type="text" name="reference" id="reference" class="form-control" rajaa>
       </div>
     </div>
 
@@ -129,7 +129,7 @@
       <div class="form-group row">
         <div class="input-group input-group-static mb-4">
           <label for="has_gst" class="ms-0 text-primary fw-bold col-12">Do you have GST?</label>
-          <select class="form-control col-12" name="has_gst" id="has_gst" required>
+          <select class="form-control col-12" name="has_gst" id="has_gst" rajaa>
             <option value="">-- Select Yes or No --</option>
             <option default value={{True}}>Yes</option>
             <option default value={{False}}>No</option>
@@ -143,7 +143,7 @@
       <div class="form-group row">
         <div class="input-group input-group-static mb-4">
           <label for="system_role" class="ms-0 text-primary fw-bold col-12">System Role</label>
-          <select class="form-control col-12" name="system_role" id="system_role" required>
+          <select class="form-control col-12" name="system_role" id="system_role" rajaa>
             {% comment %} <option value="">-- Select Role --</option> {% endcomment %}
             {% if role%}
             <option default value="{{role.role}}">{{role.role}}</option>
@@ -161,7 +161,7 @@
         <div class="input-group input-group-static mb-4">
           <label for="profession" class="ms-0 text-primary fw-bold col-12">Profession</label>
           <select class="form-control col-12" name="profession" id="profession"
-            onchange="showfield(this.options[this.selectedIndex].value)" required>
+            onchange="showfield(this.options[this.selectedIndex].value)" rajaa>
             <option value="">-- Select Profession --</option>
             {% for profession in  professions%}
             <option value={{profession.profession}}>{{profession.profession}}</option>
@@ -203,7 +203,7 @@
       <div class="form-check p-0">
         <input type="checkbox" name="terms" id="terms" class="form-check-input" style="border-color: grey;"
           oninvalid="this.setCustomValidity('You must agree to our Terms and Conditions before proceeding.')"
-          oninput="this.setCustomValidity('')" required>
+          oninput="this.setCustomValidity('')" rajaa>
         <label for="terms" class="form-check-label d-inline ms-0 text-center">I agree to the <span>Terms &
             Conditions</span>.</label>
       </div>
@@ -240,7 +240,7 @@
           aria-label="Close">&times;</button>
       </div>
       <div class="modal-body">
-        {% include 'account/Agreement.html' %}
+        {% include 'account/Agreement_Referral.html' %}
         <div class="form-check pt-5">
           <input type="checkbox" name="agreement" id="agreement" class="form-check-input" style="border-color: grey;">
           <label for="agreement" class="form-check-label text-primary d-inline ms-0 text-center">I have read and agree
@@ -284,20 +284,14 @@
   $("#form_container").on("input", function (event) {
 
     if (event.target.id == "fname") {
-      if (event.target.value != "") {
-        $("#referral_name").text(event.target.value)
-        return;
-      }
+      $("#referral_name").text(event.target.value)  
       $('input[name="terms"]').prop('checked' , false);
       return;
     }
 
 
     if (event.target.id == "prefix") {
-      if (event.target.value != "") {
-        $("#referral_prefix").text(event.target.value)
-        return
-      }
+      $("#referral_prefix").text(event.target.value)
       $('input[name="terms"]').prop('checked' , false);
       return;
     }
@@ -305,11 +299,11 @@
   })
 
   $('input[name="agreement"]').change(function (event) {
-    required_checkbox = $('input[name="terms"]')
+    rajaa_checkbox = $('input[name="terms"]')
     if (this.checked) {
-      required_checkbox.prop("checked", true);
+      rajaa_checkbox.prop("checked", true);
     } else {
-      required_checkbox.prop("checked", false);
+      rajaa_checkbox.prop("checked", false);
     }
   })
 

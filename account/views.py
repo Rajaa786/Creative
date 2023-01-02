@@ -54,7 +54,17 @@ PENDING_EMI_OBLIGATION_DURATION_UPPER_BOUND = 6
 """
 NEW VIEWS
 """
+def agreement(request):
+    base = request.build_absolute_uri('/')
 
+    logo_path = "static/material_2_pro_assets/img/website_logo.jpg"
+
+    logo_url = base + logo_path
+    website_url = base + 'account/login'
+    print("Website logo"  , logo_path)
+
+
+    return render(request , "account/user_info_mail.html" , {'website_url' : base})
 
 def view_leads(request):
     leads = Leads.objects.all()
@@ -233,12 +243,10 @@ def register_vendor(request):
 class VerificationView(View):
     def get(self, request, uidb64_pk, uidb64_hash, token):
         try:
-            print("inside verification")
             id = force_str(urlsafe_base64_decode(uidb64_pk))
             password = force_str(urlsafe_base64_decode(uidb64_hash))
             user = CustomUser.objects.get(pk=id)
-            print(id)
-            print(password)
+         
 
             if not token_generator.check_token(user, token):
                 return redirect("login" + "?message=" + "User already activated")
@@ -250,20 +258,32 @@ class VerificationView(View):
             # password = BaseUserManager().make_random_password(10)
             # user.set_password(password)
             user.save()
-            email_body = (
-                "Hi "
-                + user.first_name
-                + " \n Your username: "
-                + user.username
-                + "\n Your Password: "
-                + password
-            )
+        
+            
+            base = request.build_absolute_uri('/')
+
+            logo_path = "static/material_2_pro_assets/img/website_logo.jpg"
+
+            logo_url = base + logo_path
+            website_url = base + 'account/login'
+            print("Website logo"  , logo_path)
+
+
+            context = {
+                'username' : user.username,
+                'password' : password,
+                'website_url' : website_url,
+                'logo_url' : logo_url
+            }
+            email_body = render_to_string('account/user_info_mail.html' , context)
+
             email = EmailMessage(
-                "Account Activated",
+                "Fwd: User Id and Password",
                 email_body,
-                "rohan@gmail.com",
+                EMAIL_HOST_USER,
                 [user.email],
             )
+            email.content_subtype = "html"
             email.send(fail_silently=False)
 
             messages.success(request, "Account activated successfully")
@@ -285,8 +305,9 @@ def email_ver_msg(request):
 
 
 def login(request):
+
     if request.user.is_authenticated:
-        redirect('base_dashboard')
+        return redirect('base_dashboard')
 
     if request.method == "POST":
         username = request.POST["username"]

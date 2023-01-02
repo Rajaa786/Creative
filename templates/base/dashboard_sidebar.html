@@ -35,6 +35,8 @@
     id="sidenav-collapse-main"
   >
     <ul class="navbar-nav">
+
+      {% if request.user.is_superuser %}
       <li class="nav-item mb-2 mt-0">
         <a
           data-bs-toggle="collapse"
@@ -104,6 +106,9 @@
           </ul>
         </div>
       </li>
+      {% endif %}
+
+
       <li class="nav-item mb-2 mt-0">
         <a
           data-bs-toggle="collapse"
@@ -139,6 +144,9 @@
           </ul>
         </div>
       </li>
+
+
+      {% if request.user.is_superuser %}
       <li class="nav-item mb-2 mt-0">
         <a
           data-bs-toggle="collapse"
@@ -218,6 +226,9 @@
           <span class="nav-link-text ms-2 ps-1">Approved Projects</span>
         </a>
       </li>
+      {% endif %}
+
+      
       <li class="nav-item mb-2 mt-0">
         <a
           data-bs-toggle="collapse"

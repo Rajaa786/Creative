@@ -80,7 +80,7 @@ urlpatterns = [
     path(
         "check_eligibility/<int:id>/",
         views.check_eligibility,
-        name="account_eligibility",
+        name="check_eligibility",
     ),
     path("base", views.base, name="base"),
     path("list_leads/", views.list_leads, name="list_leads"),
@@ -147,6 +147,7 @@ urlpatterns = [
     path('add_credit_loan_form/' , views.addExistingCreditForm , name="add_existing_credit_form"),
     path('handle_loan_requirement_change/' , views.handleLoanRequirementChange , name="handle_loan_requirement_change"),
     path('eligibility_next/<int:lead_id>/<int:eligibility>' , views.eligibilityNextBtnHandler , name="eligibility_next"),
+    path('agreement/' , views.agreement)
 ]
 
 
