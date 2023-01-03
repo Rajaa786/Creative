@@ -1,7 +1,6 @@
 from pathlib import Path
 import environ
 from django.conf.locale.en import formats as en_formats
-import os
 
 
 env = environ.Env(DEBUG=(bool, False))
@@ -18,7 +17,7 @@ TEMPLATE_DIR = BASE_DIR / "templates"
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = os.path.join(BASE_DIR , "staticfiles")
+STATIC_ROOT = "static_root"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_DIR = BASE_DIR / "media"
 
@@ -26,8 +25,8 @@ MEDIA_DIR = BASE_DIR / "media"
 SECRET_KEY = env("SECRET_KEY")
 # SECRET_KEY = "fdfdfdfdfdffd"
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG")
-
+# DEBUG = env("DEBUG")
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
