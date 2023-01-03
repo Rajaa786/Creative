@@ -1,4 +1,4 @@
-{% extends request.user.is_superuser|yesno:"base.html,base/register_non_admin_base_template.html" %}
+{% extends request.user.is_superuser|yesno:"base.html,register_non_admin_base_template.html" %}
 {% load static %}
 
 
@@ -11,165 +11,202 @@
 {% block content %}
 <div class="container" style="margin:25px auto;">
   {% csrf_token %}
-  <div class="form-group row"></div>
   <div class="container">
     <h1 class=" mt-3 mb-4 display-3 text-center">New Partner Registration</h1>
     <div class="card-body">
       <div class="container">
 
-    <form action="{% url 'register' %}" method="POST" class="form-container bg-white rounded shadow-blur p-3" validate>
-      {% csrf_token %}
-      <div class="row g-3 p-3">
-        
-      <div class="col-sm-4 mb-2">
-          <label for="validationCustom01" class="form-label">Full Name</label>
-          <input type="text" class="form-control" id="validationCustom01" required>
-          <div class="valid-feedback">
-              Looks good!
-          </div>
-      </div>
-      <div class="col-sm-4 mb-2">
-          <label for="validationCustom02" class="form-label">Password</label>
-          <input type="text" class="form-control" id="validationCustom02" required>
-          <div class="valid-feedback">
-              Looks good!
-          </div>
-      </div>
-      <div class="col-sm-4 mb-2">
-          <label for="validationCustomUsername" class="form-label">E-mail</label>
-          <div class="input-group has-validation">
-              <span class="input-group-text" id="inputGroupPrepend">@</span>
-              <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
-              <div class="invalid-feedback">
-                  Please enter a valid E-mail id.
+        <form action="{% url 'register' %}" method="POST" class="form-container bg-white rounded shadow-blur p-3"
+          validate enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row g-3 p-3">
+
+            <div class="col-sm-4 mb-2">
+              <label for="prefix" class="form-label">Title</label>
+              <select class="form-control col-12" name="prefix" id="prefix" required>
+                <option value="">-- Select Title --</option>
+                {% for prefix in  prefixes%}
+                <option value={{prefix.prefix}}>{{prefix.prefix}}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+
+            <div class="col-sm-4 mb-2">
+              <label for="fname" class="form-label">Full Name</label>
+              <input type="text" class="form-control" id="validationCustom01" name="fname" required>
+              <div class="valid-feedback">
+                Looks good!
               </div>
+            </div>
+            <div class="col-sm-4 mb-2">
+              <label for="password" class="form-label">Password</label>
+              <input type="text" class="form-control" id="password" name="password" required>
+              <div class="valid-feedback">
+                Looks good!
+              </div>
+            </div>
+            <div class="col-sm-4 mb-2">
+              <label for="email" class="form-label">E-mail</label>
+              <div class="input-group has-validation">
+                <span class="input-group-text" id="inputGroupPrepend">@</span>
+                <input type="text" class="form-control" id="email" aria-describedby="inputGroupPrepend" name="email"
+                  required>
+                <div class="invalid-feedback">
+                  Please enter a valid E-mail id.
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-4 mb-2">
+              <label for="phone" class="form-label">Mobile Number</label>
+              <input type="text" class="form-control" id="phone" name="phone" required>
+              <div class="invalid-feedback">
+                Please enter a proper 10-digit Mobile Number.
+              </div>
+            </div>
+            <div class="col-sm-4 mb-2">
+              <label for="address" class="form-label">Address</label>
+              <input type="text" class="form-control" id="address" name="address" required>
+              <div class="invalid-feedback">
+                Please provide a valid address.
+              </div>
+            </div>
+            <div class="col-sm-4 mb-2">
+              <label for="city" class="form-label">City</label>
+              <select class="form-control col-12" name="city" id="city" required>
+                <option value="">-- Select City --</option>
+                {% for city in cities %}
+                <option value={{city.city_name}}>{{city.city_name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="col-sm-4 mb-2">
+              <label for="pincode" class="form-label">Pin Code</label>
+              <input type="text" class="form-control" id="pincode" name="pincode" required>
+              <div class="invalid-feedback">
+                Please enter a six digit pin code.
+
+              </div>
+            </div>
+
+            <div class="col-sm-4 mb-2">
+              <label for="reference" class="form-label">How did you know about us?</label>
+              <input type="text" name="reference" id="reference" class="form-control" required>
+            </div>
+
+            <div class="col-sm-4 mb-2">
+              <label for="referral_code" class="form-label ">Referral Code</label>
+              <input type="text" name="referral_code" id="referral_code" class="form-control">
+            </div>
+
+
+            <div class="col-sm-4 mb-2">
+              <label for="has_gst" class="form-label">Do you have GST?</label>
+              <select class="form-control col-12" name="has_gst" id="has_gst" required>
+                <option value="">-- Select Yes or No --</option>
+                <option default value={{True}}>Yes</option>
+                <option default value={{False}}>No</option>
+              </select>
+            </div>
+
+            <div class="col-sm-4 mb-2">
+              <label for="system_role" class="form-label">System Role</label>
+              <select class="form-control col-12" name="system_role" id="system_role" required>
+                {% comment %} <option value="">-- Select Role --</option> {% endcomment %}
+                {% if role%}
+                <option default value="{{role.role}}">{{role.role}}</option>
+                {% endif %}
+              </select>
+            </div>
+
+
+            <div class="col-sm-4 mb-2">
+              <label for="profession" class="form-label">Profession</label>
+              <select class="form-control col-12" name="profession" id="profession" required>
+                <option value="">-- Select Profession --</option>
+                {% for profession in  professions %}
+                <option value={{profession.profession}}>{{profession.profession}}</option>
+                {% endfor %}
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div id="div1" class="col-sm-4 mb-2 display_none">
+              <label for="other" class="form-label">Other</label>
+              <input type="text" name="other" id="other" class="form-control">
+            </div>
           </div>
-      </div>
-    
-      <div class="col-sm-4 mb-2">
-          <label for="validationCustom03" class="form-label">Mobile Number</label>
-          <input type="text" class="form-control" id="validationCustom03" required>
-          <div class="invalid-feedback">
-              Please enter a proper 10-digit Mobile Number.
+
+
+
+
+          <div class="row align-items-center mb-3 gy-3">
+            <div class="col-sm-9">
+              <div class="form-check">
+                <input type="checkbox" name="terms" id="terms" class="form-check-input" style="border-color: grey;"
+                  oninvalid="this.setCustomValidity('You must agree to our Terms and Conditions before proceeding.')"
+                  oninput="this.setCustomValidity('')" required>
+                <label for="terms" class="form-check-label d-inline ms-0 text-center">I agree to the <span>Terms &
+                    Conditions</span>.</label>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <button id="file_upload_btn" class="btn btn-secondary bg-gradient-secondary w-100 m-0" type="button"
+                data-bs-toggle="modal" data-bs-target="#fileInputModal">Upload Documents</button>
+            </div>
           </div>
-      </div>
-      <div class="col-sm-4 mb-2">
-          <label for="validationCustom04" class="form-label">Address</label>
-          <input type="text" class="form-control" id="validationCustom04" required>
-          <div class="invalid-feedback">
-              Please provide a valid address.
+          <div class="row justify-content-center mb-3">
+            <div class="col-sm-3">
+              <button type="submit" class="btn bg-gradient-primary w-100 m-0">Register</button>
+            </div>
+
           </div>
-      </div>
-      <div class="col-sm-4 mb-2">
-            <label for="validationCustom04" class="form-label">City</label>
-            <select class="form-control col-12" name="city" id="city" required>
-              <option value="">-- Select City --</option>
-              {% for city in cities %}
-              <option value={{city.city_name}}>{{city.city_name}}</option>
-              {% endfor %}
-            </select>
+          {% if not request.user.is_authenticated %}
+          <div class="container text-center">
+            <p>Already have an account?
+              <a href={% url "login" %} class="text-info">Login</a>.
+            </p>
+          </div>
+          {% endif %}
+          {% include 'account/referral_upload_documents.html' %}
+        </form>
+
+
+
+        <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+          aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Referral Agreement</h5>
+                <button type="button" class="close-btn text-dark" style="font-size : 2rem;" data-bs-dismiss="modal"
+                  aria-label="Close">&times;</button>
+              </div>
+              <div class="modal-body">
+                {% include 'account/Agreement_Referral.html' %}
+                <div class="form-check pt-5">
+                  <input type="checkbox" name="agreement" id="agreement" class="form-check-input"
+                    style="border-color: grey;">
+                  <label for="agreement" class="form-check-label text-primary d-inline ms-0 text-center">I have read and
+                    agree
+                    to Creative
+                    Finance's <span>Terms & Conditions and Agreement Policy</span>.</label>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
         </div>
 
-      <div class="col-sm-4 mb-2">
-        <label for="validationCustom01" class="form-label">Pin Code</label>
-        <input type="text" class="form-control" id="validationCustom03" required>
-        <div class="invalid-feedback">
-            Please enter a proper 10-digit Mobile Number.
 
-        </div>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-          <label for="reference" class="form-label">How did you know about us?</label>
-          <input type="text" name="reference" id="reference" class="form-control" required>
-
-
-      </div>
-
-      <div class="col-sm-4 mb-2">
-          <label for="referral_code" class="form-label ">Referral Code</label>
-          <input type="text" name="referral_code" id="referral_code" class="form-control">
-      </div>
-
-
-      <div class="col-sm-4 mb-2">
-            <label for="has_gst" class="form-label">Do you have GST?</label>
-            <select class="form-control col-12" name="has_gst" id="has_gst" required>
-              <option value="">-- Select Yes or No --</option>
-              <option default value={{True}}>Yes</option>
-              <option default value={{False}}>No</option>
-            </select>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-            <label for="system_role" class="form-label">System Role</label>
-            <select class="form-control col-12" name="system_role" id="system_role" required>
-              {% comment %} <option value="">-- Select Role --</option> {% endcomment %}
-              {% if role%}
-              <option default value="{{role.role}}">{{role.role}}</option>
-              {% endif %}
-            </select>
-      </div>
-
-
-      <div class="col-sm-4 mb-2">
-        <label for="profession" class="form-label">Profession</label>
-        <select class="form-control col-12" name="profession" id="profession" required>
-          <option value="">-- Select Profession --</option>
-          {% for profession in  professions %}
-          <option value={{profession.profession}}>{{profession.profession}}</option>
-          {% endfor %}
-          <option>Other</option>
-        </select>
-
-
-  
-      </div>
-    </div>
-      
-      <div class="col-12">
-          <div class="form-check">
-            <input type="checkbox" name="terms" id="terms" class="form-check-input" data-bs-toggle="modal"
-              data-bs-target="#exampleModal" style="border-color: grey;"
-              oninvalid="this.setCustomValidity('You must agree to our Terms and Conditions before proceeding.')"
-              oninput="this.setCustomValidity('')" required>
-            <label for="terms" class="form-check-label d-inline ms-0 text-center">I agree to the <span>Terms &
-                Conditions</span>.</label>
-          </div>
-      </div><br>
-      <div class="col-12">
-          <button class="btn btn-primary" type="submit">Register</button>
-      </div>
-    </form>
-
-
-
-<div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-  aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Referral Agreement</h5>
-        <button type="button" class="close-btn text-dark" style="font-size : 2rem;" data-bs-dismiss="modal"
-          aria-label="Close">&times;</button>
-      </div>
-      <div class="modal-body">
-        {% include 'account/Agreement_Referral.html' %}
-        <div class="form-check pt-5">
-          <input type="checkbox" name="agreement" id="agreement" class="form-check-input" style="border-color: grey;">
-          <label for="agreement" class="form-check-label text-primary d-inline ms-0 text-center">I have read and agree
-            to Creative
-            Finance's <span>Terms & Conditions and Agreement Policy</span>.</label>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
-
-
 
 
 {% endblock content %}
@@ -198,15 +235,15 @@
   $("#form_container").on("input", function (event) {
 
     if (event.target.id == "fname") {
-      $("#referral_name").text(event.target.value)  
-      $('input[name="terms"]').prop('checked' , false);
+      $("#referral_name").text(event.target.value)
+      $('input[name="terms"]').prop('checked', false);
       return;
     }
 
 
     if (event.target.id == "prefix") {
       $("#referral_prefix").text(event.target.value)
-      $('input[name="terms"]').prop('checked' , false);
+      $('input[name="terms"]').prop('checked', false);
       return;
     }
 
@@ -225,28 +262,28 @@
 
   $('input[name="terms"]').click(function (event) {
 
-    if(this.checked){
+    if (this.checked) {
       event.preventDefault()
     }
     console.log(this.checked)
-    
+
     let alert_msg = "Please First "
     if ($('select[name="prefix"]').val() == "") {
       alert(alert_msg + "Select The Title.")
       return;
     }
-    
+
     if ($('input[name="fname"]').val() == "") {
       alert(alert_msg + "Enter Your Full Name.")
       return;
     }
-    
+
     $('input[name="agreement"]').prop("checked", false)
-    
-    if(this.checked){
+
+    if (this.checked) {
       $("#exampleModal").modal('show')
     }
-    
+
     //this.checked = false;
   });
 
