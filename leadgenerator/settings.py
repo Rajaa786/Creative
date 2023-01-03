@@ -1,6 +1,7 @@
 from pathlib import Path
 import environ
 from django.conf.locale.en import formats as en_formats
+import os
 
 
 env = environ.Env(DEBUG=(bool, False))
@@ -12,12 +13,16 @@ if READ_DOT_ENV_FILE:
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 TEMPLATE_DIR = BASE_DIR / "templates"
 
 
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = "static_root"
+STATIC_DIR = BASE_DIR / "static"
+STATICFILES_DIRS = [STATIC_DIR,]
+STATIC_ROOT = os.path.join(BASE_DIR , "staticfiles")
+
+
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_DIR = BASE_DIR / "media"
 
@@ -44,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # "django.contrib.sites",
     "home",
     "stronghold",
     "mathfilters",
@@ -174,10 +180,15 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = "587"
-EMAIL_HOST_USER = "rajsingh08471@gmail.com"
-EMAIL_HOST_PASSWORD = "rzvujwqswaduhgih"
+# EMAIL_HOST_USER = "rajsingh08471@gmail.com"
+EMAIL_HOST_USER = "creative.finserve05@gmail.com"
+
+# EMAIL_HOST_PASSWORD = "rzvujwqswaduhgih"
+EMAIL_HOST_PASSWORD = "sspnfahqxzvyynyk"
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+# STRONGHOLD_USER_TEST_FUNC = lambda user: not user.is_superuser
 
 
 LOGIN_URL = "/account/login"
@@ -213,4 +224,4 @@ if not DEBUG:
 
     ALLOWED_HOSTS = ["*"]
 
-#HELLo
+# HELLo

@@ -1,88 +1,316 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <table width="700" border="0" align="center" cellpadding="20" cellspacing="0" style="border:2px solid #999">
-        <tbody><tr>
-          <td><table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
-            <tbody><tr>
-              <td align="center" valign="top"><img src="{{logo_url}}" alt="Creative Finserve" title="Creative Finserve" width="300" height="77" class="CToWUd" data-bit="iit"></td>
-            </tr>
-            <tr>
-              <td>&nbsp;</td>
-            </tr>
-            <tr>
-              <td height="1" bgcolor="#999999"></td>
-            </tr>
-            <tr>
-              <td>&nbsp;</td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial;font-size:15px;font-weight:normal;color:rgb(0,0,0);line-height:20px;text-decoration:none" valign="top"><p>Hello!</p></td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial;font-size:15px;font-weight:normal;color:rgb(0,0,0);line-height:20px;text-decoration:none" valign="top">&nbsp;</td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial;font-size:15px;font-weight:normal;color:rgb(0,0,0);line-height:20px;text-decoration:none" valign="top">We are proud to welcome you to join our Creative Finserve Family who is one of the leading online platform in arranging financial products to our esteemed Customers.</td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial;font-size:15px;font-weight:normal;color:rgb(0,0,0);line-height:20px;text-decoration:none" valign="top">&nbsp;</td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial;font-size:15px;font-weight:normal;color:rgb(0,0,0);line-height:20px;text-decoration:none" valign="top">Creative Finserve will serve you with all the support and training required to generate potential leads for all our financial products. You refer us and CFPL will work for you!</td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial;font-size:15px;font-weight:normal;color:rgb(0,0,0);line-height:20px;text-decoration:none" valign="top">&nbsp;</td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial;font-size:15px;font-weight:normal;color:rgb(0,0,0);line-height:20px;text-decoration:none" valign="top">Here is the url, user ID and Password to help you get started for sharing your leads:-</td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial;font-size:15px;font-weight:normal;color:rgb(0,0,0);line-height:20px;text-decoration:none" valign="top">&nbsp;</td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial;font-size:15px;font-weight:normal;color:rgb(0,0,0);line-height:20px;text-decoration:none" valign="top"><strong>URL:-</strong> <a href="{{website_url}}" style="color:#06f" target="_blank" data-saferedirecturl="https://www.google.com/url?q={{website_url}}&amp;source=gmail&amp;ust=1672733566630000&amp;usg=AOvVaw2xjPAJ9TWU7tBOBvRIC_qK">www.leadgenerator.co.in/crm</a></td>
-            </tr>
-            <tr>
-              <td height="10"></td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial;font-size:15px;color:rgb(0,0,0);line-height:20px;text-decoration:none" valign="top"><strong>User id:</strong><strong style="font-weight:normal">&nbsp;&nbsp;</strong><b>{{username}}</b></td>
-            </tr>
-            <tr>
-              <td height="10"></td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial;font-size:15px;color:rgb(0,0,0);line-height:20px;text-decoration:none" valign="top"><strong>Password:&nbsp;</strong><b>{{password}}</b><strong style="font-weight:normal"><br></strong></td>
-            </tr>
-            <tr>
-              <td height="10"></td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial;font-size:15px;font-weight:normal;color:rgb(0,0,0);line-height:20px;text-decoration:none" valign="top">If you have questions, comments, need help or simply want to contact us, just reply to this email or connect with us at our helpline no. 882 882 4141/882 882 4242 between 10am to 6 pm in any working day</td>
-            </tr>
-            <tr>
-              <td height="10"></td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial;font-size:15px;font-weight:normal;color:rgb(0,0,0);line-height:20px;text-decoration:none" valign="top">For more information about us visit our website to know more:- <a href="https://www.cfplindia.com" style="color:#06f" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://www.cfplindia.com&amp;source=gmail&amp;ust=1672733566630000&amp;usg=AOvVaw2X3bHSPUkqz1VH2IDh5PV7">www.cfplindia.com</a></td>
-            </tr>
-            <tr>
-              <td height="30"></td>
-            </tr>
-            <tr>
-              <td style="font-family:Arial;font-size:15px;font-weight:normal;color:rgb(0,0,0);line-height:20px;text-decoration:none;font-weight:bold">Thank you for joining us and welcome to CFPL Family!<br>
-                The CFPL Team</td>
-            </tr>
-          </tbody></table></td>
+    <style>
+      #test {
+        width: 300px;
+        height: 77px;
+        background: url("{{ domain }}{% static 'material_2_pro_assets/img/my_logo.jpg' %}")
+          no-repeat;
+      }
+    </style>
+  </head>
+  <body>
+    <table
+      width="700"
+      border="0"
+      align="center"
+      cellpadding="20"
+      cellspacing="0"
+      style="border: 2px solid #999"
+    >
+      <tbody>
+        <tr>
+          <td>
+            <table
+              width="100%"
+              border="0"
+              align="center"
+              cellpadding="0"
+              cellspacing="0"
+            >
+              <tbody>
+                <tr>
+                  <td align="center" valign="top">
+                    <img
+                    src="https://drive.google.com/uc?export=view&id=1TEfjN2jxrTTz6Jj3v9YDhRB6WZFliJiM"
+                      alt="Logo"
+                      title="Logo"
+                      style="display: block"
+                      height="77"
+                      width="300"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td height="1" bgcolor="#999999"></td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      font-family: Arial;
+                      font-size: 15px;
+                      font-weight: normal;
+                      color: rgb(0, 0, 0);
+                      line-height: 20px;
+                      text-decoration: none;
+                    "
+                    valign="top"
+                  >
+                    <p>Hello!</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      font-family: Arial;
+                      font-size: 15px;
+                      font-weight: normal;
+                      color: rgb(0, 0, 0);
+                      line-height: 20px;
+                      text-decoration: none;
+                    "
+                    valign="top"
+                  >
+                    &nbsp;
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      font-family: Arial;
+                      font-size: 15px;
+                      font-weight: normal;
+                      color: rgb(0, 0, 0);
+                      line-height: 20px;
+                      text-decoration: none;
+                    "
+                    valign="top"
+                  >
+                    We are proud to welcome you to join our Creative Finserve
+                    Family who is one of the leading online platform in
+                    arranging financial products to our esteemed Customers.
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      font-family: Arial;
+                      font-size: 15px;
+                      font-weight: normal;
+                      color: rgb(0, 0, 0);
+                      line-height: 20px;
+                      text-decoration: none;
+                    "
+                    valign="top"
+                  >
+                    &nbsp;
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      font-family: Arial;
+                      font-size: 15px;
+                      font-weight: normal;
+                      color: rgb(0, 0, 0);
+                      line-height: 20px;
+                      text-decoration: none;
+                    "
+                    valign="top"
+                  >
+                    Creative Finserve will serve you with all the support and
+                    training required to generate potential leads for all our
+                    financial products. You refer us and CFPL will work for you!
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      font-family: Arial;
+                      font-size: 15px;
+                      font-weight: normal;
+                      color: rgb(0, 0, 0);
+                      line-height: 20px;
+                      text-decoration: none;
+                    "
+                    valign="top"
+                  >
+                    &nbsp;
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      font-family: Arial;
+                      font-size: 15px;
+                      font-weight: normal;
+                      color: rgb(0, 0, 0);
+                      line-height: 20px;
+                      text-decoration: none;
+                    "
+                    valign="top"
+                  >
+                    Here is the url, user ID and Password to help you get
+                    started for sharing your leads:-
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      font-family: Arial;
+                      font-size: 15px;
+                      font-weight: normal;
+                      color: rgb(0, 0, 0);
+                      line-height: 20px;
+                      text-decoration: none;
+                    "
+                    valign="top"
+                  >
+                    &nbsp;
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      font-family: Arial;
+                      font-size: 15px;
+                      font-weight: normal;
+                      color: rgb(0, 0, 0);
+                      line-height: 20px;
+                      text-decoration: none;
+                    "
+                    valign="top"
+                  >
+                    <strong>URL:-</strong>
+                    <a
+                      href="{{website_url}}"
+                      style="color: #06f"
+                      target="_blank"
+                      data-saferedirecturl="https://www.google.com/url?q={{website_url}}&amp;source=gmail&amp;ust=1672733566630000&amp;usg=AOvVaw2xjPAJ9TWU7tBOBvRIC_qK"
+                      >www.leadgenerator.co.in/crm</a
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td height="10"></td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      font-family: Arial;
+                      font-size: 15px;
+                      color: rgb(0, 0, 0);
+                      line-height: 20px;
+                      text-decoration: none;
+                    "
+                    valign="top"
+                  >
+                    <strong>User id:</strong
+                    ><strong style="font-weight: normal">&nbsp;&nbsp;</strong
+                    ><b>{{username}}</b>
+                  </td>
+                </tr>
+                <tr>
+                  <td height="10"></td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      font-family: Arial;
+                      font-size: 15px;
+                      color: rgb(0, 0, 0);
+                      line-height: 20px;
+                      text-decoration: none;
+                    "
+                    valign="top"
+                  >
+                    <strong>Password:&nbsp;</strong><b>{{password}}</b
+                    ><strong style="font-weight: normal"><br /></strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td height="10"></td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      font-family: Arial;
+                      font-size: 15px;
+                      font-weight: normal;
+                      color: rgb(0, 0, 0);
+                      line-height: 20px;
+                      text-decoration: none;
+                    "
+                    valign="top"
+                  >
+                    If you have questions, comments, need help or simply want to
+                    contact us, just reply to this email or connect with us at
+                    our helpline no. 882 882 4141/882 882 4242 between 10am to 6
+                    pm in any working day
+                  </td>
+                </tr>
+                <tr>
+                  <td height="10"></td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      font-family: Arial;
+                      font-size: 15px;
+                      font-weight: normal;
+                      color: rgb(0, 0, 0);
+                      line-height: 20px;
+                      text-decoration: none;
+                    "
+                    valign="top"
+                  >
+                    For more information about us visit our website to know
+                    more:-
+                    <a
+                      href="https://www.cfplindia.com"
+                      style="color: #06f"
+                      target="_blank"
+                      data-saferedirecturl="https://www.google.com/url?q=https://www.cfplindia.com&amp;source=gmail&amp;ust=1672733566630000&amp;usg=AOvVaw2X3bHSPUkqz1VH2IDh5PV7"
+                      >www.cfplindia.com</a
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td height="30"></td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      font-family: Arial;
+                      font-size: 15px;
+                      font-weight: normal;
+                      color: rgb(0, 0, 0);
+                      line-height: 20px;
+                      text-decoration: none;
+                      font-weight: bold;
+                    "
+                  >
+                    Thank you for joining us and welcome to CFPL Family!<br />
+                    The CFPL Team
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
         </tr>
-      </tbody></table>
-</body>
+      </tbody>
+    </table>
+  </body>
 </html>

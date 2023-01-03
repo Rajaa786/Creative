@@ -56,15 +56,12 @@ NEW VIEWS
 """
 def agreement(request):
     base = request.build_absolute_uri('/')
-
-    logo_path = "static/material_2_pro_assets/img/website_logo.jpg"
-
-    logo_url = base + logo_path
-    website_url = base + 'account/login'
-    print("Website logo"  , logo_path)
+    domain = request.build_absolute_uri('/')
+    domain = domain[:-1]
+    domain = domain.replace("http" , "https")
 
 
-    return render(request , "account/user_info_mail.html" , {'website_url' : base})
+    return render(request , "account/user_info_mail.html" , {'domain' : domain})
 
 def view_leads(request):
     leads = Leads.objects.all()
@@ -260,20 +257,19 @@ class VerificationView(View):
             user.save()
         
             
-            base = request.build_absolute_uri('/')
+            base = request.build_absolute_uri('account/login')
+            domain = request.build_absolute_uri('/')
+            domain = domain[:-1]
 
-            logo_path = "static/material_2_pro_assets/img/website_logo.jpg"
 
-            logo_url = base + logo_path
-            website_url = base + 'account/login'
-            print("Website logo"  , logo_path)
+
 
 
             context = {
                 'username' : user.username,
                 'password' : password,
-                'website_url' : website_url,
-                'logo_url' : logo_url
+                'website_url' : base,
+                'domain' : domain
             }
             email_body = render_to_string('account/user_info_mail.html' , context)
 
