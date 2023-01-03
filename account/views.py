@@ -55,8 +55,17 @@ PENDING_EMI_OBLIGATION_DURATION_UPPER_BOUND = 6
 NEW VIEWS
 """
 
+
+def agreement(request):
+    base = request.build_absolute_uri('/')
+    domain = request.build_absolute_uri('/')
+    domain = domain[:-1]
+
+
 def base(request):
-    return render(request,'base.html')
+    return render(request, 'base.html')
+
+    return render(request, "account/user_info_mail.html", {'domain': domain})
 
 
 def view_leads(request):
@@ -67,31 +76,39 @@ def view_leads(request):
 
 def lead_detail(request, pk):
     lead = Leads.objects.get(pk=pk)
-    additional_details = AdditionalDetails.objects.filter(lead_id=lead, applicant_type__applicant_type="Applicant").first()
+    additional_details = AdditionalDetails.objects.filter(
+        lead_id=lead, applicant_type__applicant_type="Applicant").first()
     co_applicant = AdditionalDetails.objects.filter(
         lead_id=lead, applicant_type__applicant_type="1st Co-Applicant"
     ).first()
-    personal_details_form_id = SalPersonalDetails.objects.filter(additional_details_id=additional_details).first()
+    personal_details_form_id = SalPersonalDetails.objects.filter(
+        additional_details_id=additional_details).first()
     print(personal_details_form_id)
-    income_details_form_id = SalIncomeDetails.objects.filter(addi_details_id=additional_details)
+    income_details_form_id = SalIncomeDetails.objects.filter(
+        addi_details_id=additional_details)
     print(income_details_form_id)
-    other_income_form_id = SalOtherIncomes.objects.filter(addi_details_id=additional_details)
-    additional_other_incomes_form_id = SalAdditionalOtherIncomes.objects.filter(addi_details_id=additional_details)
-    company_details_form_id = SalCompanyDetails.objects.filter(addi_details_id=additional_details)
-    residence_details_form_id = SalResidenceDetails.objects.filter(addi_details_id=additional_details)
-    existing_loan_details_form_id = SalExistingLoanDetails.objects.filter(addi_details_id=additional_details)
-    existing_card_details_form_id = SalExistingCreditCard.objects.filter(addi_details_id=additional_details)
-    additional_details_form_id = SalAdditionalDetails.objects.filter(addi_details_id=additional_details)
-    investment_form_id = SalInvestments.objects.filter(addi_details_id=additional_details)
-
-
+    other_income_form_id = SalOtherIncomes.objects.filter(
+        addi_details_id=additional_details)
+    additional_other_incomes_form_id = SalAdditionalOtherIncomes.objects.filter(
+        addi_details_id=additional_details)
+    company_details_form_id = SalCompanyDetails.objects.filter(
+        addi_details_id=additional_details)
+    residence_details_form_id = SalResidenceDetails.objects.filter(
+        addi_details_id=additional_details)
+    existing_loan_details_form_id = SalExistingLoanDetails.objects.filter(
+        addi_details_id=additional_details)
+    existing_card_details_form_id = SalExistingCreditCard.objects.filter(
+        addi_details_id=additional_details)
+    additional_details_form_id = SalAdditionalDetails.objects.filter(
+        addi_details_id=additional_details)
+    investment_form_id = SalInvestments.objects.filter(
+        addi_details_id=additional_details)
 
     # salperdet = {}
     # for val in SalPersonalDetailsForm():
     #     salperdet[val.label] = f"{personal_details_form_id}.{val.name}"
     #     name = val.name
     #     print(f"{personal_details_form_id}.{name}")
-
 
     loan_applicant = LoanApplication.objects.filter(lead_id=lead)
     loan_documents = LoanDocuments.objects.filter(
@@ -104,7 +121,7 @@ def lead_detail(request, pk):
         "loan_documents": loan_documents,
         "additionaldetails_id": additional_details.pk,
         "personal_details_form_id": personal_details_form_id,
-        "income_details_form_id":income_details_form_id,
+        "income_details_form_id": income_details_form_id,
         "other_income_form_id": other_income_form_id,
         "additional_other_incomes_form_id": additional_other_incomes_form_id,
         "company_details_form_id": company_details_form_id,
@@ -432,12 +449,9 @@ def register_vendor(request):
 class VerificationView(View):
     def get(self, request, uidb64_pk, uidb64_hash, token):
         try:
-            print("inside verification")
             id = force_str(urlsafe_base64_decode(uidb64_pk))
             password = force_str(urlsafe_base64_decode(uidb64_hash))
             user = CustomUser.objects.get(pk=id)
-            print(id)
-            print(password)
 
             if not token_generator.check_token(user, token):
                 return redirect("login" + "?message=" + "User already activated")
@@ -449,20 +463,27 @@ class VerificationView(View):
             # password = BaseUserManager().make_random_password(10)
             # user.set_password(password)
             user.save()
-            email_body = (
-                "Hi "
-                + user.first_name
-                + " \n Your username: "
-                + user.username
-                + "\n Your Password: "
-                + password
-            )
+
+            base = request.build_absolute_uri('account/login')
+            domain = request.build_absolute_uri('/')
+            domain = domain[:-1]
+
+            context = {
+                'username': user.username,
+                'password': password,
+                'website_url': base,
+                'domain': domain
+            }
+            email_body = render_to_string(
+                'account/user_info_mail.html', context)
+
             email = EmailMessage(
-                "Account Activated",
+                "Fwd: User Id and Password",
                 email_body,
-                "rohan@gmail.com",
+                EMAIL_HOST_USER,
                 [user.email],
             )
+            email.content_subtype = "html"
             email.send(fail_silently=False)
 
             messages.success(request, "Account activated successfully")
@@ -484,8 +505,9 @@ def email_ver_msg(request):
 
 
 def login(request):
+
     if request.user.is_authenticated:
-        redirect('base_dashboard')
+        return redirect('base_dashboard')
 
     if request.method == "POST":
         username = request.POST["username"]
@@ -1166,9 +1188,6 @@ def create_mem(request):
 
 def dashboard(request):
     return render(request, "account/dashboard.html")
-
-
-
 
 
 @login_required()
@@ -2852,6 +2871,8 @@ def salaried(request, lead_id, additionaldetails_id):
 
 
 def check_eligibility_status(store_eligibility_details, applicant_personal_details, applicant_income_details, applicant_company_details, applicant_residence_details, product):
+    if not applicant_company_details or not applicant_income_details or not applicant_personal_details or not applicant_residence_details:
+        return NOT_ELIGIBLE
 
     applicant_eligible = ELIGIBLE
 
@@ -2918,7 +2939,8 @@ def eligibility_calculation(current_calc_data_instance, store_eligibility_detail
         # 'category': category,
         'roi': 0,
         'multiplier': 0,
-        'foir': 0
+        'foir': 0,
+        'processing_fee': 0
     }
 
     # if applicant_type == "co_applicant":
@@ -2957,70 +2979,72 @@ def eligibility_calculation(current_calc_data_instance, store_eligibility_detail
     current_calc_data_instance['cust_considerable_amount'] = cust_considerable_amount
 
 # /****************** Calculation of Multiplier  ****************/
+    if multiplier_info:
+        multiplier_data = Multiplier_Data.objects.filter(
+            mult_info_id=multiplier_info.id, min_salary__lte=applicant_income_details.net_sal, max_salary__gte=applicant_income_details.net_sal).first()
 
-    multiplier_data = Multiplier_Data.objects.filter(
-        mult_info_id=multiplier_info.id, min_salary__lte=applicant_income_details.net_sal, max_salary__gte=applicant_income_details.net_sal).first()
+        associated_tenure_multiplier = multiplier_data.tenure_multipliers.filter(
+            associated_tenure=tenure).first()
 
-    associated_tenure_multiplier = multiplier_data.tenure_multipliers.filter(
-        associated_tenure=tenure).first()
+        if associated_tenure_multiplier:
 
-    if associated_tenure_multiplier:
+            # print(associated_tenure_multiplier.multiplier)
+            current_calc_data_instance['multiplier'] = associated_tenure_multiplier.multiplier
 
-        # print(associated_tenure_multiplier.multiplier)
-        current_calc_data_instance['multiplier'] = associated_tenure_multiplier.multiplier
+            x_amount = associated_tenure_multiplier.multiplier * cust_considerable_amount
+            applicant_data['x_amount'] = x_amount
 
-        x_amount = associated_tenure_multiplier.multiplier * cust_considerable_amount
-        applicant_data['x_amount'] = x_amount
+    if roi_info:
+        roi_data = roi_info.additional_rate_info.filter(
+            min_salary__lte=applicant_income_details.net_sal, max_salary__gte=applicant_income_details.net_sal,
+            loan_min_amount__lte=loan_amount, loan_max_amount__gte=loan_amount).first()
+
+        # Calculate EMI
+        if roi_data:
+            # applicant_data['roi'] = roi_data.rate_of_interest
+            principal = -100000
+            rate = roi_data.rate_of_interest / (12 * 100)
+            tenure_in_months = tenure.ten_type
+            per_lakh_emi = pmt(
+                rate=rate, nper=tenure_in_months, pv=principal)
+
+            emi = round(per_lakh_emi * (loan_amount / 100000), 2)
+            # current_calc_data_instance[f"{applicant_type}_emi"] = emi
+            applicant_data['roi'] = roi_data.rate_of_interest
+            applicant_data['calculated_emi'] = emi
+            applicant_data['processing_fee'] = roi_data.processing_fee
 
     # /******************  Calculation of Foir ****************/
-    foir_data = Foir_Data.objects.filter(
-        foir_info_id=foir_info.id, min_salary__lte=applicant_income_details.net_sal, max_salary__gte=applicant_income_details.net_sal).first()
+            if foir_info:
+                foir_data = Foir_Data.objects.filter(
+                    foir_info_id=foir_info.id, min_salary__lte=applicant_income_details.net_sal, max_salary__gte=applicant_income_details.net_sal).first()
 
-    roi_data = roi_info.additional_rate_info.filter(
-        min_salary__lte=applicant_income_details.net_sal, max_salary__gte=applicant_income_details.net_sal,
-        loan_min_amount__lte=loan_amount, loan_max_amount__gte=loan_amount).first()
+                associated_tenure_foir = foir_data.tenure_foirs.filter(
+                    associated_tenure=tenure).first()
 
-    # Calculate EMI
-    if roi_data:
-        # applicant_data['roi'] = roi_data.rate_of_interest
-        principal = -100000
-        rate = roi_data.rate_of_interest / (12 * 100)
-        tenure_in_months = tenure.ten_type
-        per_lakh_emi = pmt(
-            rate=rate, nper=tenure_in_months, pv=principal)
+                if associated_tenure_foir and roi_data:
+                    print(associated_tenure_foir)
 
-        emi = round(per_lakh_emi * (loan_amount / 100000), 2)
-        # current_calc_data_instance[f"{applicant_type}_emi"] = emi
-        applicant_data['roi'] = roi_data.rate_of_interest
-        applicant_data['calculated_emi'] = emi
-        applicant_data['processing_fee'] = roi_data.processing_fee
+                    current_calc_data_instance['foir'] = associated_tenure_foir.foir
 
-    associated_tenure_foir = foir_data.tenure_foirs.filter(
-        associated_tenure=tenure).first()
+                    # current_calc_data_instance['roi'] = roi_data.rate_of_interest
 
-    if associated_tenure_foir and roi_data:
-        print(associated_tenure_foir)
+                    cust_considerable_amount = cust_considerable_amount * \
+                        associated_tenure_foir.foir / 100
 
-        current_calc_data_instance['foir'] = associated_tenure_foir.foir
+                    print(obligation_amount)
+                    print(cust_considerable_amount)
 
-        # current_calc_data_instance['roi'] = roi_data.rate_of_interest
+                    # tenure_in_months = get_tenure_months(
+                    #     main_applicant_personal_details.age,  main_applicant_personal_details.retirement_age)
+                    # tenure_in_months = min(
+                    # tenure_in_months, product_max_tenure)
 
-        cust_considerable_amount = cust_considerable_amount * \
-            associated_tenure_foir.foir / 100
-
-        print(obligation_amount)
-        print(cust_considerable_amount)
-
-        # tenure_in_months = get_tenure_months(
-        #     main_applicant_personal_details.age,  main_applicant_personal_details.retirement_age)
-        # tenure_in_months = min(
-        # tenure_in_months, product_max_tenure)
-
-        if cust_considerable_amount > 0:
-            percent_amount = round(
-                cust_considerable_amount / per_lakh_emi, 5) * 100000
-            # PERCENT_amount = min(lead.loan_amt, PERCENT_amount)
-            applicant_data['percent_amount'] = percent_amount
+                    if cust_considerable_amount > 0:
+                        percent_amount = round(
+                            cust_considerable_amount / per_lakh_emi, 5) * 100000
+                        # PERCENT_amount = min(lead.loan_amt, PERCENT_amount)
+                        applicant_data['percent_amount'] = percent_amount
 
     return applicant_data
 
@@ -3028,13 +3052,13 @@ def eligibility_calculation(current_calc_data_instance, store_eligibility_detail
 
 
 def set_data_current_calc_data_instance(main_applicant_data, co_applicant_data, current_calc_data_instance, store_eligibility_details, product):
-    print(main_applicant_data)
+    # print(main_applicant_data)
 
-    current_calc_data_instance['emi'] = main_applicant_data['calculated_emi'] or '-'
-    current_calc_data_instance['roi'] = main_applicant_data['roi'] or '-'
-    current_calc_data_instance['processing_fees'] = main_applicant_data['processing_fee'] or '-'
-    current_calc_data_instance['x_amount'] = main_applicant_data['x_amount'] or None
-    current_calc_data_instance['percent_amount'] = main_applicant_data['percent_amount'] or None
+    current_calc_data_instance['emi'] = main_applicant_data['calculated_emi'] or 0
+    current_calc_data_instance['roi'] = main_applicant_data['roi'] or 0
+    current_calc_data_instance['processing_fees'] = main_applicant_data['processing_fee'] or 0
+    current_calc_data_instance['x_amount'] = main_applicant_data['x_amount'] or 0
+    current_calc_data_instance['percent_amount'] = main_applicant_data['percent_amount'] or 0
 
     if not co_applicant_data:
         return
@@ -3046,12 +3070,10 @@ def set_data_current_calc_data_instance(main_applicant_data, co_applicant_data, 
 
 
 def getFinalEligibility(current_calc_data_instance, loan_amount):
-    if not current_calc_data_instance['x_amount']:
-        current_calc_data_instance['x_amount'] = "-"
+    if current_calc_data_instance['x_amount'] == '-':
         return min(current_calc_data_instance['percent_amount'], loan_amount)
 
-    if not current_calc_data_instance['percent_amount']:
-        current_calc_data_instance['percent_amount'] = "-"
+    if current_calc_data_instance['percent_amount'] == '-':
         return min(current_calc_data_instance['x_amount'], loan_amount)
 
     return min(current_calc_data_instance['x_amount'], current_calc_data_instance['percent_amount'], loan_amount)
@@ -3113,6 +3135,10 @@ def check_eligibility(request, id):
 
             main_applicant_bank_category = get_related_bank_categories(
                 product.bank_names, main_applicant_company_details.company_name)
+
+            if not main_applicant_bank_category:
+                continue
+
             main_categ = main_applicant_bank_category.category.cocat_type
             multiplier_main_info = Multiplier_Info.objects.filter(
                 pp_id=product.id, cocat_type=main_categ).first()
@@ -3123,6 +3149,8 @@ def check_eligibility(request, id):
 
             store_eligibility_details[product.bank_names.bank_name]['category'] = main_categ
 
+            # if not roi_main_info:
+            #     continue
             # if co_applicant_eligible:
             #     co_applicant_bank_category = get_related_bank_categories(
             #         product.bank_names, main_applicant_company_details.company_name)
@@ -3134,8 +3162,10 @@ def check_eligibility(request, id):
             #     roi_co_info = product.rate_of_interest.filter(
             #         cocat_type=main_categ).first()
 
+            main_applicant_eligible = True
+
             if main_applicant_eligible:
-                eligibility_count += 1
+                print("Entered HERERERER")
                 for tenure in Tenure.objects.all():
 
                     if not check_tenure_availability(
@@ -3151,7 +3181,7 @@ def check_eligibility(request, id):
                                                   'associated_tenure': tenure.ten_type,
                                                   'percent_amount': '-',
                                                   'requirement': loan_amount,
-                                                  'final_eligibility': "-",
+                                                  'final_eligibility': 0,
                                                   'applicant_emi': None,
                                                   'co_applicant_emi': None,
                                                   'emi': "-",
@@ -3170,24 +3200,18 @@ def check_eligibility(request, id):
                         main_applicant_data, co_applicant_data, current_calc_data_instance, store_eligibility_details, product)
 
                     if current_calc_data_instance['x_amount'] or current_calc_data_instance['percent_amount']:
-                        print(current_calc_data_instance['x_amount'])
-                        print(current_calc_data_instance['percent_amount'])
-
-                        getFinalEligibility(
+                        print("Entry here")
+                        current_calc_data_instance['final_eligibility'] = getFinalEligibility(
                             current_calc_data_instance, loan_amount)
 
-                        current_calc_data_instance['final_eligibility'] = min(
-                            current_calc_data_instance['x_amount'], current_calc_data_instance['percent_amount'], loan_amount)
-                        # print(current_calc_data_instance)
-
-                        if current_calc_data_instance['emi'] != '-':
+                        if current_calc_data_instance['emi']:
+                            eligibility_count += 1
                             store_eligibility_details[product.bank_names.bank_name]['eligibility_calculations'].append(
                                 current_calc_data_instance)
 
             if not main_applicant_eligible:
                 store_eligibility_details[product.bank_names.bank_name]['eligibility'] = NOT_ELIGIBLE
 
-    eligibility_count = 0
     context = {
         "eligibility_details_data": store_eligibility_details,
         'highest_net_sal_holder': highest_net_sal_holder,
@@ -3229,23 +3253,23 @@ def handleLoanRequirementChange(request):
             min_salary__lte=net_sal, max_salary__gte=net_sal,
             loan_min_amount__lte=required_loan, loan_max_amount__gte=required_loan).first()
 
-    if roi_data_:
-        print(roi_data_)
-        principal = -100000
-        roi = roi_data_.rate_of_interest
-        processing_fee = roi_data_.processing_fee
-        rate = roi/(12 * 100)
-        # tenure_in_months = get_tenure_months(
-        #     main_applicant_personal_details.age,  main_applicant_personal_details.retirement_age)
-        # tenure_in_months = min(
-        # tenure_in_months, product_max_tenure)
+        if roi_data_:
+            print(roi_data_)
+            principal = -100000
+            roi = roi_data_.rate_of_interest
+            processing_fee = roi_data_.processing_fee
+            rate = roi/(12 * 100)
+            # tenure_in_months = get_tenure_months(
+            #     main_applicant_personal_details.age,  main_applicant_personal_details.retirement_age)
+            # tenure_in_months = min(
+            # tenure_in_months, product_max_tenure)
 
-        per_lakh_emi = pmt(rate=rate, nper=tenure_, pv=principal)
+            per_lakh_emi = pmt(rate=rate, nper=tenure_, pv=principal)
 
-        emi = round(per_lakh_emi * (required_loan / 100000), 2)
-        # PERCENT_amount = min(lead.loan_amt, PERCENT_amount)
+            emi = round(per_lakh_emi * (required_loan / 100000), 2)
+            # PERCENT_amount = min(lead.loan_amt, PERCENT_amount)
 
-        final_eligibility = min(percent_amount, x_amount, required_loan)
+            final_eligibility = min(percent_amount, x_amount, required_loan)
 
     data = {
         'required_loan_amount': required_loan if emi else prev_loan_amt,
@@ -3646,7 +3670,8 @@ def customer_details(request):
 def partner_list(request):
     users = CustomUser.objects.all()
     print(users)
-    partners = [x for x in users if not x.is_superuser and x.system_role.role == "Referral Partner"]
+    partners = [
+        x for x in users if not x.is_superuser and x.system_role.role == "Referral Partner"]
     context = {"partners": partners}
     return render(request, "account/partner_list.html", context=context)
 

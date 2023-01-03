@@ -154,6 +154,7 @@ urlpatterns = [
     path('add_credit_loan_form/' , views.addExistingCreditForm , name="add_existing_credit_form"),
     path('handle_loan_requirement_change/' , views.handleLoanRequirementChange , name="handle_loan_requirement_change"),
     path('eligibility_next/<int:lead_id>/<int:eligibility>' , views.eligibilityNextBtnHandler , name="eligibility_next"),
+    path('agreement/' , views.agreement)
 ]
 
 

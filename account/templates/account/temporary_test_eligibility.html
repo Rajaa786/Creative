@@ -9,7 +9,6 @@
 
     {% include 'base/css.html' %}
 
-    {% include 'base/dashboard_css.html' %}
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
@@ -69,9 +68,9 @@
                                 <td class="text-center ">{{bank}}</td>
                                 <td class="text-center">{{calculation.applicants}}</td>
                                 <td class="text-center">{{calculation.multiplier}}</td>
-                                <td class="text-center">{{calculation.x_amount|floatformat:2}}</td>
+                                <td class="text-center">{{calculation.x_amount}}</td>
                                 <td class="text-center">{{calculation.foir}}</td>
-                                <td class="text-center">{{calculation.percent_amount|floatformat:2}}</td>
+                                <td class="text-center">{{calculation.percent_amount}}</td>
                                 <td><input class="requirement_input form-control text-center" type="number"
                                         value={{data.loanamt}} data-product-policy-id="{{data.product_and_policy_id}}"
                                         data-cocat-type="{{data.category}}"
@@ -85,9 +84,9 @@
                                         data-final-elig="{{calculation.final_eligibility}}"
                                         data-prev-processing-fee="{{calculation.processing_fees}}"
                                         aria-label="readonly input example" readonly></td>
-                                <td class="final_elig text-center">{{calculation.final_eligibility|floatformat:2}}</td>
+                                <td class="final_elig text-center">{{calculation.final_eligibility}}</td>
                                 <td class="roi text-center">{{calculation.roi}}</td>
-                                <td class="emi text-center">{{calculation.emi|floatformat:2}}</td>
+                                <td class="emi text-center">{{calculation.emi}}</td>
                                 <td class="text-center">{{calculation.associated_tenure}}</td>
                                 <td class="processing_fee text-center"><span class="pf">{{calculation.processing_fees}}</span> + GST(18%) = <span class="pf_gst">{{calculation.processing_fees|mul:1.18|floatformat:2}}</span>
                                 </td>
