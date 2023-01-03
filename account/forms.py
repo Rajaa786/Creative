@@ -44,6 +44,86 @@ class LeadsForm(ModelForm):
                 pass
 
 
+#vipul
+class carsForm(ModelForm):
+    class Meta:
+        model = CarRefinance
+        exclude = ('lead_id',)
+        labels = {
+            'roi' : 'Rate of Interest',
+            'loanamounttaken' : 'Loan Amount taken',
+            'loanamountso' : 'Loan Amountos',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(carsForm, self).__init__(*args, **kwargs)
+        self.fields['sub_model'].queryset = Submodel.objects.none()
+        self.fields['carmake'].queryset = Carmake.objects.none()
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control',
+                'autofocus': ''
+            })
+
+        if 'carmake' in self.data:
+            try:
+                carmake_id = int(self.data.get('carmake'))
+                self.fields['sub_model'].queryset = Submodel.objects.filter(
+                    carmake=carmake_id)
+            except(ValueError, TypeError):
+                pass
+
+    def clean_data(self):
+        cleaned_data = super(carsForm, self).clean()
+        mortage = cleaned_data.get("mortage")
+        if mortage == True:
+            if not cleaned_data.get('bank'):
+                raise forms.ValidationError("Please enter bank name")
+            if not cleaned_data.get('roi'):
+                raise forms.ValidationError("Please enter rate of interest")
+            if not cleaned_data.get('tenure'):
+                raise forms.ValidationError("Please enter tenure")
+            if not cleaned_data.get('loanamounttaken'):
+                raise forms.ValidationError("Please enter loan amount taken")
+            if not cleaned_data.get('loanamountso'):
+                raise forms.ValidationError("Please enter loan amountso")
+
+
+class LapForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(LapForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+    def clean_data(self):
+        cleaned_data = super(LapForm, self).clean()
+        oc_available = cleaned_data.get('oc_available')
+        property_used_for = cleaned_data.get('property_used_for')
+        car_parking = cleaned_data.get('car_parking')
+        if oc_available == False:
+            if not cleaned_data.get('cc_available'):
+                raise forms.ValidationError("Please enter cc_available")
+            if not cleaned_data.get('municipal_approved'):
+                raise forms.ValidationError("Please enter municipal_approved")
+        if property_used_for == True:
+            if not cleaned_data.get('rent'):
+                raise forms.ValidationError("Please enter rent")
+        if car_parking == True:
+            if not cleaned_data.get('car_parking_amt'):
+                raise forms.ValidationError("Please enter car parking amt")
+    class Meta:
+        model = Lap
+        exclude = ('lead_id',)
+        labels = {
+            'proj_name': 'Project Name',
+            'prop_loc': 'Property Location',
+            'prop_city': 'Property City',
+            'prop_state': 'Property State',
+            'car_parking_amt': 'Car Parking Amount',
+            'market_val': 'Market Value',
+            'distress_val':'Distress Value',
+            'prop_in': 'Property In',
+        }
+
 class TempForm(forms.Form):
     applicant_type = forms.ModelChoiceField(
         queryset=ApplicantType.objects.filter(~Q(applicant_type="Applicant"))

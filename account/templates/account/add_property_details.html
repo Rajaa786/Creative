@@ -1,18 +1,17 @@
-{% extends 'base/base.html' %} 
+{% extends 'base.html' %} 
 {% load static %} 
 
-{% block other_css %}
-{% endblock other_css %} 
+
 
 {% block title %}Property Details{% endblock title %}
 
 {% block other_body_css %}id="page-top"{% endblock other_body_css %} 
-{% block other_body %}
+{% block content %}
 <div class="container mb-0">
-  <div class="mb-3 card-body bg-white rounded shadow-blur">
+  <div class="mb-3 rounded shadow-blur">
         <div class="row justify-content-center mb-5 mt-3">
             <div class="col-auto">
-                <h1 class="display-6 text-gray-800">Property Details</h1>
+                <h1 class="mb-5 mt-3 display-3 text-center bg-transparent text-dark">Property Details</h1>
             </div>
         </div>
         <div class="card z-index-2 pb-3 mb-5">
@@ -24,8 +23,8 @@
                             role="button"
                             aria-expanded="false"
                             id="addapplicant">
-                            <h4 class="card-title fw-bold text-light">Underconstruction Buying from Builder</h4>
-                            <p class="card-category fw-bold text-light mb-0">
+                            <h4 class="card-title fw-bold text-primary">Underconstruction Buying from Builder</h4>
+                            <p class="card-category fw-bold text-primary mb-0">
                                 From Builder
                             </p>
                         </a>
@@ -44,8 +43,8 @@
                             role="button"
                             aria-expanded="false"
                             id="addapplicant">
-                            <h4 class="card-title fw-bold text-light">Underconstruction Buying from Seller</h4>
-                            <p class="card-category fw-bold text-light mb-0">
+                            <h4 class="card-title fw-bold text-primary">Underconstruction Buying from Seller</h4>
+                            <p class="card-category fw-bold text-primary mb-0">
                                 From Builder
                             </p>
                         </a>
@@ -64,8 +63,8 @@
                             role="button"
                             aria-expanded="false"
                             id="addapplicant">
-                            <h4 class="card-title fw-bold text-light">ReadyPossession Buying from Builder</h4>
-                            <p class="card-category fw-bold text-light mb-0">
+                            <h4 class="card-title fw-bold text-primary">ReadyPossession Buying from Builder</h4>
+                            <p class="card-category fw-bold text-primary mb-0">
                                 From Builder
                             </p>
                         </a>
@@ -84,8 +83,8 @@
                             role="button"
                             aria-expanded="false"
                             id="addapplicant">
-                            <h4 class="card-title fw-bold text-light">ReadyPossession Buying from Seller</h4>
-                            <p class="card-category fw-bold text-light mb-0">
+                            <h4 class="card-title fw-bold text-primary">ReadyPossession Buying from Seller</h4>
+                            <p class="card-category fw-bold text-primary mb-0">
                                 From Builder
                             </p>
                         </a>
@@ -101,4 +100,4 @@
         </div>
   </div>
 </div>
-{% endblock other_body %}
+{% endblock content %}

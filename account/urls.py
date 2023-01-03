@@ -12,6 +12,11 @@ urlpatterns = [
     path("ff/", views.base, name="base"), 
 
     path("dashboard/", views.base_dashboard, name="base_dashboard"),
+
+    #vipul
+    path('carrefinance/<int:lead_id>', views.car_refinance, name="car_refinance"),
+    path('insurance/', views.insurance, name="insurance"),
+    path('lap/<int:id>', views.lap, name="lap"),
     # --------------------------------------------------------#
     # new_LEADS
     path("view/", views.view_leads, name="view-leads"),

@@ -240,6 +240,151 @@ def base_dashboard(request):
     return render(request, "dashboard.html")
 
 
+#vipul
+@login_required()
+def car_refinance(request, lead_id):
+    form = carsForm()
+    if request.method == 'POST':
+        form = carsForm(request.POST or None)
+        if form.is_valid():
+            form_instance = form.save(commit=False)
+            form_instance.lead_id = Leads.objects.get(pk=lead_id)
+            # form_instance.additional_details_id = AdditionalDetails.objects.get(
+            #         pk=additionaldetails_id)
+            form_instance.save()
+            messages.success(
+                request, "Cars Details Updated Successfully !")
+            return redirect('check_eligibility', lead_id)
+
+        else:
+            messages.error(request, form.errors)
+            return redirect(f"/account/carrefinance/{lead_id}")
+
+    return render(request, 'account/car_refinance.html', context={"form": form, "lead_id": lead_id})
+
+@login_required()
+def lap(request, id):
+    form = LapForm()
+    if request.method == 'POST':
+        form = LapForm(request.POST or None)
+        if form.is_valid():
+            form_instance = form.save(commit=False)
+            form_instance.lead_id = Leads.objects.get(pk=id)
+            form_instance.save()
+            messages.success(
+                request, "Property Details Updated Successfully !")
+            return redirect('lap', id)
+
+        else:
+            messages.error(request, form.errors)
+            return redirect(f"/account/lap/{id}")
+
+    return render(request, 'account/lap.html', context={"form": form, "lead_id": id})
+
+
+
+@login_required()
+def insurance(request):
+    
+    if request.method == "POST":
+        insuranceType =  request.POST.get('insuranceTypeSelector')
+        name = request.POST.get('name')
+        phoneNumber = request.POST.get('phoneNumber')
+        emailID = request.POST.get('emailID')
+        address = request.POST.get('address')
+        pincode = request.POST.get('pincode')
+        gender = request.POST.get('gender')
+        age = request.POST.get('age')
+        remark = request.POST.get('remark')
+        insuranceApplication = InsuranceApplication(
+                name = name,
+                phoneNumber = phoneNumber,
+                email = emailID,
+                address = address,
+                pincode = pincode,
+                gender = gender,
+                age = age,
+                insuranceType = insuranceType,
+                remark = remark,
+        )
+
+        insuranceApplication.save()
+
+        if insuranceType == "term":
+
+            smokerTobacco = False
+
+            if request.POST.get('smokerTobacco') == "yes":
+                smokerTobacco = True
+
+            termInsurance = TermInsurance(
+                insuranceApplication = insuranceApplication,
+                tobacco = smokerTobacco,
+                annualIncome = request.POST.get('annualIncome'),
+                mode = request.POST.get('mode'),
+                sumAssured = request.POST.get('sumAssured'),
+                premiumPaymentTerm = request.POST.get('ppt'),
+                premiumTerm = request.POST.get('premiumTerm'),
+            )
+            termInsurance.save()
+
+        if insuranceType == "twoWheeler" or insuranceType == "fourWheeler":
+
+            vehicleInsurance = VehicleInsurance(
+
+                insuranceApplication = insuranceApplication,
+                vehicleType = insuranceType,
+                vehicleRegistrationNumber = request.POST.get('vehicleRegistrationNumber'),
+                rcBook = request.FILES.get('rcBook'),
+                insuranceCopy = request.FILES.get('insuranceCopy'),
+
+            )
+
+            vehicleInsurance.save()
+
+        if insuranceType == "medical":
+
+            medicalInsurance = MedicalInsurance(
+                insuranceApplication = insuranceApplication,
+                sumAssured = request.POST.get('sumAssured'),
+                noOfFamilyMembers = request.POST.get('familyNumber'),
+            )
+
+            medicalInsurance.save()
+
+            noOfFamilyMembers = int(request.POST.get('familyNumber'))
+
+            for i in range(noOfFamilyMembers):
+
+                diseaseSuffered = False
+
+                if request.POST.get('disease'+str(i)) == "hasDisease":
+                    diseaseSuffered = True
+
+                medicalInsuranceFamilyMember = MedicalInsuranceFamilyMember(
+                    medicalInsurance = medicalInsurance,
+                    typeOfRelationship = request.POST.get('relation'+str(i)),
+                    diseaseSuffered = diseaseSuffered,
+                    diseaseName = request.POST.get('diseaseName'+str(i)),
+                    name = request.POST.get('name'+str(i)),
+                    phoneNumber = request.POST.get('phoneNumber'+str(i)),
+                    email = request.POST.get('emailID'+str(i)),
+                    address = request.POST.get('address'+str(i)),
+                    pincode = request.POST.get('pincode'+str(i)),
+                    gender = request.POST.get('gender'+str(i)),
+                    age = request.POST.get('age'+str(i)),
+                )
+
+                medicalInsuranceFamilyMember.save()
+
+    context = {
+        'active':'',
+        'title':'Insurance'
+    }
+
+    return render(request,'account/insurance.html',context)
+
+
 # @login_required()
 async def register(request):
     if request.method == "POST":
@@ -435,6 +580,10 @@ def add_leads(request):
                 instance.save()
                 if instance.product.product == "Personal Loan":
                     return redirect("additionaldetails", instance.pk)
+                elif instance.product.product == 'Car Refinance':
+                    return redirect('additionaldetails', instance.pk)
+                elif instance.product.product == 'Home Loan':
+                    return redirect('additionaldetails', instance.pk)
                 else:
                     return redirect("base_dashboard")
     context = {"form": LeadsForm()}

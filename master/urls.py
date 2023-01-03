@@ -3,6 +3,20 @@ from . import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
+
+    #vipul
+    path('addCarmake/', views.Carmake_form, name="Carmake_form"),
+    path('addSubmodel/', views.Submodel_form, name="Submodel_form"),
+    path('editcarmake/<int:id>', views.editcarmake, name="editcarmake"),
+    path('editsubmodel/<int:id>', views.editsubmodel, name="editsubmodel"),
+    path('addAreain/', views.Areain_form, name="Areain_form"),
+    path('addAreatype/', views.Areatype_form, name="Areatype_form"),
+    path('addRoomtype/', views.Roomtype_form, name="Roomtype_form"),
+    path('addLessetype/', views.Lessetype_form, name="Lessetype_form"),
+    path('editareain/<int:id>', views.editareain, name="editareain"),
+    path('editareatype/<int:id>', views.editareatype, name="editareatype"),
+    path('editroomtype/<int:id>', views.editroomtype, name="editroomtype"),
+    path('editlessetype/<int:id>', views.editlessetype, name="editlessetype"), 
     path('addAgreementtype/', views.Agreementtype_form, name="Agreementtype_form"),
     path('addApplicanttype/', views.Applicanttype_form, name="Applicanttype_form"),
     path('addAYyear/', views.AYyear_form, name="AYyear_form"),

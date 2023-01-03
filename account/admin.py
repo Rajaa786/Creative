@@ -13,6 +13,15 @@ class LeadsAdmin(admin.ModelAdmin):
 admin.register(Group)
 admin.register(Permission)
 
+#vipul
+admin.site.register(CarRefinance)
+admin.site.register(Lap)
+admin.site.register(InsuranceApplication)
+admin.site.register(MedicalInsurance)
+admin.site.register(TermInsurance)
+admin.site.register(VehicleInsurance)
+admin.site.register(MedicalInsuranceFamilyMember)
+
 # Register your models here.
 admin.site.register(CustomUser)
 admin.site.register(Leads, LeadsAdmin)

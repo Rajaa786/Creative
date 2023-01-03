@@ -31,6 +31,19 @@ DEFAULT_YEAR_CHOICES = (
     ("Past", "Past"),
 )
 
+RENTAL_NONRENTAL_CHOICES = (
+    (None, ('Select Rental Or NonRental')),
+    (True, ('Rental')),
+    (False, ('NonRental'))
+)
+
+REPORT_CHOICES =(
+    (None, ('Select Yes Or No')),
+    ('Yes', 'Yes'),
+    ('No', 'No'),
+    ('Not aware', 'Not aware')
+)
+
 MARITAL_STATUS_CHOICES = (
     ("1", "-- Select MARITAL STATUS --"),
     ("Single", "Single"),
@@ -114,6 +127,97 @@ class Leads(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     added_by = models.CharField(max_length=50, null=True)
 
+
+#vipul
+class CarRefinance(models.Model):
+    carmake = models.ForeignKey(Carmake, on_delete=models.CASCADE)
+    sub_model = models.ForeignKey(Submodel, on_delete=models.CASCADE)
+    manu_year = models.CharField(max_length=10)
+    mortage = models.BooleanField(choices=YES_NO_CHOICES)
+    bank = models.ForeignKey(BankName, on_delete=models.CASCADE, null=True, blank=True)
+    # bank = models.CharField(max_length=50, null=True, blank=True)
+    roi = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    tenure = models.ForeignKey(Tenure, on_delete=models.CASCADE, null=True, blank=True)
+    loanamounttaken = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    loanamountso = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    insurance = models.CharField(max_length=50)
+    validtill = models.CharField(max_length=50)
+
+class InsuranceApplication(models.Model):
+    name = models.CharField(max_length=124)
+    phoneNumber = models.CharField(max_length=13)
+    email = models.EmailField(max_length=254)
+    address = models.TextField()
+    pincode = models.IntegerField()
+    gender = models.CharField(max_length=15)
+    age = models.IntegerField()
+    insuranceType = models.CharField(max_length=15)
+    remark = models.TextField()    
+
+class MedicalInsurance(models.Model):
+    insuranceApplication = models.ForeignKey(InsuranceApplication,on_delete=models.CASCADE)
+    sumAssured = models.IntegerField()
+    noOfFamilyMembers = models.IntegerField()
+
+class MedicalInsuranceFamilyMember(models.Model):
+    medicalInsurance = models.ForeignKey(MedicalInsurance, on_delete=models.CASCADE)
+    name = models.CharField(max_length=124)
+    phoneNumber = models.CharField(max_length=13)
+    email = models.EmailField(max_length=254)
+    address = models.TextField()
+    pincode = models.IntegerField()
+    gender = models.CharField(max_length=15)
+    age = models.IntegerField()
+    typeOfRelationship = models.CharField(max_length=50)
+    diseaseSuffered = models.BooleanField()
+    diseaseName = models.CharField(null=True,blank=True,max_length=100)
+
+
+class TermInsurance(models.Model):
+    insuranceApplication = models.ForeignKey(InsuranceApplication,on_delete=models.CASCADE)
+    tobacco = models.BooleanField()
+    annualIncome = models.IntegerField()
+    mode = models.CharField(max_length=20)
+    sumAssured = models.IntegerField()
+    premiumPaymentTerm = models.IntegerField()
+    premiumTerm = models.IntegerField()
+
+class VehicleInsurance(models.Model):
+    insuranceApplication = models.ForeignKey(InsuranceApplication,on_delete=models.CASCADE)
+    vehicleType = models.CharField(max_length=20)
+    vehicleRegistrationNumber = models.CharField(max_length=15)
+    rcBook = models.FileField()
+    insuranceCopy = models.FileField()
+
+class Lap(models.Model):  # loan against property
+    seller_status = models.ForeignKey(Status, on_delete=models.CASCADE)
+    builder_name = models.CharField(max_length=50)
+    proj_name = models.CharField(max_length=50)
+    apf_num = models.CharField(max_length=50)
+    apf_approved_lender = models.ManyToManyField(BankName)
+    market_val = models.IntegerField()
+    distress_val = models.IntegerField()
+    prop_loc = models.CharField(max_length=50)
+    prop_city = models.ForeignKey(City, on_delete=models.CASCADE)
+    prop_state = models.ForeignKey(State, on_delete=models.CASCADE)
+    prop_in = models.ForeignKey(PropertyIn, on_delete=CASCADE)
+    oc_available = models.BooleanField(choices=YES_NO_CHOICES)
+    cc_available = models.BooleanField(choices=YES_NO_CHOICES)
+    municipal_approved = models.BooleanField(choices=YES_NO_CHOICES)
+    area_size = models.IntegerField()
+    area_in = models.ForeignKey(AreaIn, on_delete=models.CASCADE)
+    area_type = models.ForeignKey(AreaType, on_delete=models.CASCADE)
+    room_type = models.ForeignKey(RoomType, on_delete=models.CASCADE)
+    agreement_type = models.ForeignKey(AgreementType, on_delete=models.CASCADE)
+    property_used_for = models.BooleanField(choices=RENTAL_NONRENTAL_CHOICES)
+    #rental_field = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    rent = models.IntegerField()
+    property_tax_paid = models.BooleanField(null=True, blank=True, choices=YES_NO_CHOICES)
+    society_formed = models.BooleanField(null=True, blank=True, choices=YES_NO_CHOICES)
+    building_age = models.IntegerField()
+    structural_report = models.BooleanField(choices=REPORT_CHOICES)
+    car_parking = models.BooleanField(choices=YES_NO_CHOICES)
+    car_parking_amt = models.IntegerField(blank=True, null=True)
 
 class LoanApplication(models.Model):
     lead_id = models.ForeignKey(Leads, on_delete=models.CASCADE)
@@ -490,13 +594,12 @@ class PropType1(models.Model):  # Underconstruction buying from builder
     lead_id = models.ForeignKey(Leads, on_delete=models.CASCADE)
     future_rent = models.PositiveIntegerField(
         validators=[MinValueValidator(1)])
-    car_parking_amt = models.PositiveIntegerField(
-        validators=[MinValueValidator(1)])
     subvention_scheme = models.BooleanField(
         choices=YES_NO_CHOICES, blank=True, null=True
     )
     car_parking = models.BooleanField(choices=YES_NO_CHOICES)
-
+    car_parking_amt = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)])
 
 class PropType2(models.Model):  # Underconstruction buying from seller
     seller_status = models.ForeignKey(Status, on_delete=models.CASCADE)
@@ -537,10 +640,9 @@ class PropType2(models.Model):  # Underconstruction buying from seller
     lead_id = models.ForeignKey(Leads, on_delete=models.CASCADE)
     future_rent = models.PositiveIntegerField(
         validators=[MinValueValidator(1)])
+    car_parking = models.BooleanField(choices=YES_NO_CHOICES)
     car_parking_amt = models.PositiveIntegerField(
         validators=[MinValueValidator(1)])
-    car_parking = models.BooleanField(choices=YES_NO_CHOICES)
-
 
 class PropType3(models.Model):
     builder_name = models.CharField(max_length=50)
@@ -575,10 +677,9 @@ class PropType3(models.Model):
     cost_sheet_amt = models.PositiveIntegerField(
         validators=[MinValueValidator(1)])
     lead_id = models.ForeignKey(Leads, on_delete=models.CASCADE)
+    car_parking = models.BooleanField(choices=YES_NO_CHOICES)
     car_parking_amt = models.PositiveIntegerField(
         validators=[MinValueValidator(1)])
-    car_parking = models.BooleanField(choices=YES_NO_CHOICES)
-
 
 # #  Ready possession buying from seller
 class PropType4(models.Model):
@@ -624,9 +725,9 @@ class PropType4(models.Model):
     society_informed = models.BooleanField(
         null=True, blank=True, choices=YES_NO_CHOICES
     )
+    car_parking = models.BooleanField(choices=YES_NO_CHOICES)
     car_parking_amt = models.PositiveIntegerField(
         validators=[MinValueValidator(1)])
-    car_parking = models.BooleanField(choices=YES_NO_CHOICES)
     lead_id = models.ForeignKey(Leads, on_delete=models.CASCADE)
 
 
