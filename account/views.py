@@ -3070,10 +3070,10 @@ def set_data_current_calc_data_instance(main_applicant_data, co_applicant_data, 
 
 
 def getFinalEligibility(current_calc_data_instance, loan_amount):
-    if current_calc_data_instance['x_amount'] == '-':
+    if not current_calc_data_instance['x_amount']:
         return min(current_calc_data_instance['percent_amount'], loan_amount)
 
-    if current_calc_data_instance['percent_amount'] == '-':
+    if not current_calc_data_instance['percent_amount']:
         return min(current_calc_data_instance['x_amount'], loan_amount)
 
     return min(current_calc_data_instance['x_amount'], current_calc_data_instance['percent_amount'], loan_amount)
@@ -3162,10 +3162,9 @@ def check_eligibility(request, id):
             #     roi_co_info = product.rate_of_interest.filter(
             #         cocat_type=main_categ).first()
 
-            main_applicant_eligible = True
 
             if main_applicant_eligible:
-                print("Entered HERERERER")
+               
                 for tenure in Tenure.objects.all():
 
                     if not check_tenure_availability(
