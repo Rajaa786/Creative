@@ -1,4 +1,4 @@
-{% extends request.user.is_superuser|yesno:"base/base.html,base/base_non_admin_template.html" %}
+{% extends request.user.is_superuser|yesno:"base.html,base/base_non_admin_template.html" %}
 {% load static %}
 
 
@@ -21,7 +21,7 @@
     {% endblock other_css %}
 
 
-    {% block other_body %}
+    {% block content %}
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -396,7 +396,7 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-    {% endblock other_body %}
+    {% endblock content %}
     <!--
         <script>
             $("#bank_name").on('change', function() {

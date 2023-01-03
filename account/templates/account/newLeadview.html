@@ -1,11 +1,11 @@
-{% extends request.user.is_superuser|yesno:"base/base.html,base/base_non_admin_template.html" %}
+{% extends request.user.is_superuser|yesno:"base.html,base/base_non_admin_template.html" %}
 {% load static %}
 
 
 {% block title %}List Lead{% endblock title %}
 
 {% block other_body_css %}id="page-top"{% endblock other_body_css %}
-{% block other_body%}
+{% block content%}
 <div class="container-fluid py-4">
   <div class="row">
     <div class="col-12">
@@ -17,11 +17,10 @@
             </div>
             <div class="ms-auto my-auto mt-lg-0 mt-4">
               <div class="ms-auto my-auto">
-                <a href="{% url 'add_leads' %}" class="btn bg-gradient-primary btn-sm mb-0">
-                  <span class="icon text-white-50">
-                    <i class="fas fa-plus"></i>
+                <a href="{% url 'add_leads' %}" class="btn btn-primary btn-icon-split">
+
                   </span>
-                  <span class="text">Add Customer Details</span>
+                  <span class="text">+ Add Customer Details</span>
                 </a>
               </div>
             </div>
@@ -44,29 +43,31 @@
               <tbody>
                 {% for lead in listleads %}
                 <tr style='text-align: center'>
-                  <td> {{ forloop.counter }}.</td>
+                  <td> {{ lead.pk }}.</td>
                   <td>{{ lead.name }}</td>
                   <td>{{ lead.phone }}</td>
                   <td class="text-sm">
-                    <a href={% url 'account_eligibility' id=lead.pk %} title="Check Eligibility">
+                    <a href={% url 'check_eligibility' id=lead.pk %} title="Check Eligibility">
                       <span class="text-warning">
-                        <i class="fa fa-check-circle"></i>
-                      </span>
+<div class="icon-container">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check hover-green"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="icon-name"></span>
+                                                        </div>                      </span>
                     </a>
                   </td>
 
                   <td class="text-sm">
                     <a href="/account/{{lead.pk}}" data-bs-toggle="tooltip" data-bs-original-title="Preview product">
-                      <i class="material-icons text-secondary position-relative text-lg">visibility</i>
-                    </a>
-                    <a href="{% url 'lead-update' lead.pk %}" class="mx-3" data-bs-toggle="tooltip"
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>                    </a>
+
+                      {% if request.user.is_superuser %}
+
+                      <a href="{% url 'lead-update' lead.pk %}" class="mx-3" data-bs-toggle="tooltip"
                       data-bs-original-title="Edit product">
-                      <i class="material-icons text-secondary position-relative text-lg">drive_file_rename_outline</i>
-                    </a>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>                    </a>
                     <a href="{% url 'lead-delete' lead.pk %}" data-bs-toggle="tooltip"
                       data-bs-original-title="Delete product">
-                      <i class="material-icons text-secondary position-relative text-lg">delete</i>
-                    </a>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>                    </a>
+                  {% endif %}
                   </td>
                 </tr>
                 {% endfor %}
@@ -74,7 +75,7 @@
             </table>
           </div>
         </div>
-        {% endblock other_body %}
+        {% endblock content %}
         {% comment %}
         <!-- Scroll to Top Button-->
         <a class="scroll-to-top rounded" href="#page-top">
