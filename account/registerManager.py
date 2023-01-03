@@ -19,21 +19,6 @@ import asyncio
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
-# DATABASES_NAME = defaultdb
-# DATABASES_USER = doadmin
-# DATABASES_PASSWORD = AVNS_C4w1Q7b-lb0FU44li7c
-# DATABASES_HOST = db-mysql-blr1-53992-do-user-12870761-0.b.db.ondigitalocean.com
-# DATABASES_PORT = 25060
-
-# DATABASES_NAME = django-test
-
-# DATABASES_USER = root
-
-# DATABASES_HOST = localhost
-
-# DATABASES_PORT = 3306
-
-# DATABASES_PASSWORD = ""
 
 
 async def async_mail_sender(email):
@@ -81,7 +66,7 @@ async def register_referral_logic(request):
     city = request.POST["city"]
     has_gst = request.POST["has_gst"]
     reference = request.POST["reference"]
-    referral_code = request.POST.get("referral_code", "")
+    referral_code = request.POST.get("referral_code", None)
     if await sync_to_async(CustomUser.objects.filter(email=Email).exists)():
         messages.info(request, "Email Taken")
         return redirect("register_referral")

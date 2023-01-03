@@ -1,26 +1,46 @@
-{% extends "base.html" %}
 {% load static %}
 
+<!DOCTYPE html>
 
-{% block content %}
+<html lang="en">
+
+<head>
+
+    {% include 'base/meta.html' %}
+
+    {% include 'base/css.html' %}
+
+    <title>{% block title %}{% endblock title %}</title>
+
+
+    {% block other_css %}{% endblock other_css %}
+
+    <style>
+        .alert-text {
+            color: white;
+            font-weight: bolder;
+        }
+    </style>
+
+</head>
+
+<body {% block other_body_css %}{% endblock other_body_css %}>
 
     <main class="main-content position-relative border-radius-lg ">
 
-        {% block other_body %}{% endblock other_body %}
+        {% block content %}{% endblock content %}
 
         {% include 'base/js.html' %}
 
     </main>
 
-{% endblock content %}
-
-
-    {% block other_js %}
-        <script>
+    <script>
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
         }
-    </script>{% endblock other_js %}
+    </script>
+
+    {% block other_js %}{% endblock other_js %}
 
 </body>
 
