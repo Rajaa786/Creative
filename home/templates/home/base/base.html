@@ -12,11 +12,7 @@
 
         {% block other_css %}{% endblock other_css %}
 
-        {% if title %}
-            <title>{{title}}</title>
-        {% else %}
-            <title>{% block title %}{% endblock title %}</title>
-        {% endif %}
+        <title>{% block title %}{% endblock title %}</title>
 
     </head>
     <body {% block other_body_css %}{% endblock other_body_css %}>
