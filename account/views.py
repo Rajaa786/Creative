@@ -2914,6 +2914,12 @@ def set_data_current_calc_data_instance(main_applicant_data, co_applicant_data, 
     if not co_applicant_data:
         return
 
+    # if main_applicant_data['net_sal'] < co_applicant_data['net_sal']:
+    #     current_calc_data_instance['emi'] = co_applicant_data['calculated_emi']
+    #     current_calc_data_instance['roi'] = co_applicant_data['roi']
+    #     store_eligibility_details[product.bank_names.bank_name]['category'] = co_applicant_data['category']
+
+
 def getFinalEligibility(current_calc_data_instance, loan_amount):
     if not current_calc_data_instance['x_amount']:
         return min(current_calc_data_instance['percent_amount'], loan_amount)
