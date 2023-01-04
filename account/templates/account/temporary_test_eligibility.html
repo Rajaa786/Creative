@@ -38,7 +38,44 @@
     {% comment %} <h4>{{eligibility_details_data}}</h4> {% endcomment %}
     {% comment %} {% if data.multiplier_calculations %} {% endcomment %}
     <div class="container-xl bg-white rounded-3">
-        div.
+        <div class="eligibility-nav">
+          
+            <nav class="navbar navbar-expand-lg bg-light">
+                <div class="container-fluid p-2">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mb-2 mb-lg-0 justify-content-evenly w-100">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="{% url 'lead-detail' lead_id %}">View</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'lead-update' lead_id %}">Edit</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="" onclick="window.print()">Print</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'check_eligibility' lead_id %}" download="test.txt">Download</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Mail</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Whatsapp</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Calculator</a>
+                            </li>
+                        </ul>
+                    
+                    </div>
+                </div>
+            </nav>
+        </div>
         <div class="row py-3">
             <div class="col-12">
                 <div class="table-responsive">
@@ -74,14 +111,11 @@
                                 <td class="text-center">{{calculation.percent_amount}}</td>
                                 <td><input class="requirement_input form-control text-center" type="number"
                                         value={{data.loanamt}} data-product-policy-id="{{data.product_and_policy_id}}"
-                                        data-cocat-type="{{data.category}}"
-                                        data-net-sal="{{highest_net_sal_holder}}"
+                                        data-cocat-type="{{data.category}}" data-net-sal="{{highest_net_sal_holder}}"
                                         data-tenure="{{calculation.associated_tenure}}"
                                         data-percent-amount="{{calculation.percent_amount}}"
-                                        data-x-amount="{{calculation.x_amount}}"
-                                        data-emi="{{calculation.emi}}"
-                                        data-prev-loan-amt="{{data.loanamt}}"
-                                        data-prev-roi="{{calculation.roi}}"
+                                        data-x-amount="{{calculation.x_amount}}" data-emi="{{calculation.emi}}"
+                                        data-prev-loan-amt="{{data.loanamt}}" data-prev-roi="{{calculation.roi}}"
                                         data-final-elig="{{calculation.final_eligibility}}"
                                         data-prev-processing-fee="{{calculation.processing_fees}}"
                                         aria-label="readonly input example" readonly></td>
@@ -89,7 +123,9 @@
                                 <td class="roi text-center">{{calculation.roi}}</td>
                                 <td class="emi text-center">{{calculation.emi}}</td>
                                 <td class="text-center">{{calculation.associated_tenure}}</td>
-                                <td class="processing_fee text-center"><span class="pf">{{calculation.processing_fees}}</span> + GST(18%) = <span class="pf_gst">{{calculation.processing_fees|mul:1.18|floatformat:2}}</span>
+                                <td class="processing_fee text-center"><span
+                                        class="pf">{{calculation.processing_fees}}</span> + GST(18%) = <span
+                                        class="pf_gst">{{calculation.processing_fees|mul:1.18|floatformat:2}}</span>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -108,7 +144,8 @@
 
         <div class="row mt-5">
             <div class="col-md-12 text-center">
-                <a href="{% url 'eligibility_next' lead_id eligibility %}"><button type="button" class="btn btn-primary">Proceed</button></a>
+                <a href="{% url 'eligibility_next' lead_id eligibility %}"><button type="button"
+                        class="btn btn-primary">Proceed</button></a>
             </div>
         </div>
     </div>
@@ -122,104 +159,104 @@
 
 
     <script>
-
         $(document).ready(() => {
 
 
-        eligibility_details_table = $("#eligibility_details_table")
+            eligibility_details_table = $("#eligibility_details_table")
 
-        eligibility_details_table.click(function (event) {
+            eligibility_details_table.click(function (event) {
 
-            if (event.target.nodeName == "INPUT") {
-                console.log("Input Clicked")
-                $(event.target).prop("readonly", false)
-            }
+                if (event.target.nodeName == "INPUT") {
+                    console.log("Input Clicked")
+                    $(event.target).prop("readonly", false)
+                }
 
+            })
+
+
+            eligibility_details_table.change(function (event) {
+                if (event.target.nodeName == "INPUT") {
+
+                    let target = $(event.target)
+
+                    let required_val = target.val()
+                    let prev_loan_amt = target.attr('data-prev-loan-amt')
+                    let pp_id = target.attr('data-product-policy-id');
+                    let cocat_type = target.attr('data-cocat-type')
+                    let net_sal = target.attr('data-net-sal')
+                    let tenure = target.attr('data-tenure')
+                    let percent_amount = target.attr('data-percent-amount')
+                    let x_amount = target.attr('data-x-amount')
+                    let emi = target.attr('data-emi')
+                    let final_elig = target.attr('data-final-elig')
+                    let prev_roi = target.attr('data-prev-roi')
+                    let prev_processing_fee = target.attr('data-prev-processing-fee')
+
+                    let ajax_call_url = $(this).attr('data-url')
+                    console.log("Table Changed");
+                    $.ajax({
+                        url: ajax_call_url,
+                        type: 'GET',
+                        data: {
+                            'required_val': required_val,
+                            'pp_id': pp_id,
+                            'cocat_type': cocat_type,
+                            'net_sal': net_sal,
+                            'tenure': tenure,
+                            'percent_amount': percent_amount,
+                            'x_amount': x_amount,
+                            'prev_loan_amt': prev_loan_amt,
+                            'prev_emi': emi,
+                            'prev_final_elig': final_elig,
+                            'prev_roi': prev_roi,
+                            'prev_processing_fee': prev_processing_fee
+                        },
+                        datatype: 'json',
+                        success: function (data_) {
+                            console.log(data_)
+                            let target_parent = target.parent()
+                            console.log(target_parent.siblings(".final_elig"))
+                            console.log(target_parent.siblings(".emi"))
+                            target_parent.siblings('.final_elig').text(data_
+                                .final_eligibility)
+                            target_parent.siblings('.emi').text(data_.emi)
+                            target_parent.siblings('.roi').text(data_.roi)
+                            let pf = target_parent.siblings('.processing_fee')
+                            pf.children('.pf').text(data_.processing_fee)
+                            let pf_gst_calc = data_.processing_fee * 1.18
+                            pf.children('.pf_gst').text(pf_gst_calc.toFixed(2))
+                            target.val(data_.required_loan_amount)
+                            target.attr('data-prev-loan-amt', data_.required_loan_amount)
+                            target.attr('data-emi', data_.emi)
+                            target.attr('data-prev-roi', data_.roi)
+                            target.attr('data-final-elig', data_.final_eligibility)
+                            target.attr('data-prev-processing-fee', data_.processing_fee)
+                        },
+
+                        error: function (data_) {
+                            console.log("Inside Error")
+                            console.log(data_.responseText);
+                        }
+                    });
+                }
+            })
+
+
+            eligibility_details_table.on('blur', 'input', function (event) {
+                console.log("Blurred");
+                $(event.target).prop("readonly", true);
+            })
+
+
+            /*eligibility_details_table.addEventListener('focus',function(event){
+            },true);
+            
+            eligibility_details_table.addEventListener('blur',function(event){
+            },true);*/
         })
-
-
-        eligibility_details_table.change(function (event) {
-            if (event.target.nodeName == "INPUT") {
-
-                let target = $(event.target)
-
-                let required_val = target.val()
-                let prev_loan_amt = target.attr('data-prev-loan-amt')
-                let pp_id = target.attr('data-product-policy-id');
-                let cocat_type = target.attr('data-cocat-type')
-                let net_sal = target.attr('data-net-sal')
-                let tenure = target.attr('data-tenure')
-                let percent_amount = target.attr('data-percent-amount')
-                let x_amount = target.attr('data-x-amount')
-                let emi = target.attr('data-emi')
-                let final_elig = target.attr('data-final-elig')
-                let prev_roi = target.attr('data-prev-roi')
-                let prev_processing_fee = target.attr('data-prev-processing-fee')
-
-                let ajax_call_url = $(this).attr('data-url')
-                console.log("Table Changed");
-                $.ajax({
-                    url: ajax_call_url,
-                    type: 'GET',
-                    data: {
-                        'required_val': required_val,
-                        'pp_id' : pp_id,
-                        'cocat_type' : cocat_type,
-                        'net_sal' : net_sal,
-                        'tenure' : tenure,
-                        'percent_amount' : percent_amount,
-                        'x_amount' : x_amount,
-                        'prev_loan_amt' : prev_loan_amt,
-                        'prev_emi' : emi,
-                        'prev_final_elig' : final_elig,
-                        'prev_roi' : prev_roi,
-                        'prev_processing_fee' : prev_processing_fee
-                    },
-                    datatype: 'json',
-                    success: function (data_) {
-                        console.log(data_)
-                        let target_parent = target.parent()
-                        console.log(target_parent.siblings(".final_elig"))
-                        console.log(target_parent.siblings(".emi"))
-                        target_parent.siblings('.final_elig').text(data_.final_eligibility)
-                        target_parent.siblings('.emi').text(data_.emi)
-                        target_parent.siblings('.roi').text(data_.roi)
-                        let pf = target_parent.siblings('.processing_fee')
-                        pf.children('.pf').text(data_.processing_fee)
-                        let pf_gst_calc = data_.processing_fee * 1.18
-                        pf.children('.pf_gst').text(pf_gst_calc.toFixed(2))
-                        target.val(data_.required_loan_amount)
-                        target.attr('data-prev-loan-amt' , data_.required_loan_amount)
-                        target.attr('data-emi' , data_.emi)
-                        target.attr('data-prev-roi' , data_.roi)
-                        target.attr('data-final-elig' , data_.final_eligibility)
-                        target.attr('data-prev-processing-fee' , data_.processing_fee)
-                    },
-                    
-                    error: function (data_) {
-                        console.log("Inside Error")
-                        console.log(data_.responseText);
-                    }
-                });
-            }
-        })
-
-
-        eligibility_details_table.on('blur', 'input', function (event) {
-            console.log("Blurred");
-            $(event.target).prop("readonly", true);
-        })
-        
-
-        /*eligibility_details_table.addEventListener('focus',function(event){
-        },true);
-        
-        eligibility_details_table.addEventListener('blur',function(event){
-        },true);*/
-    })
     </script>
 
-    
+
 </body>
 
 </html>
