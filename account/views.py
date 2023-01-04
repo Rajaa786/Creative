@@ -257,6 +257,151 @@ def base_dashboard(request):
     return render(request, "dashboard.html")
 
 
+#vipul
+@login_required()
+def car_refinance(request, lead_id):
+    form = carsForm()
+    if request.method == 'POST':
+        form = carsForm(request.POST or None)
+        if form.is_valid():
+            form_instance = form.save(commit=False)
+            form_instance.lead_id = Leads.objects.get(pk=lead_id)
+            # form_instance.additional_details_id = AdditionalDetails.objects.get(
+            #         pk=additionaldetails_id)
+            form_instance.save()
+            messages.success(
+                request, "Cars Details Updated Successfully !")
+            return redirect('check_eligibility', lead_id)
+
+        else:
+            messages.error(request, form.errors)
+            return redirect(f"/account/carrefinance/{lead_id}")
+
+    return render(request, 'account/car_refinance.html', context={"form": form, "lead_id": lead_id})
+
+@login_required()
+def lap(request, id):
+    form = LapForm()
+    if request.method == 'POST':
+        form = LapForm(request.POST or None)
+        if form.is_valid():
+            form_instance = form.save(commit=False)
+            form_instance.lead_id = Leads.objects.get(pk=id)
+            form_instance.save()
+            messages.success(
+                request, "Property Details Updated Successfully !")
+            return redirect('lap', id)
+
+        else:
+            messages.error(request, form.errors)
+            return redirect(f"/account/lap/{id}")
+
+    return render(request, 'account/lap.html', context={"form": form, "lead_id": id})
+
+
+
+@login_required()
+def insurance(request):
+    
+    if request.method == "POST":
+        insuranceType =  request.POST.get('insuranceTypeSelector')
+        name = request.POST.get('name')
+        phoneNumber = request.POST.get('phoneNumber')
+        emailID = request.POST.get('emailID')
+        address = request.POST.get('address')
+        pincode = request.POST.get('pincode')
+        gender = request.POST.get('gender')
+        age = request.POST.get('age')
+        remark = request.POST.get('remark')
+        insuranceApplication = InsuranceApplication(
+                name = name,
+                phoneNumber = phoneNumber,
+                email = emailID,
+                address = address,
+                pincode = pincode,
+                gender = gender,
+                age = age,
+                insuranceType = insuranceType,
+                remark = remark,
+        )
+
+        insuranceApplication.save()
+
+        if insuranceType == "term":
+
+            smokerTobacco = False
+
+            if request.POST.get('smokerTobacco') == "yes":
+                smokerTobacco = True
+
+            termInsurance = TermInsurance(
+                insuranceApplication = insuranceApplication,
+                tobacco = smokerTobacco,
+                annualIncome = request.POST.get('annualIncome'),
+                mode = request.POST.get('mode'),
+                sumAssured = request.POST.get('sumAssured'),
+                premiumPaymentTerm = request.POST.get('ppt'),
+                premiumTerm = request.POST.get('premiumTerm'),
+            )
+            termInsurance.save()
+
+        if insuranceType == "twoWheeler" or insuranceType == "fourWheeler":
+
+            vehicleInsurance = VehicleInsurance(
+
+                insuranceApplication = insuranceApplication,
+                vehicleType = insuranceType,
+                vehicleRegistrationNumber = request.POST.get('vehicleRegistrationNumber'),
+                rcBook = request.FILES.get('rcBook'),
+                insuranceCopy = request.FILES.get('insuranceCopy'),
+
+            )
+
+            vehicleInsurance.save()
+
+        if insuranceType == "medical":
+
+            medicalInsurance = MedicalInsurance(
+                insuranceApplication = insuranceApplication,
+                sumAssured = request.POST.get('sumAssured'),
+                noOfFamilyMembers = request.POST.get('familyNumber'),
+            )
+
+            medicalInsurance.save()
+
+            noOfFamilyMembers = int(request.POST.get('familyNumber'))
+
+            for i in range(noOfFamilyMembers):
+
+                diseaseSuffered = False
+
+                if request.POST.get('disease'+str(i)) == "hasDisease":
+                    diseaseSuffered = True
+
+                medicalInsuranceFamilyMember = MedicalInsuranceFamilyMember(
+                    medicalInsurance = medicalInsurance,
+                    typeOfRelationship = request.POST.get('relation'+str(i)),
+                    diseaseSuffered = diseaseSuffered,
+                    diseaseName = request.POST.get('diseaseName'+str(i)),
+                    name = request.POST.get('name'+str(i)),
+                    phoneNumber = request.POST.get('phoneNumber'+str(i)),
+                    email = request.POST.get('emailID'+str(i)),
+                    address = request.POST.get('address'+str(i)),
+                    pincode = request.POST.get('pincode'+str(i)),
+                    gender = request.POST.get('gender'+str(i)),
+                    age = request.POST.get('age'+str(i)),
+                )
+
+                medicalInsuranceFamilyMember.save()
+
+    context = {
+        'active':'',
+        'title':'Insurance'
+    }
+
+    return render(request,'account/insurance.html',context)
+
+
 # @login_required()
 async def register(request):
     if request.method == "POST":
@@ -457,6 +602,10 @@ def add_leads(request):
                 instance.save()
                 if instance.product.product == "Personal Loan":
                     return redirect("additionaldetails", instance.pk)
+                elif instance.product.product == 'Car Refinance':
+                    return redirect('additionaldetails', instance.pk)
+                elif instance.product.product == 'Home Loan':
+                    return redirect('additionaldetails', instance.pk)
                 else:
                     return redirect("base_dashboard")
     context = {"form": LeadsForm()}
@@ -2924,7 +3073,11 @@ def getFinalEligibility(current_calc_data_instance, loan_amount):
     if not current_calc_data_instance['x_amount']:
         return min(current_calc_data_instance['percent_amount'], loan_amount)
 
+<<<<<<< HEAD
     if not current_calc_data_instance['percent_amount'] == '-':
+=======
+    if not current_calc_data_instance['percent_amount']:
+>>>>>>> bbd77903ceaf69bf46c681cb2e5f501c026168b0
         return min(current_calc_data_instance['x_amount'], loan_amount)
 
     return min(current_calc_data_instance['x_amount'], current_calc_data_instance['percent_amount'], loan_amount)
@@ -2980,6 +3133,7 @@ def check_eligibility(request, id):
                                                                main_applicant_income_details, main_applicant_company_details, main_applicant_residence_details, product)
             # co_applicant_eligible = check_eligibility_status(store_eligibility_details, main_applicant_personal_details,
             #                                                  main_applicant_income_details, main_applicant_company_details, main_applicant_residence_details, product)
+<<<<<<< HEAD
             if main_applicant_eligible:
                 loan_amount = main_applicant_personal_details.loan_amount
                 main_applicant_data = None
@@ -3015,6 +3169,45 @@ def check_eligibility(request, id):
                 #         cocat_type=main_categ).first()
 
 
+=======
+
+            loan_amount = main_applicant_personal_details.loan_amount
+            main_applicant_data = None
+            co_applicant_data = None
+
+            main_applicant_bank_category = get_related_bank_categories(
+                product.bank_names, main_applicant_company_details.company_name)
+
+            if not main_applicant_bank_category:
+                continue
+
+            main_categ = main_applicant_bank_category.category.cocat_type
+            multiplier_main_info = Multiplier_Info.objects.filter(
+                pp_id=product.id, cocat_type=main_categ).first()
+            foir_main_info = Foir_Info.objects.filter(
+                pp_id=product.id, cocat_type=main_categ).first()
+            roi_main_info = RateOfInterest_Info.objects.filter(
+                pp_id=product.id, cocat_type=main_categ).first()
+
+            store_eligibility_details[product.bank_names.bank_name]['category'] = main_categ
+
+            # if not roi_main_info:
+            #     continue
+            # if co_applicant_eligible:
+            #     co_applicant_bank_category = get_related_bank_categories(
+            #         product.bank_names, main_applicant_company_details.company_name)
+            #     co_categ = main_applicant_bank_category.category.cocat_type
+            #     multiplier_co_info = product.multiplier_info.filter(
+            #         cocat_type=main_categ).first()
+            #     foir_co_info = product.foir_info.filter(
+            #         cocat_type=main_categ).first()
+            #     roi_co_info = product.rate_of_interest.filter(
+            #         cocat_type=main_categ).first()
+
+
+            if main_applicant_eligible:
+               
+>>>>>>> bbd77903ceaf69bf46c681cb2e5f501c026168b0
                 for tenure in Tenure.objects.all():
 
                     if not check_tenure_availability(

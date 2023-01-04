@@ -114,6 +114,75 @@ def Agreementtype_form(request):
     return render(request, 'master/master_details.html')
 
 
+#vipul
+def Areatype_form(request):
+    if request.method == 'POST':
+        areatypeformvalue = request.POST['Areatype'].strip()
+        effective_date = date.today()
+        ineffective_date = request.POST['AreatypeIdate']
+        if AreaType.objects.filter(area_type=areatypeformvalue).exists():
+            messages.info(request, 'Area Type already exists')
+            return redirect('Master_details')
+        else:
+            newareatype = AreaType.objects.create(
+                area_type=areatypeformvalue, effective_date=effective_date, ineffective_date=ineffective_date)
+            newareatype.save()
+            return redirect('Master_details')
+
+    return render(request, 'master/master_details.html')
+
+def Roomtype_form(request):
+    if request.method == 'POST':
+        roomtypeformvalue = request.POST['Roomtype'].strip()
+        effective_date = date.today()
+        ineffective_date = request.POST['RoomtypeIdate']
+        if RoomType.objects.filter(room_type=roomtypeformvalue).exists():
+            messages.info(request, 'Room Type already exists')
+            return redirect('Master_details')
+        else:
+            newroomtype = RoomType.objects.create(
+                room_type=roomtypeformvalue, effective_date=effective_date, ineffective_date=ineffective_date)
+            newroomtype.save()
+            return redirect('Master_details')
+
+    return render(request, 'master/master_details.html')
+
+
+def Areain_form(request):
+    if request.method == 'POST':
+        areainformvalue = request.POST['Areain'].strip()
+        effective_date = date.today()
+        ineffective_date = request.POST['AreainIdate']
+        if AreaIn.objects.filter(area_in=areainformvalue).exists():
+            messages.info(request, 'Area In already exists')
+            return redirect('Master_details')
+        else:
+            newareain = AreaIn.objects.create(
+                area_in=areainformvalue, effective_date=effective_date, ineffective_date=ineffective_date)
+            newareain.save()
+            return redirect('Master_details')
+
+    return render(request, 'master/master_details.html')
+
+def Lessetype_form(request):
+    if request.method == 'POST':
+        lessetypeformvalue = request.POST['Lessetype'].strip()
+        effective_date = date.today()
+        ineffective_date = check_ineffective_date_present(
+            request.POST['LessetypeIdate'])
+
+        if LesseType.objects.filter(lesse_type=lessetypeformvalue).exists():
+            messages.info(request, 'Lesse Type already exists')
+            return redirect('Master_details')
+        else:
+            newlessetype = LesseType.objects.create(
+                lesse_type=lessetypeformvalue, effective_date=effective_date, ineffective_date=ineffective_date)
+            newlessetype.save()
+            return redirect('Master_details')
+
+    return render(request, 'master/master_details.html')
+
+
 def Applicanttype_form(request):
     if request.method == 'POST':
         applicanttypeformvalue = request.POST['ApplicantType'].strip()
@@ -520,6 +589,43 @@ def SubProduct_form(request):
     }
     return render(request, 'master/master_details.html', context=context)
 
+#vipul
+def Carmake_form(request):
+    if request.method == 'POST':
+        carmakeformvalue = request.POST['Carmake'].strip()
+        effective_date = date.today()
+        ineffective_date = request.POST['CarmakeIdate']
+        if Carmake.objects.filter(carmake=carmakeformvalue).exists():
+            messages.info(request, 'Car already exists')
+            return redirect('Master_details')
+        else:
+            newCarmake = Carmake.objects.create(
+                carmake=carmakeformvalue, effective_date=effective_date, ineffective_date=ineffective_date)
+            newCarmake.save()
+            return redirect('Master_details')
+    return render(request, 'master/master_details.html')
+
+def Submodel_form(request):
+    if request.method == 'POST':
+        carmake = Carmake.objects.get(pk=int(request.POST['carmake']))
+        submodelformvalue = request.POST['Submodel'].strip()
+        effective_date = date.today()
+        ineffective_date = request.POST['SubmodelIdate']
+        if Submodel.objects.filter(sub_model=submodelformvalue, carmake=carmake).exists():
+            messages.info(request, 'Sub Model already exists')
+            return redirect('Master_details')
+        else:
+            newsubmodel = Submodel.objects.create(
+                sub_model=submodelformvalue, carmake=carmake, effective_date=effective_date, ineffective_date=ineffective_date)
+            newsubmodel.save()
+            return redirect('Master_details')
+
+    carmakes = Carmake.objects.all()
+    context = {
+        'carmakes': carmakes,
+    }
+    return render(request, 'master/master_details.html', context=context)
+
 
 def Prefix_form(request):
     if request.method == 'POST':
@@ -591,6 +697,8 @@ def Masterdetails(request):
         'roles': Role.objects.all(),
         'products': Product.objects.all(),
         'subproducts': SubProduct.objects.all(),
+        'carmakes': Carmake.objects.all(),
+        'submodels': Submodel.objects.all(),
         'customertypes': CustomerType.objects.all(),
         'designationtypes': DesignationType.objects.all(),
         'company_types': CompanyType.objects.all(),
@@ -611,6 +719,10 @@ def Masterdetails(request):
         'ayyears': AYYear.objects.all(),
         'tenure': Tenure.objects.all(),
         'agreementtypes': AgreementType.objects.all(),
+        'areatypes': AreaType.objects.all(),
+        'roomtypes': RoomType.objects.all(),
+        'lessetypes': LesseType.objects.all(),
+        'areains': AreaIn.objects.all(),
         'stageOfconstructions': StageOfConstruction.objects.all(),
         'rejectiontypes': RejectionType.objects.all(),
         'commissionrates': Comissionrates.objects.all(),
@@ -720,6 +832,31 @@ def editsubproduct(request, id):
     }
     return render(request, 'master/subproduct_edit.html', context=context)
 
+
+#vipul
+def editcarmake(request, id):
+    if request.method == 'POST':
+        carmake = Carmake.objects.filter(id=id)
+        newcarmake = request.POST['Carmake']
+        carmake.update(carmake=newcarmake)
+        return redirect('Master_details')
+    print(Carmake.objects.filter(id=id)[0])
+    context = {
+        'carmake': Carmake.objects.filter(id=id)[0]
+    }
+    return render(request, 'master/car_edit.html', context=context)
+
+def editsubmodel(request, id):
+    if request.method == 'POST':
+        sub_model = Submodel.objects.filter(id=id)
+        newsubmodel = request.POST['Submodel']
+        sub_model.update(sub_model=newsubmodel)
+        return redirect('Master_details')
+    print(Submodel.objects.filter(id=id)[0])
+    context = {
+        'product': Submodel.objects.filter(id=id)[0]
+    }
+    return render(request, 'master/submodel_edit.html', context=context)
 
 def editcustomertype(request, id):
     if request.method == 'POST':
@@ -940,6 +1077,55 @@ def editagreementtype(request, id):
         'agreement_type': AgreementType.objects.filter(id=id)[0]
     }
     return render(request, 'master/agreement_edit.html', context=context)
+
+#vipul
+def editareatype(request, id):
+    if request.method == 'POST':
+        area_type = AreaType.objects.filter(id=id)
+        newareatype = request.POST['AreaType']
+        area_type.update(area_type=newareatype)
+        return redirect('Master_details')
+    print(AreaType.objects.filter(id=id)[0])
+    context = {
+        'area_type': AreaType.objects.filter(id=id)[0]
+    }
+    return render(request, 'master/area_edit.html', context=context)
+
+def editroomtype(request, id):
+    if request.method == 'POST':
+        room_type = RoomType.objects.filter(id=id)
+        newroomtype = request.POST['RoomType']
+        room_type.update(room_type=newroomtype)
+        return redirect('Master_details')
+    print(RoomType.objects.filter(id=id)[0])
+    context = {
+        'room_type': RoomType.objects.filter(id=id)[0]
+    }
+    return render(request, 'master/room_edit.html', context=context)
+
+def editareain(request, id):
+    if request.method == 'POST':
+        area_in = AreaIn.objects.filter(id=id)
+        newareain = request.POST['AreaIn']
+        area_in.update(area_in=newareain)
+        return redirect('Master_details')
+    print(AreaIn.objects.filter(id=id)[0])
+    context = {
+        'area_in': AreaIn.objects.filter(id=id)[0]
+    }
+    return render(request, 'master/areain_edit.html', context=context)
+
+def editlessetype(request, id):
+    if request.method == 'POST':
+        lesse_type = LesseType.objects.filter(id=id)
+        newlessetype = request.POST['AgreementType']
+        lesse_type.update(lesse_type=newlessetype)
+        return redirect('Master_details')
+    print(LesseType.objects.filter(id=id)[0])
+    context = {
+        'lesse_type': LesseType.objects.filter(id=id)[0]
+    }
+    return render(request, 'master/lesse_edit.html', context=context)
 
 
 def editstageofconstruction(request, id):

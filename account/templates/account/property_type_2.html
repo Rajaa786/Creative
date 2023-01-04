@@ -1,16 +1,16 @@
-{% extends 'base/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {%block title%}Underconstruction Buying from Builder {% endblock title %}
 {% block other_body_css %}id="page-top"{% endblock other_body_css %} 
-{% block other_body %}
+{% block content %}
 <div class="container mb-0">
-    <div class="mb-3 card-body bg-white rounded shadow-blur">
+    <div class="mb-3  rounded shadow-blur">
         <div class="row justify-content-center mb-5 mt-3">
             <div class="col-auto">
-                <h1 class="display-6 text-gray-800">Underconstruction Buying from Seller</h1>
+                <h1 class="mb-5 mt-3 display-6 text-center bg-transparent text-dark">Underconstruction Buying from Seller</h1>
             </div>
         </div>
-        <form class ="form-container" action = "{% url 'property_type_1' id=lead_id %}" method = "POST">
+        <form class ="form-container p-4 card" action = "{% url 'property_type_1' id=lead_id %}" method = "POST">
             {% csrf_token %} 
 
             <div class = "row g-4 p-4">
@@ -32,7 +32,7 @@
     </div>
 </div>
 
-{% endblock other_body %}
+{% endblock content %}
 
 {% block other_js %}
 <script>

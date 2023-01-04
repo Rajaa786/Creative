@@ -90,6 +90,24 @@ class Role(models.Model):
     effective_date = models.DateField(null=True)
     ineffective_date = models.DateField(blank=True, null=True)
 
+#vipul
+class Carmake(models.Model):
+    carmake = models.CharField(max_length=25)
+    effective_date = models.DateField(null=True)
+    ineffective_date = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return self.carmake
+
+class Submodel(models.Model):
+    sub_model = models.CharField(max_length=50)
+    effective_date = models.DateField(null=True)
+    ineffective_date = models.DateField(blank=True, null=True)
+    carmake = models.ForeignKey(Carmake, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.sub_model
+
 
 class Product(models.Model):
     product = models.CharField(max_length=25)

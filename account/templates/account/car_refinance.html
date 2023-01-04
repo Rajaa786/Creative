@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block title %}Car Refinance{% endblock title %}
+
+{% block content %}
+<h1 class="mb-5 mt-3 display-3 text-center bg-transparent text-dark">Car Details</h1>
+<div class="container" style="margin:25px auto;">
+  {% csrf_token %}
+  <div class="form-group row"></div>
+  <div class="container">
+    <div class="card-body">
+      <div class="container">
+        <form class ="form-container  rounded shadow-blur p-4 card" action = "{% url 'car_refinance' lead_id=lead_id %}" method = "POST">
+            {% csrf_token %} 
+
+            <div class = "row g-4 p-4">
+                {% for field in form %}
+                    <div class="col-sm-4" id ="{{field.label}}">
+                        <div class="input-group input-group-static">
+                            <label class="ms-0 text-primary fw-bold">{{field.label}}</label>
+                            {{ field }}
+                        </div>
+                        <span class = "text-danger">{{field.error}}</span>
+                    </div>
+                {% endfor %}
+              <!-- <div class="col-sm-4 mb-2">
+                <div class="form-group row">
+                  <div class="input-group input-group-static">
+                    <label class="ms-0 text-primary fw-bold col-sm-3 mb-2"
+                      >Mortage :- </label
+                    >
+                    <label class="radio-container m-r-45 col-sm-2 ">Yes <input type="radio" name="mortage" value="Yes" onclick="text(0)" checked> <span class="checkmark"></span></label>
+                    <label class="radio-container">No <input type="radio" name="mortage" value="No" onclick="text(1)"> <span class="checkmark"></span></label>
+                  </div>
+                </div>
+              </div>
+                <div class="g-1 p-2" id="mycode">
+                  <div class="row g-1 p-0" >
+                <div class="col-sm-4 mb-2">
+                          <div class="input-group input-group-static">
+                            <label class="ms-1 text-primary fw-bold"
+                              >Bank</label
+                            >
+                            <input
+                              type="text"
+                              name="bank"
+                              class="form-control ms-1 text-primary fw-bold"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                          <div class="input-group input-group-static">
+                            <label class="ms-2 text-primary fw-bold"
+                              >ROI</label
+                            >
+                            <input
+                              type="text"
+                              name="roi"
+                              class="form-control ms-2 text-primary fw-bold"
+                              required
+                            />
+                          </div>
+                        </div>
+              
+                        <div class="col-sm-4 mb-2">
+                          <div class="input-group input-group-static">
+                            <label class="ms-3 text-primary fw-bold"
+                              >Tenure</label
+                            >
+                            <input
+                              type="text"
+                              name="tenure"
+                              class="form-control ms-3 text-primary fw-bold"
+                              required
+                            />
+                          </div>
+                        </div>
+              
+                        <div class="col-sm-4 mb-2">
+                          <div class="input-group input-group-static">
+                            <label class="ms-1 text-primary fw-bold"
+                              >Loan Amount Taken </label
+                            >
+                            <input
+                              type="text"
+                              name="lat"
+                              class="form-control ms-1 text-primary fw-bold"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div class="col-sm-4 mb-2">
+                          <div class="input-group input-group-static">
+                            <label class="ms-2 text-primary fw-bold"
+                              >Loan Amount O/S</label
+                            >
+                            <input
+                              type="text"
+                              name="la"
+                              class="form-control ms-2 text-primary fw-bold"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+            </div> -->
+          </div>
+          <div class="text-center">
+            <button class="btn btn-primary" name="save" type="submit">Save</button>
+            <button class="btn btn-primary" name="next" type="submit">Next</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block other_js %}
+<script>
+//   function showfield(name) {
+//     if (name == 'Other')
+//       document.getElementById('div1').innerHTML =
+//       '  <label  for="other" class="form-label text-primary fw-bold">Other</label>' +
+//       '  <div class="input-group input-group-outline mb-4">' +
+//       '      <input type="text" name="other" id="other" class="form-control" placeholder="eg. Other Car">' +
+//       '  </div>';
+//     else
+//       document.getElementById('div1').innerHTML = '';
+//   }
+// 
+//    function text(x){
+//        if (x==0) document.getElementById("mycode").style.display = "block";
+//        else document.getElementById("mycode").style.display = "none";
+//        return;
+//        }
+
+
+if($("#id_mortage").val() != "True")
+    {
+        $("#id_bank").val("");
+        document.getElementById("Bank").style['display']="none";
+        $("#id_bank").attr('required', '');
+
+        $("#id_roi").val("");
+        document.getElementById("Rate of Interest").style['display']="none";
+        $("#id_roi").attr('required', '');
+
+        $("#id_tenure").val("");
+        document.getElementById("Tenure").style['display']="none";
+        $("#id_tenure").attr('required', '');
+
+        $("#id_loanamounttaken").val("");
+        document.getElementById("Loan Amount taken").style['display']="none";
+        $("#id_loanamounttaken").attr('required', '');
+
+        $("#id_loanamountso").val("");
+        document.getElementById("Loan Amountos").style['display']="none";
+        $("#id_loanamountso").attr('required', '');
+    }
+
+    $(document).on('change','#id_mortage',function(){
+        if($(this).val() == "True"){
+            document.getElementById("Bank").style['display']=""
+            $("#id_bank").attr('required', 'required');
+
+            document.getElementById("Rate of Interest").style['display']=""
+            $("#id_roi").attr('required', 'required');
+
+            document.getElementById("Tenure").style['display']=""
+            $("#id_tenure").attr('required', 'required');
+
+            document.getElementById("Loan Amount taken").style['display']=""
+            $("#id_loanamounttaken").attr('required', 'required');
+
+            document.getElementById("Loan Amountos").style['display']=""
+            $("#id_loanamountso").attr('required', 'required');
+        }
+        else{
+            $("#id_bank").val('');
+            document.getElementById("Bank").style['display']="none";
+            $("#id_mortage").attr('required','');
+            
+            $("#id_roi").val('');
+            document.getElementById("Rate of Interest").style['display']="none";
+            $("#id_mortage").attr('required','');
+
+            $("#id_tenure").val('');
+            document.getElementById("Tenure").style['display']="none";
+            $("#id_mortage").attr('required','');
+
+            $("#id_loanamounttaken").val('');
+            document.getElementById("Loan Amount taken").style['display']="none";
+            $("#id_mortage").attr('required','');
+
+            $("#id_loanamountso").val('');
+            document.getElementById("Loan Amountos").style['display']="none";
+            $("#id_mortage").attr('required','');
+        }
+    });
+    
+</script>
+{% endblock other_js %}

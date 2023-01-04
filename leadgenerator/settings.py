@@ -2,7 +2,6 @@ from pathlib import Path
 import environ
 from django.conf.locale.en import formats as en_formats
 import os
-import os
 
 
 env = environ.Env(DEBUG=(bool, False))
@@ -19,6 +18,7 @@ TEMPLATE_DIR = BASE_DIR / "templates"
 
 
 STATIC_URL = "/static/"
+
 STATIC_DIR = BASE_DIR / "static"
 STATICFILES_DIRS = [STATIC_DIR,]
 STATIC_ROOT = os.path.join(BASE_DIR , "staticfiles")
@@ -33,7 +33,6 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = env("DEBUG")
 DEBUG = True
-
 
 ALLOWED_HOSTS = ["*"]
 
@@ -226,4 +225,3 @@ if not DEBUG:
 
     ALLOWED_HOSTS = ["*"]
 
-# HELLo

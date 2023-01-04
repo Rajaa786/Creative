@@ -883,6 +883,161 @@
 					</div>
 				</div>
 			</div>
+           
+		   <div class="card z-index-2 pb-3 mb-5">
+				<div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+					<div class="bg-gradient-primary shadow-primary border-radius-lg p-3 ">
+						<div class="row">
+							<div class="col">
+								<a data-bs-toggle="collapse" href="#Carmake" role="button" aria-expanded="false"
+									aria-controls="Carmake">
+									<h4 class="card-title fw-bold text-auto">Car Make</h4>
+									<p class="card-category fw-bold text-auto mb-0"> Here is a subtitle for this table</p>
+								</a>
+							</div>
+							<div class="col-auto d-flex align-items-center  ">
+								<a class="btn btn-info mb-0" data-bs-toggle="modal" data-bs-target="#addCarmake"><span class="material-icons">add</span> Add</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="collapse card-body" id="Carmake">
+					<div class="table-responsive">
+						<table class="table">
+							<thead class=" text-primary">
+								<tr>
+									<th class="px-2">Car Make</th>
+									<th class="px-2">Effective Date</th>
+									<th class="px-2">Ineffective Date</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for carmake in Carmakes %}
+								<tr>
+									<td>{{ carmake.carmake }}</td>
+									<td>{{ carmake.effective_date }}</td>
+									<td>{{ carmake.ineffective_date }}</td>
+									<td>
+										<a href={% url 'editcarmake' id=carmake.id %}>
+											<span class="icon text-black-50"><i class="fa fa-edit"></i></span>
+										</a>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="addCarmake" tabindex="-1" role="dialog" aria-labelledby="addCarmake" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title font-weight-normal" id="addCarmake"><i class="fab fa-product-hunt"></i> Add Car</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<form class=" form text-left" action={% url 'Carmake_form' %} method="POST">
+							<div class="modal-body">
+								{% csrf_token %}
+								<div class="input-group input-group-outline my-3">
+									<label class="form-label">Car Make</label>
+									<input type="text" name="Carmake" class="form-control" onfocus="focused(this)" onfocusout="defocused(this)">
+								</div>
+								<div class="input-group input-group-static my-3">
+									<label>Ineffective Date</label>
+									<input type="date" name="CarmakeIdate" class="form-control">
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+								<button type="submit" class="btn bg-gradient-primary">Save changes</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<div class="card z-index-2 pb-3 mb-5">
+				<div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+					<div class="bg-gradient-primary shadow-primary border-radius-lg p-3 ">
+						<div class="row">
+							<div class="col">
+								<a data-bs-toggle="collapse" href="#Submodel" role="button" aria-expanded="false" aria-controls="Submodel">
+									<h4 class="card-title fw-bold text-auto">SubModel</h4>
+									<p class="card-category fw-bold text-auto mb-0"> Here is a subtitle for this table</p>
+								</a>
+							</div>
+							<div class="col-auto d-flex align-items-center">
+								<a class="btn btn-info mb-0" data-bs-toggle="modal" data-bs-target="#addSubmodel"><span class="material-icons">add</span> Add</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="collapse card-body" id="Submodel">
+					<div class="table-responsive">
+						<table class="table">
+							<thead class="text-primary">
+								<tr>
+									<th class="px-2">CarMake</th>
+									<th class="px-2">SubModel</th>
+									<th class="px-2">Effective Date</th>
+									<th class="px-2">Ineffective Date</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for submodel in submodel %}
+								<tr>
+									<td>{{ submodel.carmake.carmake }}</td>
+									<td>{{ submodel.sub_model }}</td>
+									<td>{{ submodel.effective_date }}</td>
+									<td>{{ submodel.ineffective_date }}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="addSubmodel" tabindex="-1" role="dialog" aria-labelledby="addSubmodel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title font-weight-normal" id="addSubmodel"><i class="fab fa-product-hunt"></i> Add SubModel</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<form class=" form text-left" action={% url 'Submodel_form' %} method="POST">
+							<div class="modal-body">
+								{% csrf_token %}
+								<div class="input-group input-group-outline my-3">
+									<label class="form-label"> Sub Model</label>
+									<input type="text" name="Submodel" class="form-control" onfocus="focused(this)" onfocusout="defocused(this)">
+								</div>
+								<div class="input-group input-group-outline my-3">
+									<label class="form-label">Car Make</label>
+
+									<input type="text" name="Carmake" class="form-control" onfocus="focused(this)"
+										onfocusout="defocused(this)">
+								</div>
+								<div class="input-group input-group-static my-3">
+									<label>Ineffective Date</label>
+									<input type="date" name="SubmodelIdate" class="form-control">
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+								<button type="submit" class="btn bg-gradient-primary">Save changes</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+
+
 			<div class="card z-index-2 pb-3 mb-5">
 				<div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
 					<div class="bg-gradient-primary shadow-primary border-radius-lg p-3 ">
@@ -2142,6 +2297,311 @@
 							<div class="modal-footer">
 								<button type="button" class="btn bg-gradient-secondary"
 									data-bs-dismiss="modal">Close</button>
+								<button type="submit" class="btn bg-gradient-primary">Save changes</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="card z-index-2 pb-3 mb-5">
+				<div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+					<div class="bg-gradient-primary shadow-primary border-radius-lg p-3 ">
+						<div class="row">
+							<div class="col">
+								<a data-bs-toggle="collapse" href="#LesseType" role="button" aria-expanded="false"
+									aria-controls="LesseType">
+									<h4 class="card-title fw-bold text-auto">Lesse Type</h4>
+									<p class="card-category fw-bold text-auto mb-0"> Here is a subtitle for this table
+									</p>
+								</a>
+							</div>
+							<div class="col-auto  d-flex align-items-center">
+								<a class="btn btn-info mb-0" data-bs-toggle="modal"
+									data-bs-target="#addLessetype"><span class="material-icons">add</span> Add</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="collapse card-body" id="LesseType">
+					<div class="table-responsive">
+						<table class="table">
+							<thead class=" text-primary">
+								<tr>
+									<th class="px-2">LesseType</th>
+									<th class="px-2">Effective Date</th>
+									<th class="px-2">Ineffective Date</th>
+									<th class="px-2">Edit</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for lessetype in lessetypes %}
+								<tr>
+									<td>{{ lessetype.lesse_type }}</td>
+									<td>{{ lessetype.effective_date }}</td>
+									<td>{{ lessetype.ineffective_date }}</td>
+									<td><a href={% url 'editlessetype' id=lessetype.id %}><span
+												class="icon text-black-50"><i class="fa fa-edit"></i></span></a></td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="addLessetype" tabindex="-1" role="dialog" aria-labelledby="addLessetype"
+				aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title font-weight-normal" id="addLessetype">Add Lessetype</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<form class=" form text-left" action={% url 'Lessetype_form' %} method="POST">
+							<div class="modal-body">
+								{% csrf_token %}
+								<div class="input-group input-group-outline my-3">
+									<label class="form-label">Lessetype</label>
+									<input type="text" name="Lessetype" class="form-control" onfocus="focused(this)"
+										onfocusout="defocused(this)">
+								</div>
+								<div class="input-group input-group-static my-3">
+									<label>Ineffective Date</label>
+									<input type="date" name="LessetypeIdate" class="form-control">
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn bg-gradient-secondary"
+									data-bs-dismiss="modal">Close</button>
+								<button type="submit" class="btn bg-gradient-primary">Save changes</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="card z-index-2 pb-3 mb-5">
+				<div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+					<div class="bg-gradient-primary shadow-primary border-radius-lg p-3 ">
+						<div class="row">
+							<div class="col">
+								<a data-bs-toggle="collapse" href="#AreaType" role="button" aria-expanded="false"
+									aria-controls="AreaType">
+									<h4 class="card-title fw-bold text-auto">Area Type</h4>
+									<p class="card-category fw-bold text-auto mb-0"> Here is a subtitle for this table</p>
+								</a>
+							</div>
+							<div class="col-auto  d-flex align-items-center">
+								<a class="btn btn-info mb-0" data-bs-toggle="modal" data-bs-target="#addAreatype"><span class="material-icons">add</span> Add</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="collapse card-body" id="AreaType">
+					<div class="table-responsive">
+						<table class="table">
+							<thead class=" text-primary">
+								<tr>
+									<th class="px-2">AreaType</th>
+									<th class="px-2">Effective Date</th>
+									<th class="px-2">Ineffective Date</th>
+									<th class="px-2">Edit</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for areatype in areatypes %}
+								<tr>
+									<td>{{ areatype.area_type }}</td>
+									<td>{{ areatype.effective_date }}</td>
+									<td>{{ areatype.ineffective_date }}</td>
+									<td><a href={% url 'editareatype' id=areatype.id %}><span class="icon text-black-50"><i
+													class="fa fa-edit"></i></span></a></td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="addAreatype" tabindex="-1" role="dialog" aria-labelledby="addAreatype" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title font-weight-normal" id="addAreatype">Add Areatype</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<form class=" form text-left" action={% url 'Areatype_form' %} method="POST">
+							<div class="modal-body">
+								{% csrf_token %}
+								<div class="input-group input-group-outline my-3">
+									<label class="form-label">Areatype</label>
+									<input type="text" name="Areatype" class="form-control" onfocus="focused(this)" onfocusout="defocused(this)">
+								</div>
+								<div class="input-group input-group-static my-3">
+									<label>Ineffective Date</label>
+									<input type="date" name="AreatypeIdate" class="form-control">
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+								<button type="submit" class="btn bg-gradient-primary">Save changes</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+
+
+
+			<div class="card z-index-2 pb-3 mb-5">
+				<div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+					<div class="bg-gradient-primary shadow-primary border-radius-lg p-3 ">
+						<div class="row">
+							<div class="col">
+								<a data-bs-toggle="collapse" href="#RoomType" role="button" aria-expanded="false"
+									aria-controls="RoomType">
+									<h4 class="card-title fw-bold text-auto">Room Type</h4>
+									<p class="card-category fw-bold text-auto mb-0"> Here is a subtitle for this table</p>
+								</a>
+							</div>
+							<div class="col-auto  d-flex align-items-center">
+								<a class="btn btn-info mb-0" data-bs-toggle="modal" data-bs-target="#addRoomtype"><span class="material-icons">add</span> Add</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="collapse card-body" id="RoomType">
+					<div class="table-responsive">
+						<table class="table">
+							<thead class=" text-primary">
+								<tr>
+									<th class="px-2">RoomType</th>
+									<th class="px-2">Effective Date</th>
+									<th class="px-2">Ineffective Date</th>
+									<th class="px-2">Edit</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for roomtype in roomtypes %}
+								<tr>
+									<td>{{ roomtype.room_type }}</td>
+									<td>{{ roomtype.effective_date }}</td>
+									<td>{{ roomtype.ineffective_date }}</td>
+									<td><a href={% url 'editroomtype' id=roomtype.id %}><span class="icon text-black-50"><i
+													class="fa fa-edit"></i></span></a></td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="addRoomtype" tabindex="-1" role="dialog" aria-labelledby="addRoomtype" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title font-weight-normal" id="addRoomtype">Add Roomtype</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<form class=" form text-left" action={% url 'Roomtype_form' %} method="POST">
+							<div class="modal-body">
+								{% csrf_token %}
+								<div class="input-group input-group-outline my-3">
+									<label class="form-label">Roomtype</label>
+									<input type="text" name="Roomtype" class="form-control" onfocus="focused(this)" onfocusout="defocused(this)">
+								</div>
+								<div class="input-group input-group-static my-3">
+									<label>Ineffective Date</label>
+									<input type="date" name="RoomtypeIdate" class="form-control">
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+								<button type="submit" class="btn bg-gradient-primary">Save changes</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+
+
+			<div class="card z-index-2 pb-3 mb-5">
+				<div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+					<div class="bg-gradient-primary shadow-primary border-radius-lg p-3 ">
+						<div class="row">
+							<div class="col">
+								<a data-bs-toggle="collapse" href="#AreaIn" role="button" aria-expanded="false"
+									aria-controls="AreaIn">
+									<h4 class="card-title fw-bold text-auto">Area In</h4>
+									<p class="card-category fw-bold text-auto mb-0"> Here is a subtitle for this table</p>
+								</a>
+							</div>
+							<div class="col-auto  d-flex align-items-center">
+								<a class="btn btn-info mb-0" data-bs-toggle="modal" data-bs-target="#addAreaIn"><span class="material-icons">add</span> Add</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="collapse card-body" id="AreaIn">
+					<div class="table-responsive">
+						<table class="table">
+							<thead class=" text-primary">
+								<tr>
+									<th class="px-2">AreaIn</th>
+									<th class="px-2">Effective Date</th>
+									<th class="px-2">Ineffective Date</th>
+									<th class="px-2">Edit</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for areain in areains %}
+								<tr>
+									<td>{{ areain.area_in }}</td>
+									<td>{{ areain.effective_date }}</td>
+									<td>{{ areain.ineffective_date }}</td>
+									<td><a href={% url 'editareain' id=areain.id %}><span class="icon text-black-50"><i
+													class="fa fa-edit"></i></span></a></td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="addAreaIn" tabindex="-1" role="dialog" aria-labelledby="addAreaIn" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title font-weight-normal" id="addAreaIn">Add AreaIn</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<form class=" form text-left" action={% url 'Areain_form' %} method="POST">
+							<div class="modal-body">
+								{% csrf_token %}
+								<div class="input-group input-group-outline my-3">
+									<label class="form-label">Areain</label>
+									<input type="text" name="Areain" class="form-control" onfocus="focused(this)" onfocusout="defocused(this)">
+								</div>
+								<div class="input-group input-group-static my-3">
+									<label>Ineffective Date</label>
+									<input type="date" name="AreainIdate" class="form-control">
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
 								<button type="submit" class="btn bg-gradient-primary">Save changes</button>
 							</div>
 						</form>

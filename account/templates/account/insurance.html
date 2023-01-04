@@ -1,0 +1,598 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Insurance{% endblock title %}
+
+{% block content %}
+<section>
+	<h1 class="mb-5 mt-3 display-3 text-center bg-transparent text-dark">Insurance</h1>
+</section>
+<section class="bg-3blue pt-5 pb-4">
+	<form action="/{% url 'insurance' %}" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		<div class="container p-4 card" style="max-width: 800px">
+			<div class="form-group input-group input-group-static">
+				<label class="ms-0 text-primary fw-bold" for="insuranceTypeSelector"
+					>Insurance Type</label
+				>
+				<select
+					class="form-control"
+					name="insuranceTypeSelector"
+					id="insuranceTypeSelector"
+				>
+					<option value="" disabled selected>
+						Select Insurance Type
+					</option>
+					<option value="medical" class="text-dark">Medical</option>
+					<option value="term" class="text-dark">Term</option>
+					<option value="twoWheeler" class="text-dark">Two Wheeler</option>
+					<option value="fourWheeler" class="text-dark">Four Wheeler</option>
+				</select>
+			</div>
+			<div id="basic"></div>
+			<div id="extra"></div>
+			<div class="text-center pt-3 pb-3">
+                <button class="btn btn-primary" name="cancel" type="cancel">Cancel</button>
+				<button class="btn btn-primary" name="save" type="submit">Save</button>
+			</div>
+		</div>
+	</form>
+</section>
+
+
+{% endblock content %}
+
+{% block other_js %}
+<script>
+	$(document).ready(function () {
+		const basic = `<div class="row g-4 p-4 ">
+                  <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Name</label>
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text bg-2blue"><i class="fa fa-user ft-4blue" aria-hidden="true"></i></span>
+                      </div>
+                      <input
+                      type="text"
+                      name="name"
+                      id=""
+                      class="form-control"
+                      placeholder=""
+                      aria-describedby=""
+                      required
+                  />
+                  </div>
+              </div>
+              <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Mobile No.</label>
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text bg-2blue"><i class="fa fa-phone ft-4blue" aria-hidden="true"></i></span>
+                      </div>
+                      <input
+                      type="number"
+                      name="phoneNumber"
+                      id=""
+                      class="form-control"
+                      placeholder=""
+                      aria-describedby=""
+                      required
+                  />
+                  </div>
+              </div>
+              <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Email ID:</label>
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text bg-2blue"><i class="fa fa-envelope ft-4blue" aria-hidden="true"></i></span>
+                      </div>
+                      <input
+                      type="email"
+                      name="emailID"
+                      id=""
+                      class="form-control"
+                      placeholder=""
+                      aria-describedby=""
+                      required
+                  />
+                  </div>
+              </div>
+              <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Location</label>
+                  <div class="input-group">
+                      <textarea class="form-control" name="address" id="" rows="1"></textarea>
+                  </div>
+              </div>
+              <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Pin Code</label>
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text bg-2blue"><i class="fa fa-location-arrow ft-4blue" aria-hidden="true"></i></span>
+                      </div>
+                      <input
+                      type="number"
+                      name="pincode"
+                      id=""
+                      class="form-control"
+                      placeholder=""
+                      aria-describedby=""
+                      required
+                  />
+                  </div>
+              </div>
+              <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Gender</label>
+                  <div class="input-group">
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="gender" id="male" value="male">
+                          <label class="font-weight-bolder" class="form-check-label" for="male">Male</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+                          <label class="font-weight-bolder" class="form-check-label" for="female">Female</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="gender" id="other" value="other">
+                          <label class="font-weight-bolder" class="form-check-label" for="other">Other</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Age</label>
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text bg-2blue"><i class="fa fa-user ft-4blue" aria-hidden="true"></i></span>
+                      </div>
+                      <input
+                      type="number"
+                      name="age"
+                      id=""
+                      class="form-control"
+                      placeholder=""
+                      aria-describedby=""
+                      required
+                  />
+                  </div>
+              </div>
+              <div class="form-group input-group input-group-static">
+                <label for="" class="font-weight-bolder font-weight-bolder ms-0 text-primary fw-bold"
+                >Remark</label
+                >
+                <textarea
+                class="form-control"
+                placeholder=""
+                row="6"
+                name="remark"
+                required
+                ></textarea>
+            </div>
+            </div>`;
+		const medicalForm = `<div class="row g-4 p-4 ">
+                  <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Sum Assured</label>
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text bg-2blue"><i class="fa fa-inr ft-4blue" aria-hidden="true"></i></span>
+                      </div>
+                      <input
+                      type="number"
+                      name="sumAssured"
+                      id=""
+                      class="form-control"
+                      placeholder=""
+                      aria-describedby=""
+                      required
+                  />
+                  </div>
+              </div>
+              <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="familyNumber">No. of members in family</label>
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text bg-2blue"><i class="fa fa-users ft-4blue" aria-hidden="true"></i></span>
+                      </div>
+                      <input
+                      type="number"
+                      name="familyNumber"
+                      id="familyNumber"
+                      class="form-control"
+                      placeholder=""
+                      aria-describedby=""
+                      required
+                  />
+                  </div>
+              </div>
+              <div id="famForm"></div>
+              </div>`;
+		const diseaseName = `<div class="row g-4 p-4 ">
+                  <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Disease Name</label>
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text bg-2blue"><i class="fa fa-frown-o ft-4blue" aria-hidden="true"></i></span>
+                      </div>
+                      <input
+                      type="text"
+                      name="diseaseName"
+                      id=""
+                      class="form-control"
+                      placeholder=""
+                      aria-describedby=""
+                      required
+                  />
+                  </div>
+              </div>
+              </div>`;
+		const termForm = `<div class="row g-4 p-4 ">
+                  <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Smoker /Chew Tobacco</label>
+                  <div class="input-group">
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="smokerTobacco" id="yes" value="yes">
+                          <label class="font-weight-bolder" class="form-check-label" for="yes">Yes</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="smokerTobacco" id="no" value="no">
+                          <label class="font-weight-bolder" class="form-check-label" for="no">No</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Annual Income</label>
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text bg-2blue"><i class="fa fa-inr ft-4blue" aria-hidden="true"></i></span>
+                      </div>
+                      <input
+                      type="number"
+                      name="annualIncome"
+                      id=""
+                      class="form-control"
+                      placeholder=""
+                      aria-describedby=""
+                      required
+                  />
+                  </div>
+              </div>
+              <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="insuranceTypeSelector">Mode</label>
+                  <select class="form-control" name="mode" id="mode">
+                      <option value="" disabled selected>Select Mode</option>
+                      <option value="yearly"
+                          >Yearly</option
+                      >
+                      <option value="monthly"
+                          >Monthly</option
+                      >
+                      <option value="quaterly">Quaterly</option>
+                  </select>
+              </div>
+              <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Sum Assured</label>
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text bg-2blue"><i class="fa fa-inr ft-4blue" aria-hidden="true"></i></span>
+                      </div>
+                      <input
+                      type="number"
+                      name="sumAssured"
+                      id=""
+                      class="form-control"
+                      placeholder=""
+                      aria-describedby=""
+                      required
+                  />
+                  </div>
+              </div>
+              <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Premium Payment Term (PPT)</label>
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text bg-2blue"><i class="fa fa-inr ft-4blue" aria-hidden="true"></i></span>
+                      </div>
+                      <input
+                      type="number"
+                      name="ppt"
+                      id=""
+                      class="form-control"
+                      placeholder=""
+                      aria-describedby=""
+                      required
+                  />
+                  </div>
+              </div>
+              <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Premium Term</label>
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text bg-2blue"><i class="fa fa-inr ft-4blue" aria-hidden="true"></i></span>
+                      </div>
+                      <input
+                      type="number"
+                      name="premiumTerm"
+                      id=""
+                      class="form-control"
+                      placeholder=""
+                      aria-describedby=""
+                      required
+                  />
+                  </div>
+              </div>
+              </div>`;
+		const wheelerForm = `<div class="row g-4 p-4 ">
+                  <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Enter Vehicle Registration Number</label>
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text bg-2blue"><i class="fa fa-car ft-4blue" aria-hidden="true"></i></span>
+                      </div>
+                      <input
+                      type="text"
+                      name="vehicleRegistrationNumber"
+                      id=""
+                      class="form-control"
+                      placeholder=""
+                      aria-describedby=""
+                      required
+                  />
+                  </div>
+              </div>
+              <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Upload your RC Book</label>
+                  <div class="input-group">
+                      <div class="custom-file">
+                          <input type="file" class="custom-file-input" name="rcBook" id="" >
+                          <label class ="custom-file-label font-weight-bolder" for="">MRC Book</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="form-group input-group input-group-static">
+                  <label class="font-weight-bolder ms-0 text-primary fw-bold" for="">Upload your Insurance Copy</label>
+                  <div class="input-group">
+                      <div class="custom-file">
+                          <input type="file" class="custom-file-input" name="insuranceCopy" id="" >
+                          <label class="custom-file-label font-weight-bolder" for="">Insurance Copy</label>
+                      </div>
+                  </div>
+              </div>
+              </div>`;
+		const showForm = (e) => {
+			let selectedVal = $(this).find("option:selected").val();
+			$("#basic").html(basic);
+			$("#extra").html(``);
+			switch (selectedVal) {
+				case "medical":
+					$("#extra").html(medicalForm);
+					$(document).on("keyup", "#familyNumber", () => {
+						let famNum = $("#familyNumber").val();
+						$("#famForm").html(``);
+						if (famNum > 0) {
+							for (let i = 0; i < famNum; i++) {
+								$("#famForm").append(
+									`<h5 class="text-center my-4">Family Member ${
+										i + 1
+									} </h5>`
+								);
+								$("#famForm").append(`
+                                      <div class="form-group input-group input-group-static">
+                                          <label class="ms-0 text-primary fw-bold" for="">Name</label>
+                                          <div class="input-group">
+                                              <div class="input-group-prepend">
+                                                  <span class="input-group-text bg-2blue"><i class="fa fa-user ft-4blue" aria-hidden="true"></i></span>
+                                              </div>
+                                              <input
+                                              type="text"
+                                              name="name${i}"
+                                              id=""
+                                              class="form-control"
+                                              placeholder=""
+                                              aria-describedby=""
+                                              required
+                                          />
+                                          </div>
+                                      </div>
+                                      <div class="form-group input-group input-group-static">
+                                          <label class="ms-0 text-primary fw-bold" for="">Mobile No.</label>
+                                          <div class="input-group">
+                                              <div class="input-group-prepend">
+                                                  <span class="input-group-text bg-2blue"><i class="fa fa-phone ft-4blue" aria-hidden="true"></i></span>
+                                              </div>
+                                              <input
+                                              type="number"
+                                              name="phoneNumber${i}"
+                                              id=""
+                                              class="form-control"
+                                              placeholder=""
+                                              aria-describedby=""
+                                              required
+                                          />
+                                          </div>
+                                      </div>
+                                      <div class="form-group input-group input-group-static">
+                                          <label class="ms-0 text-primary fw-bold" for="">Email ID:</label>
+                                          <div class="input-group">
+                                              <div class="input-group-prepend">
+                                                  <span class="input-group-text bg-2blue"><i class="fa fa-envelope ft-4blue" aria-hidden="true"></i></span>
+                                              </div>
+                                              <input
+                                              type="email"
+                                              name="emailID${i}"
+                                              id=""
+                                              class="form-control"
+                                              placeholder=""
+                                              aria-describedby=""
+                                              required
+                                          />
+                                          </div>
+                                      </div>
+                                      <div class="form-group input-group input-group-static">
+                                          <label class="ms-0 text-primary fw-bold" for="">Location</label>
+                                          <div class="input-group">
+                                              <textarea class="form-control" name="address${i}" id="" rows="3"></textarea>
+                                          </div>
+                                      </div>
+                                      <div class="form-group input-group input-group-static">
+                                          <label class="ms-0 text-primary fw-bold" for="">Pin Code</label>
+                                          <div class="input-group">
+                                              <div class="input-group-prepend">
+                                                  <span class="input-group-text bg-2blue"><i class="fa fa-location-arrow ft-4blue" aria-hidden="true"></i></span>
+                                              </div>
+                                              <input
+                                              type="number"
+                                              name="pincode${i}"
+                                              id=""
+                                              class="form-control"
+                                              placeholder=""
+                                              aria-describedby=""
+                                              required
+                                          />
+                                          </div>
+                                      </div>
+                                      <div class="form-group input-group input-group-static">
+                                          <label class="ms-0 text-primary fw-bold" for="">Gender</label>
+                                          <div class="input-group">
+                                              <div class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="gender${i}" id="male" value="male">
+                                                  <label class="font-weight-bolder" class="form-check-label" for="male">Male</label>
+                                              </div>
+                                              <div class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="gender${i}" id="female" value="female">
+                                                  <label class="font-weight-bolder" class="form-check-label" for="female">Female</label>
+                                              </div>
+                                              <div class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="gender${i}" id="other" value="other">
+                                                  <label class="font-weight-bolder" class="form-check-label" for="other">Other</label>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="form-group input-group input-group-static">
+                                          <label class="ms-0 text-primary fw-bold" for="">Age</label>
+                                          <div class="input-group">
+                                              <div class="input-group-prepend">
+                                                  <span class="input-group-text bg-2blue"><i class="fa fa-user ft-4blue" aria-hidden="true"></i></span>
+                                              </div>
+                                              <input
+                                              type="number"
+                                              name="age${i}"
+                                              id=""
+                                              class="form-control"
+                                              placeholder=""
+                                              aria-describedby=""
+                                              required
+                                          />
+                                          </div>
+                                      </div>`);
+								$("#famForm").append(`<div class="form-group input-group input-group-static">
+                  <label class="ms-0 text-primary fw-bold" for="">Type of Relationship</label>
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text bg-2blue"><i class="fa fa-users ft-4blue" aria-hidden="true"></i></span>
+                      </div>
+                      <input
+                      type="text"
+                      name="relation${i}"
+                      id=""
+                      class="form-control"
+                      placeholder=""
+                      aria-describedby=""
+                      required
+                  />
+                  </div>
+              </div>
+              <div class="diseaseForm">
+                      <div class="form-group input-group input-group-static">
+                          <label class="ms-0 text-primary fw-bold" for="">Disease Suffered</label>
+                          <div class="input-group">
+                              <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="disease${i}" id="yes${i}" value="hasDisease">
+                                  <label class="font-weight-bolder" class="form-check-label" for="yes${i}">Yes</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="disease${i}" id="no${i}" value="noDisease">
+                                  <label class="font-weight-bolder" class="form-check-label" for="no${i}">No</label>
+                              </div>
+                          </div>
+                      </div>
+              </div>
+              <div class="diseaseNameForm"></div>
+              `);
+								$("input[type=radio]").on("click", () => {
+									$("input[value=hasDisease]:checked")
+										.parent()
+										.parent()
+										.parent()
+										.parent()
+										.next().html(`
+                                          <div class="form-group input-group input-group-static">
+                                              <label class="ms-0 text-primary fw-bold" for="">Disease Name</label>
+                                              <div class="input-group">
+                                                  <div class="input-group-prepend">
+                                                      <span class="input-group-text bg-2blue"><i class="fa fa-frown-o ft-4blue" aria-hidden="true"></i></span>
+                                                  </div>
+                                                  <input
+                                                  type="text"
+                                                  name="diseaseName${i}"
+                                                  id=""
+                                                  class="form-control"
+                                                  placeholder=""
+                                                  aria-describedby=""
+                                                  required
+                                              />
+                                              </div>
+                                          </div>
+                                      `);
+									$("input[value=noDisease]:checked")
+										.parent()
+										.parent()
+										.parent()
+										.parent()
+										.next()
+										.html(``);
+								});
+							}
+						}
+					});
+
+					break;
+				case "term":
+					$("#extra").html(termForm);
+					break;
+				case "twoWheeler":
+					$("#extra").html(wheelerForm);
+					break;
+				case "fourWheeler":
+					$("#extra").html(wheelerForm);
+					break;
+				default:
+					$("#extra").html(``);
+					break;
+			}
+		};
+		$("#insuranceTypeSelector").on("change", showForm);
+	});
+	$(document).on("change", ".custom-file-input", function () {
+		var fileName = $(this).val().split("\\").pop();
+		$(this)
+			.siblings(".custom-file-label")
+			.addClass("selected")
+			.html(fileName);
+	});
+</script>
+
+<script>
+	$(document).ready(function () {
+		var url_string = window.location.href;
+		var url = new URL(url_string);
+		var loan = url.searchParams.get("insurance");
+		if (loan != null) {
+			let element = document.getElementsByName(
+				"insuranceTypeSelector"
+			)[0];
+			element.value = String(loan);
+			element.dispatchEvent(new Event("change"));
+		}
+	});
+</script>
+{% endblock other_js %}
+
