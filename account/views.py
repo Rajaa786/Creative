@@ -3073,11 +3073,7 @@ def getFinalEligibility(current_calc_data_instance, loan_amount):
     if not current_calc_data_instance['x_amount']:
         return min(current_calc_data_instance['percent_amount'], loan_amount)
 
-<<<<<<< HEAD
-    if not current_calc_data_instance['percent_amount'] == '-':
-=======
     if not current_calc_data_instance['percent_amount']:
->>>>>>> bbd77903ceaf69bf46c681cb2e5f501c026168b0
         return min(current_calc_data_instance['x_amount'], loan_amount)
 
     return min(current_calc_data_instance['x_amount'], current_calc_data_instance['percent_amount'], loan_amount)
@@ -3133,7 +3129,6 @@ def check_eligibility(request, id):
                                                                main_applicant_income_details, main_applicant_company_details, main_applicant_residence_details, product)
             # co_applicant_eligible = check_eligibility_status(store_eligibility_details, main_applicant_personal_details,
             #                                                  main_applicant_income_details, main_applicant_company_details, main_applicant_residence_details, product)
-<<<<<<< HEAD
             if main_applicant_eligible:
                 loan_amount = main_applicant_personal_details.loan_amount
                 main_applicant_data = None
@@ -3169,45 +3164,6 @@ def check_eligibility(request, id):
                 #         cocat_type=main_categ).first()
 
 
-=======
-
-            loan_amount = main_applicant_personal_details.loan_amount
-            main_applicant_data = None
-            co_applicant_data = None
-
-            main_applicant_bank_category = get_related_bank_categories(
-                product.bank_names, main_applicant_company_details.company_name)
-
-            if not main_applicant_bank_category:
-                continue
-
-            main_categ = main_applicant_bank_category.category.cocat_type
-            multiplier_main_info = Multiplier_Info.objects.filter(
-                pp_id=product.id, cocat_type=main_categ).first()
-            foir_main_info = Foir_Info.objects.filter(
-                pp_id=product.id, cocat_type=main_categ).first()
-            roi_main_info = RateOfInterest_Info.objects.filter(
-                pp_id=product.id, cocat_type=main_categ).first()
-
-            store_eligibility_details[product.bank_names.bank_name]['category'] = main_categ
-
-            # if not roi_main_info:
-            #     continue
-            # if co_applicant_eligible:
-            #     co_applicant_bank_category = get_related_bank_categories(
-            #         product.bank_names, main_applicant_company_details.company_name)
-            #     co_categ = main_applicant_bank_category.category.cocat_type
-            #     multiplier_co_info = product.multiplier_info.filter(
-            #         cocat_type=main_categ).first()
-            #     foir_co_info = product.foir_info.filter(
-            #         cocat_type=main_categ).first()
-            #     roi_co_info = product.rate_of_interest.filter(
-            #         cocat_type=main_categ).first()
-
-
-            if main_applicant_eligible:
-               
->>>>>>> bbd77903ceaf69bf46c681cb2e5f501c026168b0
                 for tenure in Tenure.objects.all():
 
                     if not check_tenure_availability(

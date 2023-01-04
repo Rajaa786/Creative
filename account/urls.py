@@ -20,9 +20,9 @@ urlpatterns = [
     # --------------------------------------------------------#
     # new_LEADS
     path("view/", views.view_leads, name="view-leads"),
-    path("<int:pk>/", views.lead_detail, name="lead-detail"),
-    path("<int:pk>/update/", views.lead_update, name="lead-update"),
-    path("<int:pk>/delete/", views.lead_delete, name="lead-delete"),
+    path("view_lead/<int:pk>/", views.lead_detail, name="lead-detail"),
+    path("update_lead/<int:pk>/", views.lead_update, name="lead-update"),
+    path("delete_lead/<int:pk>/", views.lead_delete, name="lead-delete"),
     path("newLeadview.html", views.list_leads, name="list_leads"),
     path(
         "additional_details_next/<int:lead_id>/",
