@@ -5,7 +5,29 @@
 {% block title %}Product & Policy Master{% endblock title %}
 
 {% block other_css %}
-<link rel="stylesheet" href="{% static 'material_2_pro_assets/css/p&p_css.css' %}" />
+{% comment %} <link rel="stylesheet" href="{% static 'material_2_pro_assets/css/p&p_css.css' %}" /> {% endcomment %}
+<style>
+   
+    .foir-multiplier-salary-input{
+        min-width: 10rem;
+    }
+
+    .roi-salary-input{
+        min-width: 10rem;
+    }
+
+    .roi-loan-input{
+        min-width: 10rem;
+    }
+
+    .foir-multiplier-input{
+        min-width: 8rem;
+    }
+
+    .roi-input{
+        min-width: 10rem;
+    }
+</style>
 {% endblock other_css %}
 
 {% block other_body_css %}id="page-top"{% endblock other_body_css %}
@@ -20,15 +42,14 @@
             <div class="container p-0">
                 <form id="product_and_policy_form" method="POST" action="{% url 'add_products_and_policy_view' %}"
                     class="form-container bg-blue rounded shadow-blur p-3" id="leadform" data-cities-url="ajax/cities/"
-                    data-subproducts-url="ajax/subproducts/" data-companycat-url="{% url 'get_company_categories_data' %}">
+                    data-subproducts-url="ajax/subproducts/"
+                    data-companycat-url="{% url 'get_company_categories_data' %}">
                     {% csrf_token %}
                     <div class="row g-4 p-4">
                         {% for field in form %}
                         <div class="col-sm-4 mb-2">
-                            <div class="input-group input-group-static">
-                                <label class="ms-0 text-primary fw-bold">{{field.label}}</label>
-                                {{ field }}
-                            </div>
+                            <label class="ms-0 text-primary fw-bold">{{field.label}}</label>
+                            {{ field }}
                         </div>
                         {% endfor %}
                     </div>
@@ -40,14 +61,14 @@
 
 
                     <div class="row g-1 mt-3 px-4">
-                        <label class="col-12" style="color: black"><b>Company Type:</b></label>
+                        <label class="col-12"><b>Company Type:</b></label>
                         {% for com in com_type %}
                         <div class="col-md-4 mb-2">
                             <div class="form-check">
-                                <input id="company_type" class="form-check-input me-1" style="border-color: grey;" type="checkbox"
-                                    value="{{com.company_type}}" name="company_type">
-                                <label
-                                    for="company_type" class="form-check-label ml-1 ms-0 text-primary fw-bold"><b>{{com.company_type}}</b></label>
+                                <input id="{{com.company_type}}" class="form-check-input" style="border-color: grey;"
+                                    type="checkbox" value="{{com.company_type}}" name="company_type">
+                                <label for="{{com.company_type}}"
+                                    class="form-check-label ml-1 ms-0 text-primary fw-bold"><b>{{com.company_type}}</b></label>
                             </div>
                         </div>
                         {% endfor %}
@@ -56,14 +77,14 @@
 
 
                     <div class="row g-1 mt-3 px-4">
-                        <label class="col-12" style="color: black"><b>Salary Type:</b></label>
+                        <label class="col-12"><b>Salary Type:</b></label>
                         {% for salary_type in s_type %}
                         <div class="col-md-4 mb-2">
                             <div class="form-check">
-                                <input id="salary_type" class="form-check-input me-1" style="border-color: grey;" type="checkbox"
-                                    value="{{salary_type.salary_type}}" name="salary_type">
-                                <label
-                                    for="salary_type" class="form-check-label ml-1 ms-0 text-primary fw-bold"><b>{{salary_type.salary_type}}</b></label>
+                                <input id="{{salary_type.salary_type}}" class="form-check-input" style="border-color: grey;"
+                                    type="checkbox" value="{{salary_type.salary_type}}" name="salary_type">
+                                <label for="{{salary_type.salary_type}}"
+                                    class="form-check-label ml-1 ms-0 text-primary fw-bold"><b>{{salary_type.salary_type}}</b></label>
                             </div>
                         </div>
                         {% endfor %}
@@ -72,21 +93,21 @@
 
 
                     <div class="row g-1 mt-3 px-4">
-                        <label class="col-12" style="color: black"><b>Residence Type:</b></label>
+                        <label class="col-12"><b>Residence Type:</b></label>
                         {% for residence_type in res_type %}
                         <div class="col-md-4 mb-2">
                             <div class="form-check">
-                                <input id="res_type" class="form-check-input me-1" style="border-color: grey;" type="checkbox"
-                                    value="{{residence_type.residence_type}}" name="res_type">
-                                <label
-                                    for="res_type" class="form-check-label ml-1 ms-0 text-primary fw-bold"><b>{{residence_type.residence_type}}</b></label>
+                                <input id="{{residence_type.residence_type}}" class="form-check-input" style="border-color: grey;"
+                                    type="checkbox" value="{{residence_type.residence_type}}" name="res_type">
+                                <label for="{{residence_type.residence_type}}"
+                                    class="form-check-label ml-1 ms-0 text-primary fw-bold"><b>{{residence_type.residence_type}}</b></label>
                             </div>
                         </div>
                         {% endfor %}
                     </div>
 
 
-                    
+
                     <div class="mt-3 text-center">
 
                         <button class="btn btn-primary me-3" name="submit" type="submit">Submit</button>
@@ -122,23 +143,23 @@
             const n_url = $("#product_and_policy_form").attr("data-companycat-url");
             const bank_id = $(this).val();
             console.log(n_url)
-        
+
             $.ajax({
-              url: n_url,
-              type: 'GET',
-              data: {
-                'bank_id': bank_id
-              },
-              datatype: 'JSON',
-              success: function (data) {
-                console.log(data)
-                $("#company_categories").html(data);
-              },
-              error: function (error) {
-                console.log(error);
-              }
+                url: n_url,
+                type: 'GET',
+                data: {
+                    'bank_id': bank_id
+                },
+                datatype: 'JSON',
+                success: function (data) {
+                    console.log(data)
+                    $("#company_categories").html(data);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
             });
-          });
+        });
 
 
 
@@ -146,10 +167,10 @@
 
         $(wrapper).on('click', '.remove_button', function (e) {
             e.preventDefault();
-            $(this).parent('div').remove(); 
+            $(this).parent('div').remove();
         });
 
-        
+
     })
 </script>
 {% endblock other_js %}

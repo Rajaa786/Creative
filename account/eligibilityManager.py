@@ -19,7 +19,7 @@ def check_cibil_score(customer_cibil_score, product_cibil_score):
 def check_tenure_availability(age,  retirement_age, tenure_asked, current_tenure):
     tenure_available = get_Available_Tenure(age , retirement_age)
 
-    if tenure_available >= current_tenure.ten_type:
+    if tenure_available >= current_tenure.ten_type and tenure_asked.ten_type >= current_tenure.ten_type :
         return True
     else: 
         return False

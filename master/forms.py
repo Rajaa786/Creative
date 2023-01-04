@@ -14,7 +14,10 @@ from django.db.models import Q
 class ProductAndPolicyMasterForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProductAndPolicyMasterForm, self).__init__(*args, **kwargs)
+        self.fields['customer_type'] = ModelChoiceField(queryset=CustomerType.objects.all(), empty_label="-- Select Customer Type --")
         self.fields['product_name'] = ModelChoiceField(queryset=Product.objects.all(), empty_label="-- Select Product --")
+        self.fields['bank_names'] = ModelChoiceField(queryset=BankName.objects.all(), empty_label="-- Select Bank --")
+        self.fields['designation'] = ModelChoiceField(queryset=DesignationType.objects.all(), empty_label="-- Select Designation --")
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
@@ -23,7 +26,7 @@ class ProductAndPolicyMasterForm(ModelForm):
         model = Product_and_Policy_Master
 
         labels = {
-            "current_experience": "Current Experience (in months)",
+            "current_experience": "Current Experience (in years)",
             "is_salary_account": "Salary account in this Bank?",
             "total_experience": "Total Experience (in years)",
             "co_applicant_allowed": "Are Co-Applicants Allowed?"
