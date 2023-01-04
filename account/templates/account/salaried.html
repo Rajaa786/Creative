@@ -1,5 +1,6 @@
 {% extends request.user.is_superuser|yesno:"base.html,base/base_non_admin_template.html" %}
 {% load static %}
+{% comment %} 16da62 {% endcomment %}
 
 {% block title %}Salary Details{% endblock title %}
 
@@ -7,72 +8,77 @@
 <div class="container-fluid">
     <div id="content-wrapper" class="d-flex flex-column">
         <h1 class=" mt-3 mb-4 display-3 text-center">Income Details for Salaried</h1>
-        <div class="container bg-white shadow-blur rounded mb-4">
-            <div class="row" align="center">
-                <div class="col-md-6">
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-form-label text-primary"> <b>Customer Name</b> </label>
-                        <div class="col-sm-12">
-                            <input type="text" value="{{ name }}" class="form-control" disabled>
+        <div class="container shadow-blur rounded mb-4">
+            <div class="card p-4">
+                <div class="row" align="center">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label text-primary"> <b>Customer Name</b> </label>
+                            <div class="col-sm-12">
+                                <input type="text" value="{{ name }}" class="form-control" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-form-label text-primary"> <b>Applicant Type</b> </label>
+                            <div class="col-sm-12">
+                                <input type="text" value="{{ applicant_type }}" class="form-control" disabled>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-form-label text-primary"> <b>Applicant Type</b> </label>
-                        <div class="col-sm-12">
-                            <input type="text" value="{{ applicant_type }}" class="form-control" disabled>
-                        </div>
+                <hr>
+                <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                    data-bs-target="#personalDetailsModal">
+                    <b>Personal Details</b>
+                </div>
+                <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                    data-bs-target="#incomeDetails">
+                    <b>Income Details</b>
+                </div>
+                <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                    data-bs-target="#otherIncomes">
+                    <b>Other Income Details</b>
+                </div>
+                <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                    data-bs-target="#otherThanIncomeMentionedAbove">
+                    <b>Other Than Income Mentioned Above Details</b>
+                </div>
+                <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                    data-bs-target="#companyDetailsModal">
+                    <b>Company Details</b>
+                </div>
+                <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                    data-bs-target="#residenceDetailModal">
+                    <b>Residence Details</b>
+                </div>
+                <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                    data-bs-target="#existingloanDetailModal">
+                    <b>Existing Loan Details</b>
+                </div>
+                <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                    data-bs-target="#existingcardDetailModal">
+                    <b>Existing Card Details</b>
+                </div>
+                <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                    data-bs-target="#additionalDetailsModal">
+                    <b>Additional Details</b>
+                </div>
+                <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
+                    data-bs-target="#investmentDetailModal">
+                    <b>Investment Details</b>
+                </div>
+                <form method="POST"
+                    action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
+                    {% csrf_token %}
+                    <div class="text-center">
+                        <button class="btn btn-primary mr-3" name="next" value="{{loan_type}}"
+                            type="submit">NEXT</button>
                     </div>
-                </div>
+                </form>
             </div>
-            <hr>
-            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
-                data-bs-target="#personalDetailsModal">
-                <b>Personal Details</b>
-            </div>
-            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
-                data-bs-target="#incomeDetails">
-                <b>Income Details</b>
-            </div>
-            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
-                data-bs-target="#otherIncomes">
-                <b>Other Income Details</b>
-            </div>
-            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
-                data-bs-target="#otherThanIncomeMentionedAbove">
-                <b>Other Than Income Mentioned Above Details</b>
-            </div>
-            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
-                data-bs-target="#companyDetailsModal">
-                <b>Company Details</b>
-            </div>
-            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
-                data-bs-target="#residenceDetailModal">
-                <b>Residence Details</b>
-            </div>
-            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
-                data-bs-target="#existingloanDetailModal">
-                <b>Existing Loan Details</b>
-            </div>
-            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
-                data-bs-target="#existingcardDetailModal">
-                <b>Existing Card Details</b>
-            </div>
-            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
-                data-bs-target="#additionalDetailsModal">
-                <b>Additional Details</b>
-            </div>
-            <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
-                data-bs-target="#investmentDetailModal">
-                <b>Investment Details</b>
-            </div>
-            <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
-                {% csrf_token %}
-                <div class="text-center">
-                    <button class="btn btn-primary mr-3" name="next" value="{{loan_type}}" type="submit">NEXT</button>
-                </div>
-            </form>
+
         </div>
     </div>
 </div>
@@ -325,7 +331,7 @@
             </div>
             <form method="POST" action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
                 {% csrf_token %}
-            <input type="hidden" name="existing_credit_details_form_count" value=1>
+                <input type="hidden" name="existing_credit_details_form_count" value=1>
                 <div class="modal-body">
                     <div id="existing_credit_form_container">
                         <div class="row g-4 p-4">
@@ -420,9 +426,13 @@
 
 {% block other_js %}
 <script>
-    var qualifications = {}; {% for instance in personal_details_qualification %}
-    qualifications["{{instance.qualification}}"] = ("{{instance.degree}}" == 'True'); 
-    {% endfor %}
+    var qualifications = {}; {
+        %
+        for instance in personal_details_qualification %
+    }
+    qualifications["{{instance.qualification}}"] = ("{{instance.degree}}" == 'True'); {
+        % endfor %
+    }
     var id_company_name, id_other_company_name, id_how_old_is_agreement, id_will_you_make_agreement,
         id_valid_rent_agreement, id_lessee_name, id_lessee_type, id_bonus_amount, id_repayment_history_col,
         id_product_id, id_Other_Bank_Name, id_bank_name, id_repayment_history, id_default_year,
@@ -580,7 +590,9 @@
         }
     });
 
-    {% comment %}
+    {
+        % comment %
+    }
     $(document).on('change', '#id_qualification', function () {
         var qualification_name = $('option[value="' + $(this).val() + '"]:selected').text();
         if (qualifications[qualification_name]) {
@@ -588,8 +600,9 @@
         } else {
             id_degree_others.hide();
         }
-    }); 
-    {% endcomment %}
+    }); {
+        % endcomment %
+    }
 
     $(document).on('change', '#id_profession', function () {
         var profession_name = $('option[value="' + $(this).val() + '"]:selected').text();
@@ -720,20 +733,20 @@
     })
 
 
-    $("#existing_loan_form_container").click(function(event){
+    $("#existing_loan_form_container").click(function (event) {
         if (event.target.nodeName == "BUTTON") {
             $(event.target).parent().parent().remove();
             let cur_val = $('input[name="existing_loan_details_form_count"]').val()
-            $('input[name="existing_loan_details_form_count"]').val(cur_val-1)
+            $('input[name="existing_loan_details_form_count"]').val(cur_val - 1)
         }
     })
 
 
-    $("#existing_credit_form_container").click(function(event){
+    $("#existing_credit_form_container").click(function (event) {
         if (event.target.nodeName == "BUTTON") {
             $(event.target).parent().parent().remove();
             let cur_val2 = $('input[name="existing_credit_details_form_count"]').val()
-            $('input[name="existing_credit_details_form_count"]').val(cur_val2-1)
+            $('input[name="existing_credit_details_form_count"]').val(cur_val2 - 1)
         }
     })
 </script>

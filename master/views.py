@@ -576,7 +576,7 @@ def companyCategoryData(request):
     context = {
         'tenures': Tenure.objects.all(),
         'associatedCompanyCategories': associated_company_categories,
-        'bank_id' : bank_id
+        'bank_id': bank_id
     }
 
     return render(request, 'master/associated_company_categories.html', context=context)
@@ -1318,7 +1318,7 @@ def addProductAndPolicyView(request):
                             continue
                         if PerTenure_Multiplier_Data.objects.filter(associated_tenure=tenure, multiplier=multiplier).exists():
                             per_tenure_multiplier_data = PerTenure_Multiplier_Data.objects.filter(
-                                associated_tenure=tenure, multiplier=multiplier).filter()
+                                associated_tenure=tenure, multiplier=multiplier).first()
                         else:
                             per_tenure_multiplier_data = PerTenure_Multiplier_Data(
                                 associated_tenure=tenure, multiplier=multiplier)
@@ -1382,7 +1382,6 @@ def addProductAndPolicyView(request):
                 current_loan_max_amts = request.POST.getlist(
                     f"{cocat_type_id}_loan_max_amt")
 
-                
                 if RateOfInterest_Info.objects.filter(pp_id=product_and_policy_instance,                     cocat_type=current_cocat_type.cocat_type).exists():
                     current_rateofinterest_info = RateOfInterest_Info.objects.filter(
                         pp_id=product_and_policy_instance,  cocat_type=current_cocat_type.cocat_type).first()
@@ -1392,6 +1391,9 @@ def addProductAndPolicyView(request):
                     current_rateofinterest_info.save()
 
                 for index_, (current_loan_min_amount, current_loan_max_amount) in enumerate(zip(current_loan_min_amts, current_loan_max_amts)):
+
+                    if not current_loan_min_amount or not current_loan_max_amount:
+                        continue
 
                     current_cocat_type_rate_min_salaries = request.POST.getlist(
                         f"{cocat_type_id}_rate_min_salary")
@@ -1424,7 +1426,6 @@ def addProductAndPolicyView(request):
                         current_rateofinterest_info.additional_rate_info.add(
                             current_additionalrate_info)
                         current_rateofinterest_info.save()
-
 
         return redirect('list_product_and_policy')
 
