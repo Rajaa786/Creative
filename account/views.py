@@ -254,7 +254,7 @@ def lead_delete(request, pk):
 
 @login_required()
 def base_dashboard(request):
-    return render(request, "dashboard.html")
+    return render(request, "account/dashboard.html")
 
 
 #vipul
