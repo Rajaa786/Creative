@@ -11,12 +11,15 @@
 
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+        integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     {% comment %}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" /> {% endcomment %}
 
-    <link rel="stylesheet" href="{% static 'material_2_pro_assets/css/p&p_css.css' %}" />
+    {% comment %}
+    <link rel="stylesheet" href="{% static 'material_2_pro_assets/css/p&p_css.css' %}" /> {% endcomment %}
 
 
     <style>
@@ -27,6 +30,23 @@
 
         td {
             vertical-align: middle;
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        #requirement_input {
+            min-width: 8rem;
+            max-width: 8rem
+        }
+
+        .amount{
+            min-width: 7.46rem;
+        }
+
+        .final_eligibility{
+            min-width: 9.6rem;
         }
     </style>
 
@@ -39,7 +59,7 @@
     {% comment %} {% if data.multiplier_calculations %} {% endcomment %}
     <div class="container-xl bg-white rounded-3">
         <div class="eligibility-nav">
-          
+
             <nav class="navbar navbar-expand-lg bg-light">
                 <div class="container-fluid p-2">
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -50,7 +70,8 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mb-2 mb-lg-0 justify-content-evenly w-100">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="{% url 'lead-detail' lead_id %}">View</a>
+                                <a class="nav-link active" aria-current="page"
+                                    href="{% url 'lead-detail' lead_id %}">View</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'lead-update' lead_id %}">Edit</a>
@@ -58,43 +79,43 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="" onclick="window.print()">Print</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'check_eligibility' lead_id %}" download="test.txt">Download</a>
+                            <li id="download" class="nav-item">
+                                <a class="nav-link cursor-pointer">Download</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Mail</a>
+                                <a class="nav-link cursor-pointer">Mail</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Whatsapp</a>
+                                <a class="nav-link cursor-pointer">Whatsapp</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Calculator</a>
+                                <a class="nav-link cursor-pointer">Calculator</a>
                             </li>
                         </ul>
-                    
+
                     </div>
                 </div>
             </nav>
         </div>
-        <div class="row py-3">
+        <div id="content_to_download" class="row py-3">
             <div class="col-12">
                 <div class="table-responsive">
                     <table id="eligibility_details_table" data-url="{% url 'handle_loan_requirement_change' %}"
                         class="m-0 table table-bordered">
                         <thead>
                             <tr>
-                                <th>Bank</th>
-                                <th>Applicant</th>
-                                <th>Multiplier</th>
-                                <th>X Amount</th>
-                                <th>FOIR</th>
-                                <th>% Amount</th>
-                                <th>Requirement</th>
-                                <th>Final Eligibility</th>
-                                <th>ROI</th>
-                                <th>EMI</th>
-                                <th>Tenure</th>
-                                <th>Processing Fees</th>
+                                <th class="text-center">Bank</th>
+                                <th class="text-center">Applicant</th>
+                                <th class="text-center">Multiplier</th>
+                                <th class="amount text-center">X Amount</th>
+                                <th class="text-center">FOIR</th>
+                                <th class="amount text-center">% Amount</th>
+                                <th class="text-center">Requirement</th>
+                                <th class="final_eligibility text-center">Final Eligibility</th>
+                                <th class="text-center">ROI</th>
+                                <th class="text-center">EMI</th>
+                                <th class="text-center">Tenure</th>
+                                <th class="text-center">Processing Fees</th>
                             </tr>
                         </thead>
 
@@ -103,14 +124,15 @@
                             {% for calculation in  data.eligibility_calculations %}
 
                             <tr>
-                                <td class="text-center ">{{bank}}</td>
+                                <td class="text-center">{{bank}}</td>
                                 <td class="text-center">{{calculation.applicants}}</td>
                                 <td class="text-center">{{calculation.multiplier}}</td>
-                                <td class="text-center">{{calculation.x_amount}}</td>
+                                <td class="text-center">{{calculation.x_amount|floatformat:2}}</td>
                                 <td class="text-center">{{calculation.foir}}</td>
-                                <td class="text-center">{{calculation.percent_amount}}</td>
-                                <td><input class="requirement_input form-control text-center" type="number"
-                                        value={{data.loanamt}} data-product-policy-id="{{data.product_and_policy_id}}"
+                                <td class="text-center">{{calculation.percent_amount|floatformat:2}}</td>
+                                <td><input id="requirement_input" class="requirement_input form-control text-center"
+                                        type="number" value={{data.loanamt}}
+                                        data-product-policy-id="{{data.product_and_policy_id}}"
                                         data-cocat-type="{{data.category}}" data-net-sal="{{highest_net_sal_holder}}"
                                         data-tenure="{{calculation.associated_tenure}}"
                                         data-percent-amount="{{calculation.percent_amount}}"
@@ -119,9 +141,9 @@
                                         data-final-elig="{{calculation.final_eligibility}}"
                                         data-prev-processing-fee="{{calculation.processing_fees}}"
                                         aria-label="readonly input example" readonly></td>
-                                <td class="final_elig text-center">{{calculation.final_eligibility}}</td>
+                                <td class="final_elig text-center">{{calculation.final_eligibility|floatformat:2}}</td>
                                 <td class="roi text-center">{{calculation.roi}}</td>
-                                <td class="emi text-center">{{calculation.emi}}</td>
+                                <td class="emi text-center">{{calculation.emi|floatformat:2}}</td>
                                 <td class="text-center">{{calculation.associated_tenure}}</td>
                                 <td class="processing_fee text-center"><span
                                         class="pf">{{calculation.processing_fees}}</span> + GST(18%) = <span
@@ -225,6 +247,7 @@
                             pf.children('.pf').text(data_.processing_fee)
                             let pf_gst_calc = data_.processing_fee * 1.18
                             pf.children('.pf_gst').text(pf_gst_calc.toFixed(2))
+                            print(target)
                             target.val(data_.required_loan_amount)
                             target.attr('data-prev-loan-amt', data_.required_loan_amount)
                             target.attr('data-emi', data_.emi)
@@ -253,6 +276,34 @@
             
             eligibility_details_table.addEventListener('blur',function(event){
             },true);*/
+
+            $("#download").click(function () {
+                const downloadable_content = $("#content_to_download").html()
+                console.log(downloadable_content)
+                console.log($("#requirement_input").val())
+                const tmp = document.getElementById("content_to_download")
+
+                var opt = {
+                    margin: 1,
+                    filename: 'Eligibility.pdf',
+                    image: {
+                        type: 'jpeg',
+                        quality: 0.98
+                    },
+                    html2canvas: {
+                        scale: 2
+                    },
+                    jsPDF: {
+                        unit: 'in',
+                        format: 'tabloid',
+                        orientation: 'landscape'
+                    }
+                };
+
+
+                html2pdf().from(downloadable_content).set(opt).save()
+                //html2pdf().from(tmp).save()
+            })
         })
     </script>
 
