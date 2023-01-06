@@ -86,7 +86,9 @@
                                         <button type = "submit" class="btn btn-secondary w-100">SIGN IN</button>
                                     </div>
                                 </div>
-
+                                {% if request.GET.next %}
+                                <input type="hidden" value={{request.GET.next}} name="next">
+                                {% endif %}
                                 </form>
 
 
