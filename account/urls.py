@@ -17,6 +17,7 @@ urlpatterns = [
     path('carrefinance/<int:lead_id>', views.car_refinance, name="car_refinance"),
     path('insurance/', views.insurance, name="insurance"),
     path('lap/<int:id>', views.lap, name="lap"),
+    path("ajax/submodels/", views.load_submodels, name="ajax_load_submodels"),
     # --------------------------------------------------------#
     # new_LEADS
     path("view/", views.view_leads, name="view-leads"),

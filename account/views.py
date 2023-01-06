@@ -262,20 +262,19 @@ def base_dashboard(request):
 def car_refinance(request, lead_id):
     form = carsForm()
     if request.method == 'POST':
-        form = carsForm(request.POST or None)
-        if form.is_valid():
-            form_instance = form.save(commit=False)
-            form_instance.lead_id = Leads.objects.get(pk=lead_id)
-            # form_instance.additional_details_id = AdditionalDetails.objects.get(
-            #         pk=additionaldetails_id)
-            form_instance.save()
-            messages.success(
-                request, "Cars Details Updated Successfully !")
-            return redirect('check_eligibility', lead_id)
+        if "next" in request.POST:
+            form = carsForm(request.POST or None)
+            if form.is_valid():
+                form_instance = form.save(commit=False)
+                form_instance.lead_id = Leads.objects.get(pk=lead_id)
+                form_instance.save()
+                messages.success(
+                      request, "Cars Details Updated Successfully !")
+                return redirect('check_eligibility', lead_id)
 
-        else:
-            messages.error(request, form.errors)
-            return redirect(f"/account/carrefinance/{lead_id}")
+            else:
+                messages.error(request, form.errors)
+                return redirect(f"/account/carrefinance/{lead_id}")
 
     return render(request, 'account/car_refinance.html', context={"form": form, "lead_id": lead_id})
 
@@ -1575,6 +1574,16 @@ def load_subproducts(request):
         request,
         "account/subproducts_dropdown_list_options.html",
         {"subproducts": subproducts},
+    )
+
+#vipul
+def load_submodels(request):
+    carmake_id = request.GET.get("carmake_id")
+    submodels = Submodel.objects.filter(carmake=carmake_id)
+    return render(
+        request,
+        "account/submodels_dropdown_list_options.html",
+        {"submodels": submodels},
     )
 
 

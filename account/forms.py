@@ -58,7 +58,7 @@ class carsForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(carsForm, self).__init__(*args, **kwargs)
         self.fields['sub_model'].queryset = Submodel.objects.none()
-        self.fields['carmake'].queryset = Carmake.objects.none()
+        #self.fields['carmake'].queryset = Carmake.objects.none()
         for field in iter(self.fields):
             self.fields[field].widget.attrs.update({
                 'class': 'form-control',
