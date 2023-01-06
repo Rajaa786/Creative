@@ -254,7 +254,7 @@ def lead_delete(request, pk):
 
 @login_required()
 def base_dashboard(request):
-    return render(request, "dashboard.html")
+    return render(request, "account/dashboard.html")
 
 
 #vipul
@@ -1202,8 +1202,20 @@ def list_leads(request):
 
     preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(ids)])
     listleads = Leads.objects.filter(pk__in=ids).order_by(preserved)
+    lead_dict = {}
+    for lead_ in listleads:
+        incomplete = True
+        if lead_.completion_status == Documents_fill and lead_.eligible:
+            incomplete = False
+        elif lead_.completion_status == Salaried_fill and not lead_.eligible:
+            incomplete = False
+
+        lead_dict[lead_.pk] = {
+            'lead' : lead_,
+            'incomplete' : incomplete
+        }
     # return render(request, 'music/songs.html',  {'song': song})
-    return render(request, "account/newLeadview.html", {"listleads": listleads})
+    return render(request, "account/newLeadview.html", {"listleads": listleads , "lead_dict" : lead_dict})
 
 
 def list_lead_del(request, id):
@@ -2983,16 +2995,18 @@ def eligibility_calculation(current_calc_data_instance, store_eligibility_detail
         multiplier_data = Multiplier_Data.objects.filter(
             mult_info_id=multiplier_info.id, min_salary__lte=applicant_income_details.net_sal, max_salary__gte=applicant_income_details.net_sal).first()
 
-        associated_tenure_multiplier = multiplier_data.tenure_multipliers.filter(
-            associated_tenure=tenure).first()
+        if multiplier_data:
 
-        if associated_tenure_multiplier:
+            associated_tenure_multiplier = multiplier_data.tenure_multipliers.filter(
+                associated_tenure=tenure).first()
 
-            # print(associated_tenure_multiplier.multiplier)
-            current_calc_data_instance['multiplier'] = associated_tenure_multiplier.multiplier
+            if associated_tenure_multiplier:
 
-            x_amount = associated_tenure_multiplier.multiplier * cust_considerable_amount
-            applicant_data['x_amount'] = x_amount
+                # print(associated_tenure_multiplier.multiplier)
+                current_calc_data_instance['multiplier'] = associated_tenure_multiplier.multiplier
+
+                x_amount = associated_tenure_multiplier.multiplier * cust_considerable_amount
+                applicant_data['x_amount'] = x_amount
 
     if roi_info:
         roi_data = roi_info.additional_rate_info.filter(
@@ -3019,32 +3033,33 @@ def eligibility_calculation(current_calc_data_instance, store_eligibility_detail
                 foir_data = Foir_Data.objects.filter(
                     foir_info_id=foir_info.id, min_salary__lte=applicant_income_details.net_sal, max_salary__gte=applicant_income_details.net_sal).first()
 
-                associated_tenure_foir = foir_data.tenure_foirs.filter(
-                    associated_tenure=tenure).first()
+                if foir_data and roi_data:
+                    associated_tenure_foir = foir_data.tenure_foirs.filter(
+                        associated_tenure=tenure).first()
 
-                if associated_tenure_foir and roi_data:
-                    print(associated_tenure_foir)
+                    if associated_tenure_foir:
+                        print(associated_tenure_foir)
 
-                    current_calc_data_instance['foir'] = associated_tenure_foir.foir
+                        current_calc_data_instance['foir'] = associated_tenure_foir.foir
 
-                    # current_calc_data_instance['roi'] = roi_data.rate_of_interest
+                        # current_calc_data_instance['roi'] = roi_data.rate_of_interest
 
-                    cust_considerable_amount = cust_considerable_amount * \
-                        associated_tenure_foir.foir / 100
+                        cust_considerable_amount = cust_considerable_amount * \
+                            associated_tenure_foir.foir / 100
 
-                    print(obligation_amount)
-                    print(cust_considerable_amount)
+                        print(obligation_amount)
+                        print(cust_considerable_amount)
 
-                    # tenure_in_months = get_tenure_months(
-                    #     main_applicant_personal_details.age,  main_applicant_personal_details.retirement_age)
-                    # tenure_in_months = min(
-                    # tenure_in_months, product_max_tenure)
+                        # tenure_in_months = get_tenure_months(
+                        #     main_applicant_personal_details.age,  main_applicant_personal_details.retirement_age)
+                        # tenure_in_months = min(
+                        # tenure_in_months, product_max_tenure)
 
-                    if cust_considerable_amount > 0:
-                        percent_amount = round(
-                            cust_considerable_amount / per_lakh_emi, 5) * 100000
-                        # PERCENT_amount = min(lead.loan_amt, PERCENT_amount)
-                        applicant_data['percent_amount'] = percent_amount
+                        if cust_considerable_amount > 0:
+                            percent_amount = round(
+                                cust_considerable_amount / per_lakh_emi, 5) * 100000
+                            # PERCENT_amount = min(lead.loan_amt, PERCENT_amount)
+                            applicant_data['percent_amount'] = percent_amount
 
     return applicant_data
 

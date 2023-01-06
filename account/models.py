@@ -16,6 +16,9 @@ from datetime import datetime
 YES_NO_CHOICES = ((None, ("Select Yes Or No")),
                   (True, ("Yes")), (False, ("No")))
 
+ELIGIBILITY_CHOICES = ((True, ("Yes")), 
+                        (False, ("No")))
+
 GOOD_BAD_CHOICES = ((None, "-- Good or Bad --"),
                     ("Good", "Good"), ("Bad", "Bad"))
 
@@ -56,6 +59,15 @@ GENDER_CHOICES = (
     ("Male", "Male"),
     ("Female", "Female"),
     ("Others", "Others"),
+)
+
+Applicant_fill = 0
+Salaried_fill = 1
+Documents_fill = 2
+COMPLETION_STATUS_CHOICES = (
+    (Applicant_fill, 'Applicant_fill'),
+    (Salaried_fill, 'Salaried_fill'),
+    (Documents_fill, 'Documents_fill'),
 )
 
 
@@ -126,6 +138,8 @@ class Leads(models.Model):
     state = models.ForeignKey(State, on_delete=models.CASCADE)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     added_by = models.CharField(max_length=50, null=True)
+    completion_status = models.IntegerField(choices=COMPLETION_STATUS_CHOICES , default=None)
+    eligible = models.BooleanField(choices=ELIGIBILITY_CHOICES , default=False)
 
 
 #vipul

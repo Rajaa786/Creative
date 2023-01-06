@@ -1,7 +1,7 @@
-{% extends request.user.is_superuser|yesno:"base/base.html,base/base_non_admin_template.html" %}
+{% extends "base.html" %}
 {% load static %}
 
-{% block other_body %}
+{% block content %}
     <h1 class="mb-5 mt-3 display-3 text-center">Upload Documents</h1>  
     <section class="bg-3blue pb-4">
     <form method="POST" action="{% url 'upload_documents' id=lead_id %}" enctype="multipart/form-data">
@@ -62,7 +62,7 @@
       </div>
     </form>
   </section>
-{% endblock other_body %}
+{% endblock content %}
 
 {% block other_js %}
   <script>
