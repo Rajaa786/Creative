@@ -12,7 +12,7 @@ from django.utils.safestring import mark_safe
 class LeadsForm(ModelForm):
     class Meta:
         model = Leads
-        exclude = ("added_by",)
+        exclude = ("added_by", "completion_status" , "eligible")
 
     def __init__(self, *args, **kwargs):
         super(LeadsForm, self).__init__(*args, **kwargs)
