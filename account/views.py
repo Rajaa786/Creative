@@ -85,24 +85,24 @@ def lead_detail(request, pk):
         additional_details_id=additional_details).first()
     print(personal_details_form_id)
     income_details_form_id = SalIncomeDetails.objects.filter(
-        addi_details_id=additional_details)
+        addi_details_id=additional_details).first()
     print(income_details_form_id)
     other_income_form_id = SalOtherIncomes.objects.filter(
-        addi_details_id=additional_details)
+        addi_details_id=additional_details).first()
     additional_other_incomes_form_id = SalAdditionalOtherIncomes.objects.filter(
-        addi_details_id=additional_details)
+        addi_details_id=additional_details).first()
     company_details_form_id = SalCompanyDetails.objects.filter(
-        addi_details_id=additional_details)
+        addi_details_id=additional_details).first()
     residence_details_form_id = SalResidenceDetails.objects.filter(
-        addi_details_id=additional_details)
+        addi_details_id=additional_details).first()
     existing_loan_details_form_id = SalExistingLoanDetails.objects.filter(
-        addi_details_id=additional_details)
+        addi_details_id=additional_details).first()
     existing_card_details_form_id = SalExistingCreditCard.objects.filter(
-        addi_details_id=additional_details)
+        addi_details_id=additional_details).first()
     additional_details_form_id = SalAdditionalDetails.objects.filter(
-        addi_details_id=additional_details)
+        addi_details_id=additional_details).first()
     investment_form_id = SalInvestments.objects.filter(
-        addi_details_id=additional_details)
+        addi_details_id=additional_details).first()
 
     # salperdet = {}
     # for val in SalPersonalDetailsForm():
@@ -173,8 +173,8 @@ def lead_update(request, pk):
                 return redirect("newLeadview.html", lead.pk)
             elif user.system_role.role == "Referral Partner":
                 return redirect("base")
-        if "next" in request.POST:
 
+        if "next" in request.POST:
             if form.is_valid():
                 form.save()
                 #         instance = form.save(commit=False)
@@ -241,7 +241,7 @@ def lead_update(request, pk):
                 }
             )
 
-    context = {"form": LeadsForm(), "lead": lead, "subproducts": subproducts}
+    context = {"form": LeadsForm(), "lead": lead, "subproducts": subproducts , "products":products }
 
     return render(request, "account/lead_update.html", context)
 
@@ -262,20 +262,19 @@ def base_dashboard(request):
 def car_refinance(request, lead_id):
     form = carsForm()
     if request.method == 'POST':
-        form = carsForm(request.POST or None)
-        if form.is_valid():
-            form_instance = form.save(commit=False)
-            form_instance.lead_id = Leads.objects.get(pk=lead_id)
-            # form_instance.additional_details_id = AdditionalDetails.objects.get(
-            #         pk=additionaldetails_id)
-            form_instance.save()
-            messages.success(
-                request, "Cars Details Updated Successfully !")
-            return redirect('check_eligibility', lead_id)
+        if "next" in request.POST:
+            form = carsForm(request.POST or None)
+            if form.is_valid():
+                form_instance = form.save(commit=False)
+                form_instance.lead_id = Leads.objects.get(pk=lead_id)
+                form_instance.save()
+                messages.success(
+                      request, "Cars Details Updated Successfully !")
+                return redirect('check_eligibility', lead_id)
 
-        else:
-            messages.error(request, form.errors)
-            return redirect(f"/account/carrefinance/{lead_id}")
+            else:
+                messages.error(request, form.errors)
+                return redirect(f"/account/carrefinance/{lead_id}")
 
     return render(request, 'account/car_refinance.html', context={"form": form, "lead_id": lead_id})
 
@@ -1580,6 +1579,16 @@ def load_subproducts(request):
         request,
         "account/subproducts_dropdown_list_options.html",
         {"subproducts": subproducts},
+    )
+
+#vipul
+def load_submodels(request):
+    carmake_id = request.GET.get("carmake_id")
+    submodels = Submodel.objects.filter(carmake=carmake_id)
+    return render(
+        request,
+        "account/submodels_dropdown_list_options.html",
+        {"submodels": submodels},
     )
 
 
