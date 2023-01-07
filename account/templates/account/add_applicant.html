@@ -1,68 +1,52 @@
-<form class="form-container" method="POST" action={% url 'additionaldetails' id=lead_id %} id="applicant_details">
+<form class="form-container p-3" method="POST" action={% url 'additionaldetails' id=lead_id %} id="applicant_details">
   {% csrf_token %}
-  <div class="row mt-2 ml-0">
+  <div class="row mb-4 ml-0">
     <div class="col-12">
-      <div class="form-check ps-0 d-inline-flex align-items-center mb-2" data-bs-toggle="collapse"
-        data-bs-target="#co_applicant" role="button" aria-expanded="false" aria-controls="co_applicant">
+      <div class="form-check" data-bs-toggle="collapse" data-bs-target="#co_applicant" role="button"
+        aria-expanded="false" aria-controls="co_applicant">
 
-        <input class=" form-check-input m-0 mx-0" name="joint_app_checkbox" type="checkbox" value="joint_checked"
+        <input class=" form-check-input" name="joint_app_checkbox" type="checkbox" value="joint_checked"
           id="flexCheckDefault">
         <label class="form-check-label mb-0 ml-1" for="flexCheckDefault">
           Do you want to add a joint applicant?
 
         </label>
-
-        {% comment %} {{form.is_diff}}
-        <label class="custom-control-label" for="customCheck1">Is Customer and Contact Person Different ?
-        </label> {% endcomment %}
       </div>
     </div>
   </div>
   {% if not applicant_main %}
   <div>
 
-    <div class="row">
+    <div class="row g-3">
       <div class="col-md-4">
-        <div class="input-group input-group-static mb-3">
-          <label class="ms-0 text-primary fw-bold">Customer Name {{applicant_main}}
-          </label>
-          {{form_1.cust_name}}
-        </div>
+        <label class="ms-0 text-primary fw-bold">Customer Name {{applicant_main}}
+        </label>
+        {{form_1.cust_name}}
       </div>
       <div class="col-md-4">
-        <div class="input-group input-group-static mb-3">
-          <label class="ms-0 text-primary fw-bold">Applicant Type</label>
-          {{form_1.applicant_type}}
-        </div>
+        <label class="ms-0 text-primary fw-bold">Applicant Type</label>
+        {{form_1.applicant_type}}
       </div>
       <div class="col-md-4">
-        <div class="input-group input-group-static mb-4">
-          <label class="ms-0 text-primary fw-bold">Income Holder</label>
-          {{form_1.inc_holder}}
-        </div>
+        <label class="ms-0 text-primary fw-bold">Income Holder</label>
+        {{form_1.inc_holder}}
       </div>
+
+      <div class="col-md-4">
+        <label class="ms-0 text-primary fw-bold">Customer Type</label>
+        {{form_1.cust_type}}
+      </div>
+      <div class="col-md-4">
+        <label class="ms-0 text-primary fw-bold">Relation</label>
+        {{form_1.relation}}
+      </div>
+      <div class="col-md-4">
+        <label class="ms-0 text-primary fw-bold">Contact No </label>
+        {{form_1.con_phone}}
+      </div>
+
     </div>
-    <div class="row">
-      <div class="col-md-4">
-        <div class="input-group input-group-static mb-4">
-          <label class="ms-0 text-primary fw-bold">Customer Type</label>
-          {{form_1.cust_type}}
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="input-group input-group-static mb-4">
-          <label class="ms-0 text-primary fw-bold">Relation</label>
-          {{form_1.relation}}
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="input-group input-group-static mb-4">
-          <label class="ms-0 text-primary fw-bold">Contact No </label>
-          {{form_1.con_phone}}
-        </div>
-      </div>
-      {% comment %} {{form_2.as_p}} {% endcomment %}
-    </div>
+
   </div>
   {% endif %}
 
@@ -71,51 +55,38 @@
 
 
     <p class="h4">Co-Applicant Details</p>
-    <div class="row">
+    <div class="row g-3">
       <div class="col-md-4">
-        <div class="input-group input-group-static mb-3">
-          <label class="ms-0 text-primary fw-bold">Customer Name</label>
-          {{form_2.cust_name}}
-        </div>
+        <label class="ms-0 text-primary fw-bold">Customer Name</label>
+        {{form_2.cust_name}}
       </div>
       <div class="col-md-4">
-        <div class="input-group input-group-static mb-3">
-          <label class="ms-0 text-primary fw-bold">Applicant Type</label>
-          {{form_2.applicant_type}}
-        </div>
+        <label class="ms-0 text-primary fw-bold">Applicant Type</label>
+        {{form_2.applicant_type}}
       </div>
       <div class="col-md-4">
-        <div class="input-group input-group-static mb-4">
-          <label class="ms-0 text-primary fw-bold">Income Holder</label>
-          {{form_2.inc_holder}}
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4">
-        <div class="input-group input-group-static mb-4">
-          <label class="ms-0 text-primary fw-bold">Customer Type</label>
-          {{form_2.cust_type}}
-        </div>
+        <label class="ms-0 text-primary fw-bold">Income Holder</label>
+        {{form_2.inc_holder}}
       </div>
       <div class="col-md-4">
-        <div class="input-group input-group-static mb-4">
-          <label class="ms-0 text-primary fw-bold">Relation</label>
-          {{form_2.relation}}
-        </div>
+        <label class="ms-0 text-primary fw-bold">Customer Type</label>
+        {{form_2.cust_type}}
       </div>
       <div class="col-md-4">
-        <div class="input-group input-group-static mb-4">
-          <label class="ms-0 text-primary fw-bold">Contact No </label>
-          {{form_2.con_phone}}
-        </div>
+        <label class="ms-0 text-primary fw-bold">Relation</label>
+        {{form_2.relation}}
+      </div>
+      <div class="col-md-4">
+        <label class="ms-0 text-primary fw-bold">Contact No </label>
+        {{form_2.con_phone}}
       </div>
     </div>
   </div>
 
-  <div style="text-align:center">
-    {% comment %} <button class="btn btn-primary" name="cancel" type="submit">Cancel</button> {% endcomment %}
-    <button class="btn btn-primary" name="save" type="submit">Save & Submit</button>
+  <div class="row py-3 text-center">
+    <div class="col-md-12">
+      <button class="btn btn-primary" name="save" type="submit">Save & Submit</button>
+    </div>
   </div>
 </form>
 

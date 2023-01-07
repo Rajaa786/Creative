@@ -6,17 +6,39 @@
 
 {% block title %}Registration Form{% endblock title %}
 
+{% block other_css %}
+<style>
+  .btn-close {
+    background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat !important;
+    top: 5px !important
+  }
+</style>
+
+{% endblock other_css %}
+
 {% block other_body_css %}id="page-top"{% endblock other_body_css %}
 
 {% block content %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} d-flex align-items-center
+    alert-dismissible fade show" role="alert">
+  <svg class="bi flex-shrink-0 me-2" role="img" height=20 width=20 aria-label="Success:">
+    <use xlink:href="#{% if message.tags %}{{ message.tags }}{% endif %}" /></svg>
+  <div>{{ message }}</div>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}
+
+
 <div class="container" style="margin:25px auto;">
-  {% csrf_token %}
   <div class="container">
     <h1 class=" mt-3 mb-4 display-3 text-center">New Partner Registration</h1>
-    <div class="card-body">
+    <div class="card">
       <div class="container">
 
-        <form action="{% url 'register' %}" method="POST" class="form-container bg-white rounded shadow-blur p-3"
+        <form id="form_container" action="{% url 'register' %}" method="POST" class="bg-white rounded shadow-blur p-3"
           validate enctype="multipart/form-data">
           {% csrf_token %}
           <div class="row g-3 p-3">
@@ -34,14 +56,14 @@
 
             <div class="col-sm-4 mb-2">
               <label for="fname" class="form-label">Full Name</label>
-              <input type="text" class="form-control" id="validationCustom01" name="fname" required>
+              <input type="text" class="form-control" id="fname" name="fname" required>
               <div class="valid-feedback">
                 Looks good!
               </div>
             </div>
             <div class="col-sm-4 mb-2">
               <label for="password" class="form-label">Password</label>
-              <input type="text" class="form-control" id="password" name="password" required>
+              <input type="password" class="form-control" id="password" name="password" required>
               <div class="valid-feedback">
                 Looks good!
               </div>
@@ -50,7 +72,7 @@
               <label for="email" class="form-label">E-mail</label>
               <div class="input-group has-validation">
                 <span class="input-group-text" id="inputGroupPrepend">@</span>
-                <input type="text" class="form-control" id="email" aria-describedby="inputGroupPrepend" name="email"
+                <input type="email" class="form-control" id="email" aria-describedby="inputGroupPrepend" name="email"
                   required>
                 <div class="invalid-feedback">
                   Please enter a valid E-mail id.
@@ -60,14 +82,15 @@
 
             <div class="col-sm-4 mb-2">
               <label for="phone" class="form-label">Mobile Number</label>
-              <input type="text" class="form-control" id="phone" name="phone" required>
+              <input type="tel" class="form-control" id="phone" name="phone" required>
               <div class="invalid-feedback">
                 Please enter a proper 10-digit Mobile Number.
               </div>
             </div>
             <div class="col-sm-4 mb-2">
               <label for="address" class="form-label">Address</label>
-              <input type="text" class="form-control" id="address" name="address" required>
+              <textarea id="address" name="address" class="form-control" placeholder="Enter your address" rows="1"
+                id="floatingTextarea" required spellcheck="false"></textarea>
               <div class="invalid-feedback">
                 Please provide a valid address.
               </div>
@@ -84,7 +107,7 @@
 
             <div class="col-sm-4 mb-2">
               <label for="pincode" class="form-label">Pin Code</label>
-              <input type="text" class="form-control" id="pincode" name="pincode" required>
+              <input type="text" pattern="\d*" class="form-control" id="pincode" name="pincode" required>
               <div class="invalid-feedback">
                 Please enter a six digit pin code.
 
@@ -121,19 +144,20 @@
               </select>
             </div>
 
-
             <div class="col-sm-4 mb-2">
               <label for="profession" class="form-label">Profession</label>
-              <select class="form-control col-12" name="profession" id="profession" required>
+              <select class="form-control col-12" name="profession" id="profession"
+                onchange="showfield(this.options[this.selectedIndex].value)" required>
                 <option value="">-- Select Profession --</option>
                 {% for profession in  professions %}
                 <option value={{profession.profession}}>{{profession.profession}}</option>
                 {% endfor %}
-                <option>Other</option>
+                <option value="other">Other</option>
               </select>
             </div>
+          
 
-            <div id="div1" class="col-sm-4 mb-2 display_none">
+            <div id="div1" class="col-sm-4 mb-2 d-none">
               <label for="other" class="form-label">Other</label>
               <input type="text" name="other" id="other" class="form-control">
             </div>
@@ -152,14 +176,14 @@
                     Conditions</span>.</label>
               </div>
             </div>
-            <div class="col-sm-3">
-              <button id="file_upload_btn" class="btn btn-secondary bg-gradient-secondary w-100 m-0" type="button"
+            <div class="col-sm-3 text-end">
+              <button id="file_upload_btn" class="btn btn-secondary bg-gradient-secondary m-0" type="button"
                 data-bs-toggle="modal" data-bs-target="#fileInputModal">Upload Documents</button>
             </div>
           </div>
           <div class="row justify-content-center mb-3">
-            <div class="col-sm-3">
-              <button type="submit" class="btn bg-gradient-primary w-100 m-0">Register</button>
+            <div class="col-sm-3 text-center">
+              <button type="submit" class="btn bg-gradient-primary m-0">Register</button>
             </div>
 
           </div>
@@ -181,15 +205,15 @@
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Referral Agreement</h5>
-                <button type="button" class="close-btn text-dark" style="font-size : 2rem;" data-bs-dismiss="modal"
-                  aria-label="Close">&times;</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 {% include 'account/Agreement_Referral.html' %}
                 <div class="form-check pt-5">
                   <input type="checkbox" name="agreement" id="agreement" class="form-check-input"
                     style="border-color: grey;">
-                  <label for="agreement" class="form-check-label text-primary d-inline ms-0 text-center">I have read and
+                  <label for="agreement" class="form-check-label text-primary d-inline ms-0 text-center">I have read
+                    and
                     agree
                     to Creative
                     Finance's <span>Terms & Conditions and Agreement Policy</span>.</label>
@@ -226,24 +250,36 @@
   function showfield(name) {
     console.log(name)
     if (name == 'other') {
-      document.getElementById('div1').classList.remove('display_none')
+      document.getElementById('div1').classList.remove('d-none')
     } else {
-      document.getElementById('div1').classList.add('display_none')
+      document.getElementById('div1').classList.add('d-none')
     }
   }
 
+  $('input[name="fname"]').on("input", function (event) {
+    console.log("Child Input triggered")
+  })
+
   $("#form_container").on("input", function (event) {
+
+    console.log("Form Triggered")
 
     if (event.target.id == "fname") {
       $("#referral_name").text(event.target.value)
-      $('input[name="terms"]').prop('checked', false);
+      console.log($("#referral_name"))
+      if (event.target.value == "") {
+        $('input[name="terms"]').prop('checked', false);
+      }
       return;
     }
 
 
     if (event.target.id == "prefix") {
       $("#referral_prefix").text(event.target.value)
-      $('input[name="terms"]').prop('checked', false);
+      console.log($("#referral_prefix"))
+      if (event.target.value == "") {
+        $('input[name="terms"]').prop('checked', false);
+      }
       return;
     }
 
@@ -265,7 +301,6 @@
     if (this.checked) {
       event.preventDefault()
     }
-    console.log(this.checked)
 
     let alert_msg = "Please First "
     if ($('select[name="prefix"]').val() == "") {

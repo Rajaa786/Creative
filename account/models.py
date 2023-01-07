@@ -326,7 +326,7 @@ class SalPersonalDetails(models.Model):
         Country, on_delete=models.CASCADE, blank=True, null=True
     )
     enduse = models.CharField(max_length=200, blank=True, null=True)
-    additional_details_id = models.ForeignKey(
+    addi_details_id = models.ForeignKey(
         AdditionalDetails, on_delete=models.CASCADE, blank=True, null=True
     )
     # proof                 = models.CharField(max_length=1)

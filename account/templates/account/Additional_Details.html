@@ -63,7 +63,8 @@
                 aria-expanded="false"
                 aria-controls="Applicant"
                 id="addapplicant"
-                data-url="{% url 'ajax_add_applicant' %}"
+                {% comment %} data-url="{% url 'ajax_add_applicant' %}" {% endcomment %}
+                data-url='/{{appname}}/ajax/addapplicant/'
               >
                 <h4 class="card-title fw-bold text-light">Add Applicant</h4>
                 <p class="card-category fw-bold text-light mb-0"></p>
@@ -72,7 +73,7 @@
           </div>
         </div>
       </div>
-      <div class="collapse card-body" id="Applicant"></div>
+      <div class="collapse" id="Applicant"></div>
     </div>
     {% comment %}
     <div class="card z-index-2 pb-3 mb-5">
@@ -269,8 +270,7 @@
       const id = 0;
       const lead_id = {{lead_id}}
       const main_Applicant = {% if main_applicant %}"{{main_applicant}}"{% else %}"None"{% endif %}
-      console.log("This is lead id ", lead_id);
-      console.log("Main Applicant", main_Applicant);
+     
       $.ajax({
         url: url,
         type: 'GET',

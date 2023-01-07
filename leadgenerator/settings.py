@@ -1,6 +1,7 @@
 from pathlib import Path
 import environ
 from django.conf.locale.en import formats as en_formats
+from django.contrib.messages import constants as messages
 import os
 
 
@@ -188,6 +189,11 @@ EMAIL_HOST_USER = "creative.finserve05@gmail.com"
 EMAIL_HOST_PASSWORD = "sspnfahqxzvyynyk"
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+
+MESSAGE_TAGS = {
+    messages.ERROR: "danger"
+}
 
 # STRONGHOLD_USER_TEST_FUNC = lambda user: not user.is_superuser
 

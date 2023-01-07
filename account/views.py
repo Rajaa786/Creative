@@ -19,7 +19,7 @@ from django.urls import reverse
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from .utils import token_generator, render_to_pdf
+from .utils import *
 from django.contrib.auth.base_user import BaseUserManager
 from django.db.models import Case, When
 from django.http import FileResponse, Http404
@@ -43,7 +43,7 @@ from .eligibilityManager import *
 from .registerManager import *
 from .generalManager import *
 from numpy_financial import pmt
-import time
+from .incompleteLeadHandler import *
 
 
 NOT_ELIGIBLE = False
@@ -51,9 +51,9 @@ ELIGIBLE = True
 PENDING_EMI_OBLIGATION_DURATION_UPPER_BOUND = 6
 
 
-"""
-NEW VIEWS
-"""
+@public
+def incomplete_lead_handler(request, lead_id, completion_status, loan_type):
+    return incomplete_lead_helper_dict[loan_type](request, lead_id, completion_status, loan_type)
 
 
 def agreement(request):
@@ -257,7 +257,7 @@ def base_dashboard(request):
     return render(request, "account/dashboard.html")
 
 
-#vipul
+# vipul
 @login_required()
 def car_refinance(request, lead_id):
     form = carsForm()
@@ -279,6 +279,7 @@ def car_refinance(request, lead_id):
 
     return render(request, 'account/car_refinance.html', context={"form": form, "lead_id": lead_id})
 
+
 @login_required()
 def lap(request, id):
     form = LapForm()
@@ -299,12 +300,11 @@ def lap(request, id):
     return render(request, 'account/lap.html', context={"form": form, "lead_id": id})
 
 
-
 @login_required()
 def insurance(request):
-    
+
     if request.method == "POST":
-        insuranceType =  request.POST.get('insuranceTypeSelector')
+        insuranceType = request.POST.get('insuranceTypeSelector')
         name = request.POST.get('name')
         phoneNumber = request.POST.get('phoneNumber')
         emailID = request.POST.get('emailID')
@@ -314,15 +314,15 @@ def insurance(request):
         age = request.POST.get('age')
         remark = request.POST.get('remark')
         insuranceApplication = InsuranceApplication(
-                name = name,
-                phoneNumber = phoneNumber,
-                email = emailID,
-                address = address,
-                pincode = pincode,
-                gender = gender,
-                age = age,
-                insuranceType = insuranceType,
-                remark = remark,
+            name=name,
+            phoneNumber=phoneNumber,
+            email=emailID,
+            address=address,
+            pincode=pincode,
+            gender=gender,
+            age=age,
+            insuranceType=insuranceType,
+            remark=remark,
         )
 
         insuranceApplication.save()
@@ -335,13 +335,13 @@ def insurance(request):
                 smokerTobacco = True
 
             termInsurance = TermInsurance(
-                insuranceApplication = insuranceApplication,
-                tobacco = smokerTobacco,
-                annualIncome = request.POST.get('annualIncome'),
-                mode = request.POST.get('mode'),
-                sumAssured = request.POST.get('sumAssured'),
-                premiumPaymentTerm = request.POST.get('ppt'),
-                premiumTerm = request.POST.get('premiumTerm'),
+                insuranceApplication=insuranceApplication,
+                tobacco=smokerTobacco,
+                annualIncome=request.POST.get('annualIncome'),
+                mode=request.POST.get('mode'),
+                sumAssured=request.POST.get('sumAssured'),
+                premiumPaymentTerm=request.POST.get('ppt'),
+                premiumTerm=request.POST.get('premiumTerm'),
             )
             termInsurance.save()
 
@@ -349,11 +349,12 @@ def insurance(request):
 
             vehicleInsurance = VehicleInsurance(
 
-                insuranceApplication = insuranceApplication,
-                vehicleType = insuranceType,
-                vehicleRegistrationNumber = request.POST.get('vehicleRegistrationNumber'),
-                rcBook = request.FILES.get('rcBook'),
-                insuranceCopy = request.FILES.get('insuranceCopy'),
+                insuranceApplication=insuranceApplication,
+                vehicleType=insuranceType,
+                vehicleRegistrationNumber=request.POST.get(
+                    'vehicleRegistrationNumber'),
+                rcBook=request.FILES.get('rcBook'),
+                insuranceCopy=request.FILES.get('insuranceCopy'),
 
             )
 
@@ -362,9 +363,9 @@ def insurance(request):
         if insuranceType == "medical":
 
             medicalInsurance = MedicalInsurance(
-                insuranceApplication = insuranceApplication,
-                sumAssured = request.POST.get('sumAssured'),
-                noOfFamilyMembers = request.POST.get('familyNumber'),
+                insuranceApplication=insuranceApplication,
+                sumAssured=request.POST.get('sumAssured'),
+                noOfFamilyMembers=request.POST.get('familyNumber'),
             )
 
             medicalInsurance.save()
@@ -379,27 +380,27 @@ def insurance(request):
                     diseaseSuffered = True
 
                 medicalInsuranceFamilyMember = MedicalInsuranceFamilyMember(
-                    medicalInsurance = medicalInsurance,
-                    typeOfRelationship = request.POST.get('relation'+str(i)),
-                    diseaseSuffered = diseaseSuffered,
-                    diseaseName = request.POST.get('diseaseName'+str(i)),
-                    name = request.POST.get('name'+str(i)),
-                    phoneNumber = request.POST.get('phoneNumber'+str(i)),
-                    email = request.POST.get('emailID'+str(i)),
-                    address = request.POST.get('address'+str(i)),
-                    pincode = request.POST.get('pincode'+str(i)),
-                    gender = request.POST.get('gender'+str(i)),
-                    age = request.POST.get('age'+str(i)),
+                    medicalInsurance=medicalInsurance,
+                    typeOfRelationship=request.POST.get('relation'+str(i)),
+                    diseaseSuffered=diseaseSuffered,
+                    diseaseName=request.POST.get('diseaseName'+str(i)),
+                    name=request.POST.get('name'+str(i)),
+                    phoneNumber=request.POST.get('phoneNumber'+str(i)),
+                    email=request.POST.get('emailID'+str(i)),
+                    address=request.POST.get('address'+str(i)),
+                    pincode=request.POST.get('pincode'+str(i)),
+                    gender=request.POST.get('gender'+str(i)),
+                    age=request.POST.get('age'+str(i)),
                 )
 
                 medicalInsuranceFamilyMember.save()
 
     context = {
-        'active':'',
-        'title':'Insurance'
+        'active': '',
+        'title': 'Insurance'
     }
 
-    return render(request,'account/insurance.html',context)
+    return render(request, 'account/insurance.html', context)
 
 
 # @login_required()
@@ -464,9 +465,11 @@ class VerificationView(View):
             # user.set_password(password)
             user.save()
 
-            base = request.build_absolute_uri('account/login')
+            base = request.build_absolute_uri('/account/login')
+            print("Base ", base)
             domain = request.build_absolute_uri('/')
             domain = domain[:-1]
+            print("Domain ", domain)
 
             context = {
                 'username': user.username,
@@ -1165,6 +1168,7 @@ def create_mem(request):
                 + " \n Your username: "
                 + user.username
                 + "\n Your Password: "
+
                 + password
             )
             email = EmailMessage(
@@ -1211,11 +1215,11 @@ def list_leads(request):
             incomplete = False
 
         lead_dict[lead_.pk] = {
-            'lead' : lead_,
-            'incomplete' : incomplete
+            'lead': lead_,
+            'incomplete': incomplete
         }
     # return render(request, 'music/songs.html',  {'song': song})
-    return render(request, "account/newLeadview.html", {"listleads": listleads , "lead_dict" : lead_dict})
+    return render(request, "account/newLeadview.html", {"listleads": listleads, "lead_dict": lead_dict})
 
 
 def list_lead_del(request, id):
@@ -1474,6 +1478,7 @@ def additionaldetails(request, id):
             "applicants": current_additional_details,
             "number_of_applicants": current_additional_details.count(),
             "main_applicant": main_applicant.applicant_type if main_applicant else "",
+            "appname": "account"
         },
     )
 
@@ -2388,19 +2393,19 @@ def retired(request, id):
     )
 
 
-def handle_salaried_next_btn(product_name, co_applicant, additionaldetails_id, lead_id):
+def handle_salaried_next_btn(co_applicant, additionaldetails_id, lead_id):
 
     if co_applicant and co_applicant.pk != additionaldetails_id:
         return redirect("salaried", lead_id, co_applicant.pk)
 
-        # return redirect('salaried', lead_id, additionaldetails_id)
+    return redirect('upload_documents', lead_id)
 
-    return loan_info_dict[product_name](lead_id)
+    # return loan_info_dict[product_name](lead_id)
 
 
 def salaried(request, lead_id, additionaldetails_id):
     # print(request.session['testkey'])
-    print(loan_info_dict)
+    # print(loan_info_dict)
     co_applicant = None
     lead = Leads.objects.get(pk=lead_id)
     co_applicant = AdditionalDetails.objects.filter(
@@ -2413,7 +2418,7 @@ def salaried(request, lead_id, additionaldetails_id):
 
         if "next" in request.POST:
 
-            return handle_salaried_next_btn(lead.product.product, co_applicant, additionaldetails_id, lead_id)
+            return handle_salaried_next_btn(co_applicant, additionaldetails_id, lead_id)
 
             # messages.info(
             #     request, "Please add every details to proceed.")
@@ -2607,20 +2612,19 @@ def salaried(request, lead_id, additionaldetails_id):
                 messages.error(request, form.errors)
                 return redirect("salaried", lead_id, additionaldetails_id)
 
+
     additional_details_instance = AdditionalDetails.objects.get(
         pk=additionaldetails_id)
-    # qualifications_list = []
-    # for qualification_instance in Qualification.objects.all():
-    #     qualifications_list.append({qualification_instance.qualification:qualification_instance.is_degree})
 
-    # request.user.perosnal_details = False
-    # print("****************************************************************************************")
-    # request.session.personal_details = True
-    # print(request.session.testing)
-    # print("Personal Details *********** ",
-    #   request.session.personal_details)
-    # check_salaried_details_form_list['personal_details'] = True
-    # request.session.personal_details = True
+    check_details = {}
+
+    forms_checked_count = 0
+
+    for detail_check in detail_check_list_dict:
+        check_details[detail_check] = detail_check_list_dict[detail_check].objects.filter(addi_details_id__id = additional_details_instance.id).exists()
+        if check_details[detail_check]:
+            forms_checked_count+=1
+
 
     context = {
         "additionaldetails_id": additionaldetails_id,
@@ -2640,9 +2644,10 @@ def salaried(request, lead_id, additionaldetails_id):
         "existing_card_details_form": SalExistingCreditCardForm(),
         "additional_details_form": SalAdditionalDetailsForm(),
         "investment_form": SalInvestmentsForm(),
+        'check_details': check_details,
+        'forms_checked_count' : forms_checked_count
     }
 
-    print("Reached Here")
     return render(request, "account/salaried.html", context)
 
     # if request.method == 'POST':
@@ -3038,7 +3043,6 @@ def eligibility_calculation(current_calc_data_instance, store_eligibility_detail
                         associated_tenure=tenure).first()
 
                     if associated_tenure_foir:
-                        print(associated_tenure_foir)
 
                         current_calc_data_instance['foir'] = associated_tenure_foir.foir
 
@@ -3047,8 +3051,8 @@ def eligibility_calculation(current_calc_data_instance, store_eligibility_detail
                         cust_considerable_amount = cust_considerable_amount * \
                             associated_tenure_foir.foir / 100
 
-                        print(obligation_amount)
-                        print(cust_considerable_amount)
+                        # print(obligation_amount)
+                        # print(cust_considerable_amount)
 
                         # tenure_in_months = get_tenure_months(
                         #     main_applicant_personal_details.age,  main_applicant_personal_details.retirement_age)
@@ -3105,7 +3109,7 @@ def check_eligibility(request, id):
         lead_id=lead, applicant_type__applicant_type="Applicant"
     ).first() or None
     main_applicant_personal_details = SalPersonalDetails.objects.filter(
-        additional_details_id=main_applicant
+        addi_details_id=main_applicant
     ).first()
     main_applicant_company_details = SalCompanyDetails.objects.filter(
         addi_details_id=main_applicant
@@ -3125,7 +3129,6 @@ def check_eligibility(request, id):
     # Co-Applicant Details
     co_applicant = AdditionalDetails.objects.filter(
         lead_id=lead, applicant_type__applicant_type="1st Co-Applicant").first() or None
-    print("Co Applicant : ", co_applicant)
 
     product_and_policy_master = Product_and_Policy_Master.objects.all()
 
@@ -3178,7 +3181,6 @@ def check_eligibility(request, id):
                 #     roi_co_info = product.rate_of_interest.filter(
                 #         cocat_type=main_categ).first()
 
-
                 for tenure in Tenure.objects.all():
 
                     if not check_tenure_availability(
@@ -3186,26 +3188,26 @@ def check_eligibility(request, id):
                         continue
 
                     current_calc_data_instance = {'associated_tenure': tenure.ten_type,
-                                                'multiplier': "-",
-                                                'x_amount': "-",
-                                                'foir': "-",
-                                                'roi': "-",
-                                                'applicants': 'A',
-                                                'associated_tenure': tenure.ten_type,
-                                                'percent_amount': '-',
-                                                'requirement': loan_amount,
-                                                'final_eligibility': 0,
-                                                'applicant_emi': None,
-                                                'co_applicant_emi': None,
-                                                'emi': "-",
-                                                'processing_fees': "-",
-                                                'cust_considerable_amount': 0
-                                                }
+                                                  'multiplier': "-",
+                                                  'x_amount': "-",
+                                                  'foir': "-",
+                                                  'roi': "-",
+                                                  'applicants': 'A',
+                                                  'associated_tenure': tenure.ten_type,
+                                                  'percent_amount': '-',
+                                                  'requirement': loan_amount,
+                                                  'final_eligibility': 0,
+                                                  'applicant_emi': None,
+                                                  'co_applicant_emi': None,
+                                                  'emi': "-",
+                                                  'processing_fees': "-",
+                                                  'cust_considerable_amount': 0
+                                                  }
 
                     highest_net_sal_holder = main_applicant_income_details.net_sal
 
                     main_applicant_data = eligibility_calculation(current_calc_data_instance, store_eligibility_details, main_applicant_personal_details, main_applicant_company_details, main_applicant_existing_credit_card_details_list,
-                                                                main_applicant_income_details, main_applicant_existing_loan_details_list, product, tenure, loan_amount, "applicant", multiplier_main_info, foir_main_info, roi_main_info, main_categ)
+                                                                  main_applicant_income_details, main_applicant_existing_loan_details_list, product, tenure, loan_amount, "applicant", multiplier_main_info, foir_main_info, roi_main_info, main_categ)
 
                     # if co_applicant_eligible:
                     #     co_applicant_data = eligibility_calculation(current_calc_data_instance, store_eligibility_details, main_applicant_personal_details, main_applicant_company_details, main_applicant_existing_credit_card_details,
@@ -3215,9 +3217,9 @@ def check_eligibility(request, id):
                         main_applicant_data, co_applicant_data, current_calc_data_instance, store_eligibility_details, product)
 
                     if current_calc_data_instance['x_amount'] or current_calc_data_instance['percent_amount']:
-                        print("Entry here")
                         current_calc_data_instance['final_eligibility'] = getFinalEligibility(
                             current_calc_data_instance, loan_amount)
+                        print(product)
 
                         if current_calc_data_instance['emi']:
                             eligibility_count += 1

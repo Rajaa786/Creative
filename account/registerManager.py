@@ -49,6 +49,7 @@ def get_tenure_months(current_age, retirement_age):
 
 
 async def register_referral_logic(request):
+    print(request.POST)
     start = time.time()
     group = await sync_to_async(Group.objects.get)(name="Referral Partner")
     # group = Group.objects.get(name="Referral Partner")
@@ -59,8 +60,9 @@ async def register_referral_logic(request):
     phone = request.POST["phone"]
     password = request.POST["password"]
     profession = request.POST["profession"]
-    if profession == "Other":
+    if profession == "other":
         profession = request.POST["other"]
+        print(profession)
     address = request.POST["address"]
     pincode = request.POST["pincode"]
     city = request.POST["city"]
@@ -68,7 +70,7 @@ async def register_referral_logic(request):
     reference = request.POST["reference"]
     referral_code = request.POST.get("referral_code", None)
     if await sync_to_async(CustomUser.objects.filter(email=Email).exists)():
-        messages.info(request, "Email Taken")
+        messages.error(request, "Email Already Taken")
         return redirect("register_referral")
     else:
         system_role = await sync_to_async(Role.objects.filter(role=system_role).first)()
