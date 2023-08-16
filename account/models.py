@@ -150,10 +150,10 @@ class CarRefinance(models.Model):
     mortage = models.BooleanField(choices=YES_NO_CHOICES)
     bank = models.ForeignKey(BankName, on_delete=models.CASCADE, null=True, blank=True)
     # bank = models.CharField(max_length=50, null=True, blank=True)
-    roi = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    roi = models.PositiveIntegerField(validators=[MinValueValidator(1)],null=True, blank=True)
     tenure = models.ForeignKey(Tenure, on_delete=models.CASCADE, null=True, blank=True)
-    loanamounttaken = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    loanamountso = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    loanamounttaken = models.PositiveIntegerField(validators=[MinValueValidator(1)],null=True, blank=True)
+    loanamountso = models.PositiveIntegerField(validators=[MinValueValidator(1)],null=True, blank=True)
     insurance = models.CharField(max_length=50)
     validtill = models.CharField(max_length=50)
 
@@ -326,7 +326,7 @@ class SalPersonalDetails(models.Model):
         Country, on_delete=models.CASCADE, blank=True, null=True
     )
     enduse = models.CharField(max_length=200, blank=True, null=True)
-    additional_details_id = models.ForeignKey(
+    addi_details_id = models.ForeignKey(
         AdditionalDetails, on_delete=models.CASCADE, blank=True, null=True
     )
     # proof                 = models.CharField(max_length=1)

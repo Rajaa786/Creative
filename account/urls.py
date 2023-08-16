@@ -17,6 +17,7 @@ urlpatterns = [
     path('carrefinance/<int:lead_id>', views.car_refinance, name="car_refinance"),
     path('insurance/', views.insurance, name="insurance"),
     path('lap/<int:id>', views.lap, name="lap"),
+    path("ajax/submodels/", views.load_submodels, name="ajax_load_submodels"),
     # --------------------------------------------------------#
     # new_LEADS
     path("view/", views.view_leads, name="view-leads"),
@@ -34,7 +35,7 @@ urlpatterns = [
     # --------------------------------------------------------#
     # OLD URLS#
     path("ajax/cities/", views.load_cities, name="ajax_load_cities"),
-    path("ajax/addapplicant", views.add_applicants, name="ajax_add_applicant"),
+    path("ajax/addapplicant/", views.add_applicants, name="ajax_add_applicant"),
     path("ajax/subproducts/", views.load_subproducts, name="ajax_load_subproducts"),
     path("homeloan/", include("HomeLoan.urls")),
     path("register/", views.register, name="register"),
@@ -117,19 +118,19 @@ urlpatterns = [
         views.salaried,
         name="salaried",
     ),
-    path("selfemployed", views.selfemployed, name="selfemployed"),
+    path("selfemployed/", views.selfemployed, name="selfemployed"),
     path("student/<int:id>", views.student, name="student"),
-    path("sidebar", views.sidebar, name="sidebar"),
-    path("whatsapp", views.whatsapp, name="whatsapp"),
+    path("sidebar/", views.sidebar, name="sidebar"),
+    path("whatsapp/", views.whatsapp, name="whatsapp"),
     path("email/", views.email, name="email"),
-    path("codes", views.codes, name="codes"),
-    path("approved", views.approved, name="approved"),
+    path("codes/", views.codes, name="codes"),
+    path("approved/", views.approved, name="approved"),
     path("register2", views.register2, name="register2"),
-    path("list_lead_edit/<int:id>", views.list_lead_edit, name="list_lead_edit"),
-    path("list_lead_view/<int:id>", views.list_lead_view, name="list_lead_view"),
-    path("list_lead_del/<int:id>", views.list_lead_del, name="list_lead_del"),
-    path("customer_details", views.customer_details, name="customer_details"),
-    path("partner_list", views.partner_list, name="partner_list"),
+    path("list_lead_edit/<int:id>/", views.list_lead_edit, name="list_lead_edit"),
+    path("list_lead_view/<int:id>/", views.list_lead_view, name="list_lead_view"),
+    path("list_lead_del/<int:id>/", views.list_lead_del, name="list_lead_del"),
+    path("customer_details/", views.customer_details, name="customer_details"),
+    path("partner_list/", views.partner_list, name="partner_list"),
     path(
         "partner_detailed_view/<int:id>",
         views.partner_detailed_view,
@@ -141,7 +142,7 @@ urlpatterns = [
         name="partner_detail_edit",
     ),
     path("training", views.training, name="training"),
-    path("upload_documents/<int:id>", views.upload_documents, name="upload_documents"),
+    path("upload_documents/<int:id>/", views.upload_documents, name="upload_documents"),
     path("support", views.support, name="support"),
     path("bank_download", views.bank_download, name="bank_download"),
     path("calculator", views.calculator, name="calculator"),
@@ -154,7 +155,8 @@ urlpatterns = [
     path('add_credit_loan_form/' , views.addExistingCreditForm , name="add_existing_credit_form"),
     path('handle_loan_requirement_change/' , views.handleLoanRequirementChange , name="handle_loan_requirement_change"),
     path('eligibility_next/<int:lead_id>/<int:eligibility>' , views.eligibilityNextBtnHandler , name="eligibility_next"),
-    path('agreement/' , views.agreement)
+    path('agreement/' , views.agreement),
+    path('incomplete_lead_handler/<int:lead_id>/<int:completion_status>/<str:loan_type>' , views.incomplete_lead_handler , name='incomplete_lead_handler')
 ]
 
 

@@ -5,6 +5,35 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 import os
+from .models import *
+
+Personal_Details = "personal_details"
+Income_Details = "income_details"
+Company_Details = "company_details"
+Additional_Details = "additional_details"
+Additional_Other_Income_Details = "additional_other_income_details"
+Existing_Loan_Details = "existing_loan_details"
+Existing_Credit_Card_Details = "existing_credit_card_details"
+Investment_Details = "investment_details"
+Residence_Details = "residence_details"
+Other_Income_Details = "other_income_details"
+
+detail_check_list_dict = {
+    Personal_Details: SalPersonalDetails,
+    Income_Details: SalIncomeDetails,
+    Company_Details: SalCompanyDetails,
+    Additional_Details: SalAdditionalDetails,
+    Additional_Other_Income_Details: SalAdditionalOtherIncomes,
+    Existing_Loan_Details: SalExistingLoanDetails,
+    Existing_Credit_Card_Details: SalExistingCreditCard,
+    Investment_Details: SalInvestments,
+    Residence_Details: SalResidenceDetails,
+    Other_Income_Details: SalOtherIncomes,
+}
+
+detail_doc_check_list_dict = {
+    
+}
 
 
 class AppTokenGenerator(PasswordResetTokenGenerator):

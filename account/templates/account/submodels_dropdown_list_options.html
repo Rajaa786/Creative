@@ -1,0 +1,4 @@
+<option value="">-- Select Sub-Models --</option>
+{% for submodel in submodels %}
+    <option value="{{ submodel.pk }}">{{submodel.sub_model}}</option>
+{% endfor %}

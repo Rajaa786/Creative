@@ -912,7 +912,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% for carmake in Carmakes %}
+								{% for carmake in carmakes %}
 								<tr>
 									<td>{{ carmake.carmake }}</td>
 									<td>{{ carmake.effective_date }}</td>
@@ -987,7 +987,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% for submodel in submodel %}
+								{% for submodel in submodels %}
 								<tr>
 									<td>{{ submodel.carmake.carmake }}</td>
 									<td>{{ submodel.sub_model }}</td>

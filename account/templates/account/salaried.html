@@ -5,6 +5,7 @@
 {% block title %}Salary Details{% endblock title %}
 
 {% block content %}
+<h3>{{check_details}}</h3>
 <div class="container-fluid">
     <div id="content-wrapper" class="d-flex flex-column">
         <h1 class=" mt-3 mb-4 display-3 text-center">Income Details for Salaried</h1>
@@ -29,46 +30,145 @@
                     </div>
                 </div>
                 <hr>
+
+                {% if not check_details.personal_details %}
                 <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
                     data-bs-target="#personalDetailsModal">
                     <b>Personal Details</b>
                 </div>
+                {% else %}
+                <div class="alert alert-success fs-4 text-white">
+                    <img src="{% static 'vertical-dark-menu/src/plugins/src/font-icons/feather/check.svg' %}"
+                        style="filter : invert(1)" alt="">
+                    <b>Personal Details</b>
+                </div>
+                {% endif %}
+
+
+                {% if not check_details.income_details %}
                 <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
                     data-bs-target="#incomeDetails">
                     <b>Income Details</b>
                 </div>
+                {% else %}
+                <div class="alert alert-success fs-4 text-white"> <img
+                        src="{% static 'vertical-dark-menu/src/plugins/src/font-icons/feather/check.svg' %}"
+                        style="filter : invert(1)" alt="">
+                    <b>Income Details</b>
+                </div>
+                {% endif %}
+
+
+                {% if not check_details.other_income_details %}
                 <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
                     data-bs-target="#otherIncomes">
                     <b>Other Income Details</b>
                 </div>
+                {% else %}
+                <div class="alert alert-success fs-4 text-white"> <img
+                        src="{% static 'vertical-dark-menu/src/plugins/src/font-icons/feather/check.svg' %}"
+                        style="filter : invert(1)" alt="">
+                    <b>Other Income Details</b>
+                </div>
+                {% endif %}
+
+
+                {% if not check_details.additional_other_income_details %}
                 <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
                     data-bs-target="#otherThanIncomeMentionedAbove">
                     <b>Other Than Income Mentioned Above Details</b>
                 </div>
+                {% else %}
+                <div class="alert alert-success fs-4 text-white"> <img
+                        src="{% static 'vertical-dark-menu/src/plugins/src/font-icons/feather/check.svg' %}"
+                        style="filter : invert(1)" alt="">
+                    <b>Other Than Income Mentioned Above Details</b>
+                </div>
+                {% endif %}
+
+
+                {% if not check_details.company_details %}
                 <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
                     data-bs-target="#companyDetailsModal">
                     <b>Company Details</b>
                 </div>
+                {% else %}
+                <div class="alert alert-success fs-4 text-white"> <img
+                        src="{% static 'vertical-dark-menu/src/plugins/src/font-icons/feather/check.svg' %}"
+                        style="filter : invert(1)" alt="">
+                    <b>Company Details</b>
+                </div>
+                {% endif %}
+
+
+                {% if not check_details.residence_details %}
                 <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
                     data-bs-target="#residenceDetailModal">
                     <b>Residence Details</b>
                 </div>
+                {% else %}
+                <div class="alert alert-success fs-4 text-white"> <img
+                        src="{% static 'vertical-dark-menu/src/plugins/src/font-icons/feather/check.svg' %}"
+                        style="filter : invert(1)" alt="">
+                    <b>Residence Details</b>
+                </div>
+                {% endif %}
+
+
+                {% if not check_details.existing_loan_details %}
                 <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
                     data-bs-target="#existingloanDetailModal">
                     <b>Existing Loan Details</b>
                 </div>
+                {% else %}
+                <div class="alert alert-success fs-4 text-white"> <img
+                        src="{% static 'vertical-dark-menu/src/plugins/src/font-icons/feather/check.svg' %}"
+                        style="filter : invert(1)" alt="">
+                    <b>Existing Loan Details</b>
+                </div>
+                {% endif %}
+
+                {% if not check_details.existing_credit_card_details %}
                 <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
                     data-bs-target="#existingcardDetailModal">
                     <b>Existing Card Details</b>
                 </div>
+                {% else %}
+                <div class="alert alert-success fs-4 text-white"> <img
+                        src="{% static 'vertical-dark-menu/src/plugins/src/font-icons/feather/check.svg' %}"
+                        style="filter : invert(1)" alt="">
+                    <b>Existing Card Details</b>
+                </div>
+                {% endif %}
+
+                {% if not check_details.additional_details %}
                 <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
                     data-bs-target="#additionalDetailsModal">
                     <b>Additional Details</b>
                 </div>
+                {% else %}
+                <div class="alert alert-success fs-4 text-white"> <img
+                        src="{% static 'vertical-dark-menu/src/plugins/src/font-icons/feather/check.svg' %}"
+                        style="filter : invert(1)" alt="">
+                    <b>Additional Details</b>
+                </div>
+                {% endif %}
+
+
+                {% if not check_details.investment_details %}
                 <div class="alert alert-primary fs-4 text-white" style="cursor: pointer;" data-bs-toggle="modal"
                     data-bs-target="#investmentDetailModal">
                     <b>Investment Details</b>
                 </div>
+                {% else %}
+                <div class="alert alert-success fs-4 text-white"> <img
+                        src="{% static 'vertical-dark-menu/src/plugins/src/font-icons/feather/check.svg' %}"
+                        style="filter : invert(1)" alt="">
+                    <b>Investment Details</b>
+                </div>
+                {% endif %}
+
+                {% if forms_checked_count >= 10 %}
                 <form method="POST"
                     action={% url 'salaried' lead_id=lead_id additionaldetails_id=additionaldetails_id %}>
                     {% csrf_token %}
@@ -77,6 +177,7 @@
                             type="submit">NEXT</button>
                     </div>
                 </form>
+                {% endif %}
             </div>
 
         </div>
@@ -426,13 +527,10 @@
 
 {% block other_js %}
 <script>
-    var qualifications = {}; {
-        %
-        for instance in personal_details_qualification %
-    }
-    qualifications["{{instance.qualification}}"] = ("{{instance.degree}}" == 'True'); {
-        % endfor %
-    }
+    var qualifications = {}; 
+    {% for instance in personal_details_qualification %}
+        qualifications["{{instance.qualification}}"] = ("{{instance.degree}}" == 'True'); 
+    {% endfor %}
     var id_company_name, id_other_company_name, id_how_old_is_agreement, id_will_you_make_agreement,
         id_valid_rent_agreement, id_lessee_name, id_lessee_type, id_bonus_amount, id_repayment_history_col,
         id_product_id, id_Other_Bank_Name, id_bank_name, id_repayment_history, id_default_year,
@@ -590,9 +688,7 @@
         }
     });
 
-    {
-        % comment %
-    }
+    {% comment %}
     $(document).on('change', '#id_qualification', function () {
         var qualification_name = $('option[value="' + $(this).val() + '"]:selected').text();
         if (qualifications[qualification_name]) {
@@ -600,9 +696,8 @@
         } else {
             id_degree_others.hide();
         }
-    }); {
-        % endcomment %
-    }
+    }); 
+    {% endcomment %}
 
     $(document).on('change', '#id_profession', function () {
         var profession_name = $('option[value="' + $(this).val() + '"]:selected').text();
